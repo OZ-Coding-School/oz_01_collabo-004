@@ -12,5 +12,5 @@ jobs:
         uses: actions/checkout@v2
       - name: Test
         run: docker-compose run --rm app sh -c "python manage.py wait_for_db && python manage.py test"
-      - name: Lint
-        run: docker-compose run --rm app sh -c "black . && mypy ."
+      - name: Lint Backend
+        run: docker-compose run --rm app sh -c "black ./backend && mypy ./backend"
