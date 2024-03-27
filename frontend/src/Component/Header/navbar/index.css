@@ -1,25 +1,21 @@
 .navbar {
     width: 100%;
     height: 48px;
-    display: flex;
     background-color: #289aff;
     border-bottom: 2px solid #1e6db39d;
-    justify-content: space-between;
-    align-items: center;
-}
-.navbar-title{
-    color: black;
-    margin-left: 20px;
-    padding-right: 20px;
-    border-right: 2px solid rgb(192, 192, 192);
-}
-.navbar-links {
-    flex: 1; 
     display: flex;
-    justify-content: center;
+    justify-content: space-between; /* Navbar 요소들을 좌우 정렬 */
+    align-items: center; /* Navbar 요소들을 수직 정렬 */
 }
 
-.navbar-links ul{
+.navbar-links {
+    flex: 1; /* 네비게이션 메뉴가 남은 공간을 채우도록 설정 */
+    display: flex;
+    justify-content: center; /* 네비게이션 메뉴를 가운데 정렬 */
+}
+
+.navbar-links ul {
+    display: flex; /* 가로로 정렬되도록 설정 */
     list-style-type: none;
     padding: 0;
     margin: 0;
@@ -28,13 +24,13 @@
 .navbar-links ul a {
     display: inline-block;
     text-decoration: none;
+    text-align: center;
     color: white;
     margin-right: 50px;
 }
-.navbar-links ul a:hover{
+
+.navbar-links ul a:hover {
     color: black;
-}
-.navbar-links ul a:hover{
     text-decoration: underline;
 }
 

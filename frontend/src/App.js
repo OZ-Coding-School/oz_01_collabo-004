@@ -2,7 +2,6 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Search from "./Component/Header/index.jsx";
 import Navbar from "./Component/Header/navbar/index.jsx";
-import Banner from "./Component/banner/index.jsx";
 import Home from "./Page/Homepage/index.jsx";
 import MyInfo from "./Page/MyInfoPage";
 import PetHouse from "./Page/PetHousePage";
@@ -16,7 +15,6 @@ function App() {
     <BrowserRouter>
       <Search />
       <Navbar />
-      <Banner />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/petshop" element={<PetShop />} />
