@@ -20,7 +20,7 @@ function Search() {
       <div className="header-title">
         <h2>
           {" "}
-          (logo) Dog<span>Go</span>
+          <Link to='/'>(logo)</Link> Dog<span>Go</span>
         </h2>
       </div>
       <div className="header-search">

@@ -4,18 +4,18 @@
     background-color: #289aff;
     border-bottom: 2px solid #1e6db39d;
     display: flex;
-    justify-content: space-between; /* Navbar 요소들을 좌우 정렬 */
-    align-items: center; /* Navbar 요소들을 수직 정렬 */
+    justify-content: space-between; 
+    align-items: center;
 }
 
 .navbar-links {
-    flex: 1; /* 네비게이션 메뉴가 남은 공간을 채우도록 설정 */
+    flex: 1;
     display: flex;
-    justify-content: center; /* 네비게이션 메뉴를 가운데 정렬 */
+    justify-content: center; 
 }
 
 .navbar-links ul {
-    display: flex; /* 가로로 정렬되도록 설정 */
+    display: flex;
     list-style-type: none;
     padding: 0;
     margin: 0;
