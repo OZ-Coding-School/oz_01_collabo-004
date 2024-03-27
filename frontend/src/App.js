@@ -1,7 +1,9 @@
 import React from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import Navbar from "./Component/Navbar";
-import Home from "./Page/HomePage";
+import Search from "./Component/Header/index.jsx";
+import Navbar from "./Component/Header/navbar/index.jsx";
+import Banner from "./Component/banner";
+import Home from "./Page/Homepage/index.jsx";
 import MyInfo from "./Page/MyInfoPage";
 import PetHouse from "./Page/PetHousePage";
 import PetRestaurant from "./Page/PetRestaurantPage";
@@ -11,8 +13,11 @@ import Travel from "./Page/TravelPage";
 
 function App() {
   return (
-    <Router>
+    <BrowserRouter>
+      <Search />
       <Navbar />
+      <Banner />
+    <Router>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/petshop" element={<PetShop />} />
@@ -24,6 +29,7 @@ function App() {
         <Route path="*" element={<h2>Page Not Found</h2>} />
       </Routes>
     </Router>
+    </BrowserRouter>
   );
 }
 
