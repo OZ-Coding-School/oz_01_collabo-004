@@ -1,5 +1,4 @@
 import React from 'react';
-import BannerImg from '../../image/휴양10.jpg';
 import './index.css';
 
 function Banner() {
@@ -10,7 +9,7 @@ function Banner() {
         </div>
         <div className='banner-description'>
         <div className='banner-description_img'>
-        <img src={BannerImg}
+        <img src={'/images/휴양10.jpg'}
         alt='배너이미지' 
         className='bannerimg'
         />
