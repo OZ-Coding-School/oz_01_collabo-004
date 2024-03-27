@@ -1,5 +1,5 @@
 """
-URL configuration for doggo_app project.
+URL configuration for config project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.0/topics/http/urls/
@@ -15,8 +15,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path('admin/', admin.site.urls),
+    # path('api/v1/user/', include('users.urls')),
+    # path('api/v1/prouct/', include('products.urls')),
+    # path('api/v1/order/', include('orders.urls')),
+    # path('api/v1/review/', include('reviews.urls')),
+    # path('api/v1/post/', include('posts.urls')),
 ]
