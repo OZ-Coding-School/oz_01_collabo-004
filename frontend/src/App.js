@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Search from "./Component/Header/index.jsx";
+import Footer from "./Component/footer/index.jsx";
 import Navbar from "./Component/navbar/index.jsx";
 import Home from "./Page/Homepage/index.jsx";
 import Login from "./Page/Loginpage/index.jsx";
@@ -27,6 +28,7 @@ function App() {
         <Route path="/service" element={<Service />} />
         <Route path="*" element={<h2>Page Not Found</h2>} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }
