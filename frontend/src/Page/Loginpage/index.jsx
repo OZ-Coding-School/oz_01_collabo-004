@@ -6,10 +6,9 @@ function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     console.log("Submitting", { username, password });
-    // 여기에 로그인 로직 또는 API 호출을 추가하세요.
   };
 
   return (

@@ -43,7 +43,7 @@ function Search() {
             <li>로그인</li>
           </Link>
           <Link to="/mypage">
-            <li>마이페이지</li>
+            <li>마이도꼬</li>
           </Link>
           <Link to="/service">
             <li>고객센터</li>
