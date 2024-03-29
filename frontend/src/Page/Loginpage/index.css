@@ -3,11 +3,20 @@
   margin: auto;
   margin-top: 50px;
   padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
 
+  border-radius: 5px;
+}
+.login-container h1 {
+  display: flex;
+}
+.doggo {
+  margin-bottom: 40px;
+  display: flex;
+}
+.go {
+  margin-left: 10px;
+  color: #007bff;
+}
 .login-container form div {
   margin-bottom: 15px;
 }

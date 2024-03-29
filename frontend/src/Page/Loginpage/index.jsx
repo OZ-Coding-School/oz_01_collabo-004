@@ -14,8 +14,11 @@ function LoginPage() {
 
   return (
     <div className="login-container">
+      <div className="doggo">
+        <h1>D o g</h1>
+        <h1 className="go">G o</h1>
+      </div>
       <form onSubmit={handleSubmit}>
-        <h2>Login</h2>
         <div>
           <label htmlFor="username">아이디</label>
           <input

@@ -3,8 +3,10 @@ import "./index.css";
 
 function SignupForm() {
   const [formData, setFormData] = useState({
+    id: "",
     username: "",
     email: "",
+    phone: "",
     password: "",
     confirmPassword: "",
   });
@@ -21,7 +23,7 @@ function SignupForm() {
     event.preventDefault();
     // 비밀번호 일치 확인
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match.");
+      alert("비밀번호가 맞지 않습니다.");
       return;
     }
     // 회원가입 로직 처리
@@ -43,12 +45,34 @@ function SignupForm() {
         />
       </div>
       <div className="input-group">
+        <label htmlFor="id">아이디</label>
+        <input
+          type="id"
+          id="id"
+          name="id"
+          value={formData.id}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <div className="input-group">
         <label htmlFor="email">이메일 주소</label>
         <input
           type="email"
           id="email"
           name="email"
           value={formData.email}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <div className="input-group">
+        <label htmlFor="phone">전화번호</label>
+        <input
+          type="phoneNumber"
+          id="phone"
+          name="phone"
+          value={formData.phone}
           onChange={handleChange}
           required
         />
