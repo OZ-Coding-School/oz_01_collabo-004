@@ -6,5 +6,5 @@ from products.models import Product
 class Wishlist(CommonModel):
     status = models.BooleanField(null=False, default=False)
 
-    user = models.ForeignKey(User)
-    product = models.ForeignKey(Product)
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    product = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL)

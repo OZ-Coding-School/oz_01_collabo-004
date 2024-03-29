@@ -34,8 +34,10 @@ RUN python -m venv /py && \
     mkdir -p /vol/web/static && \
     # chmod : change mode, chown : change owner
     chown -R django-user:django-user /vol && \
+    chown -R django-user:django-user /app && \
     # 폴더에 대한 접근 권한부여 
     chmod -R 755 /vol && \
+    chmod -R 755 /app && \
     # 권한 적용
     chmod -R +x /scripts
 
