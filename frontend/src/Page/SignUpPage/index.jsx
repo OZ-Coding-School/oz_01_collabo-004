@@ -23,7 +23,7 @@ function SignupForm() {
 
     try {
       const response = await fetch(
-        "https://pink-nights-kiss.loca.lt/api/v1/user/signup/",
+        "https://124f-27-117-139-6.ngrok-free.app/api/v1/user/signup/",
         {
           method: "POST",
           headers: {

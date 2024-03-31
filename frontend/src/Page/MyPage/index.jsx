@@ -1,13 +1,19 @@
+import axios from "axios";
 import React, { useState } from "react";
 import "./index.css";
 
 function MyPage() {
-  const [phoneNumber, setPhoneNumber] = useState("010-1234-5678");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handlePhoneNumberChange = (e) => {
-    setPhoneNumber(e.target.value);
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePhoneChange = (e) => {
+    setPhone(e.target.value); // 함수 이름 수정
   };
 
   const handlePasswordChange = (e) => {
@@ -15,25 +21,43 @@ function MyPage() {
   };
 
   const handleConfirmPasswordChange = (e) => {
-    setConfirmPassword(e.target.value);
+    setConfirmPassword(e.target.value); // 함수 추가
   };
 
-  const handlePhoneSubmit = (e) => {
+  const handlePhoneSubmit = async (e) => {
     e.preventDefault();
-    // 여기서 서버로 수정된 전화번호를 전송하는 API 호출을 할 수 있습니다.
-    console.log("Updated Phone Number:", phoneNumber);
-    // 전화번호 수정 완료 후 필요한 작업을 수행할 수 있습니다.
-  };
-
-  const handlePasswordSubmit = (e) => {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-      alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-      return;
+    try {
+      const response = await axios.post(
+        "https://124f-27-117-139-6.ngrok-free.app/api/v1/user/info/",
+        {
+          email: email,
+          password: password,
+          phone: phone,
+        }
+      );
+      console.log("Updated Phone Number:", phone);
+    } catch (error) {
+      console.error("Error updating phone number:", error);
     }
-    // 여기서 서버로 수정된 비밀번호를 전송하는 API 호출을 할 수 있습니다.
-    console.log("Updated Password:", password);
-    // 비밀번호 수정 완료 후 필요한 작업을 수행할 수 있습니다.
+  };
+
+  const handlePasswordSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (password !== confirmPassword) {
+        alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+        return;
+      }
+      const response = await axios.post(
+        "https://example.com/api/update-password",
+        {
+          password: password,
+        }
+      );
+      console.log("Updated Password:", password);
+    } catch (error) {
+      console.error("Error updating password:", error);
+    }
   };
 
   return (
@@ -51,7 +75,8 @@ function MyPage() {
             <strong>이메일:</strong> user@example.com
           </p>
           <p>
-            <strong>전화번호:</strong> {phoneNumber}{" "}
+            <strong>전화번호:</strong>{" "}
+            <input type="text" value={phone} onChange={handlePhoneChange} />{" "}
             <button onClick={handlePhoneSubmit}>수정</button>
           </p>
         </div>
