@@ -32,6 +32,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True, max_length=30)
     phone = models.CharField(max_length=15)
     name = models.CharField(max_length=20)
+    # 회원 탈퇴 요청시 6개월 이후에 회원정보가 db상에서 삭제되도록 할 예정 
+    is_active = models.BooleanField(default=True) # 가입시 true, 탈퇴요청시 false
+    del_req_time = models.DateTimeField(null=True) # 회원탈퇴요청 시간
     ##category_id = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     is_superuser = models.BooleanField(default=False)

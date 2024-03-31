@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+load_dotenv(dotenv_path='/Users/daeyong/Documents/Doggo/backend/local.env')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,6 +44,7 @@ DJANGO_SYSTEM_APPS = [
 ]
 
 CUSTOM_USER_APPS = [    
+    'corsheaders',
     'users.apps.UsersConfig',
     'orders.apps.OrdersConfig',
     'posts.apps.PostsConfig',
@@ -55,6 +59,7 @@ CUSTOM_USER_APPS = [
 INSTALLED_APPS = CUSTOM_USER_APPS + DJANGO_SYSTEM_APPS
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -119,8 +124,16 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication'
-    )
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'DogGo API Documentation',
+    'DESCRIPTION': 'This is a description of DogGo API',
 }
 
 from datetime import timedelta
@@ -188,3 +201,14 @@ STATIC_ROOT = '/vol/web/static'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "users.User"
+
+# 스케줄러 : 정해놓은 시간에 해당 메서드가 실행되도록함
+# CRONJOBS = [
+#     ('0 0 * * *', 'your_app_name.cron.delete_old_users'),  
+# ]
+
+# CORS_ALLOWED_ORIGINS = ['http://127.0.0.1:3000/', 'http://127.0.0.1:8000/']
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ORIGIN_ALLOW_ALL = True
