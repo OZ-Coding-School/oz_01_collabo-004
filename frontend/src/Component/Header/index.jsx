@@ -19,7 +19,6 @@ function Search() {
     <div className="header-container">
       <div className="header-title">
         <h2>
-          {" "}
           <Link to='/'>(logo)</Link> Dog<span>Go</span>
         </h2>
       </div>
