@@ -43,3 +43,8 @@
   border-radius: 4px;
   cursor: pointer;
 }
+
+.kakaogoogle {
+  display: flex;
+  padding: 0%;
+}
