@@ -18,9 +18,16 @@ function Search() {
   return (
     <div className="header-container">
       <div className="header-title">
+<<<<<<< HEAD
         <h2>
           <Link to='/'>(logo)</Link> Dog<span>Go</span>
         </h2>
+=======
+        {" "}
+        <Link to="/">
+          <img className="logo" src="/images/doggologo.png" />
+        </Link>
+>>>>>>> 5c8dd24f09a10d96a76074d16955cf06cc92d907
       </div>
       <div className="header-search">
         <div className="header-search_input">
@@ -40,6 +47,9 @@ function Search() {
           <span>웰컴</span>
           <Link to="/login">
             <li>로그인</li>
+          </Link>
+          <Link to="/mypage">
+            <li>마이도꼬</li>
           </Link>
           <Link to="/service">
             <li>고객센터</li>

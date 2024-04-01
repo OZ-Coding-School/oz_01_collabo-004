@@ -2,8 +2,6 @@
   max-width: 400px;
   margin: 20px auto;
   padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
 }
 
 .signup-form h2 {
@@ -27,6 +25,10 @@
 }
 
 .signup-form button {
+  margin: 10px;
+  position: relative;
+
+  align-items: center;
   width: 100%;
   padding: 10px;
   background-color: #007bff;
