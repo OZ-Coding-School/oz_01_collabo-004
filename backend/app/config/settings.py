@@ -31,8 +31,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
-# Application definition
+SITE_ID = 1 # 현재 Django 사이트의 고유 식별자를 설정
 
 DJANGO_SYSTEM_APPS = [
     'django.contrib.admin',
@@ -41,10 +40,15 @@ DJANGO_SYSTEM_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles'
+    'django.contrib.sites',# 여러 도메인을 관리해주는 장고 내장 시스템
 ]
 
 CUSTOM_USER_APPS = [    
     'corsheaders',
+    'allauth', # 로그인, 로그아웃, 회원가입, 비밀번호 변경, 비밀번호 초기화 등과 같은 기본적인 사용자 인증 기능을 제공
+    'allauth.account', # 사용자의 계정 설정을 커스터마이징하고 관리
+    'allauth.socialaccount', # 소셜 로그인 및 회원가입 기능을 제공
+    'allauth.socialaccount.providers.kakao', # 카카오 로그인 제공
     'users.apps.UsersConfig',
     'orders.apps.OrdersConfig',
     'posts.apps.PostsConfig',
@@ -54,9 +58,20 @@ CUSTOM_USER_APPS = [
     'rest_framework',
     'drf_spectacular',
     'rest_framework_simplejwt',
+
 ]
 
 INSTALLED_APPS = CUSTOM_USER_APPS + DJANGO_SYSTEM_APPS
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+LOGIN_REDIRECT_URL = '/' # 로그인 후에 메인페이지로 리다이렉트
+
+from django.urls.base import reverse_lazy
+ACCOUNT_LOGOUT_REDIRECT_URL = reverse_lazy('user:login') # 로그아웃 후에 리다이렉트 될 경로 
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
