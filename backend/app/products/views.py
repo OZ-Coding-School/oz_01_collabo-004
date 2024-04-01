@@ -7,12 +7,13 @@ from .serializers import ProductSerializer
 
 class ProductList(APIView):
     def get(self, request):
-        product = Product.objects.all()
-
-        serializer = ProductSerializer(product, many=True)
-
-        return Response(serializer.data)
-
+            product = Product.objects.all()
+            
+            if not product.exists():
+                Response({"error": "상품이 없습니다."}, status=status.HTTP_404_NOT_FOUND)
+            else:
+                serializer = ProductSerializer(product, many=True)
+                return Response(serializer.data)
     def post(self, request):
         serializer = ProductSerializer(data=request.data)
 
@@ -52,7 +53,7 @@ class ProductDetail(APIView):
     def delete(self, request, product_id):
         product = self.get_object(product_id)
         if product is not None:
-            product.delete()
+            product.status=False()
             return Response({"message": "상품이 성공적으로 삭제되었습니다."}, status=status.HTTP_204_NO_CONTENT)
         else:
             return Response({"error": "상품을 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND)
