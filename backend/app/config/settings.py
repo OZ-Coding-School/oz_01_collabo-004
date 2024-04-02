@@ -33,13 +33,14 @@ ALLOWED_HOSTS = ['*']
 
 SITE_ID = 1 # 현재 Django 사이트의 고유 식별자를 설정
 
+
 DJANGO_SYSTEM_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles'
+    'django.contrib.staticfiles',
     'django.contrib.sites',# 여러 도메인을 관리해주는 장고 내장 시스템
 ]
 
@@ -54,6 +55,7 @@ CUSTOM_USER_APPS = [
     'posts.apps.PostsConfig',
     'products.apps.ProductsConfig',
     'reviews.apps.ReviewsConfig',
+    'wishlist.apps.WishlistConfig',
     'core',
     'rest_framework',
     'drf_spectacular',
@@ -68,13 +70,16 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-LOGIN_REDIRECT_URL = '/' # 로그인 후에 메인페이지로 리다이렉트
+LOGIN_REDIRECT_URL = '/' # 로그인 후에 메인페이지로 리다이렉트ㄴ
 
 from django.urls.base import reverse_lazy
-ACCOUNT_LOGOUT_REDIRECT_URL = reverse_lazy('user:login') # 로그아웃 후에 리다이렉트 될 경로 
+
+# LOGIN_URL = reverse_lazy('users:login') # 로그인 페이지로 리다이렉트
+# ACCOUNT_LOGOUT_REDIRECT_URL = reverse_lazy('users:login') # 로그아웃 후에 리다이렉트 될 경로 
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -141,7 +146,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 15
 }
 
 SPECTACULAR_SETTINGS = {
