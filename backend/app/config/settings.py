@@ -46,6 +46,7 @@ CUSTOM_USER_APPS = [
     'posts.apps.PostsConfig',
     'products.apps.ProductsConfig',
     'reviews.apps.ReviewsConfig',
+    'categories.apps.CategoriesConfig',
     'core',
     'rest_framework',
     'drf_spectacular',

@@ -6,7 +6,7 @@ from .serializers import ProductSerializer
 
 class ProductAPITestCase(APITestCase):
     def setUp(self):
-        self.products_url = reverse('product-list')
+        self.products_url = reverse('product-list-create')
         self.product1 = Product.objects.create(name='상품1', description='상품1 설명', price=10000)
         self.product2 = Product.objects.create(name='상품2', description='상품2 설명', price=20000)
 
