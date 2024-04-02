@@ -2,50 +2,46 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./index.css";
 
-let aut_acc = "";
-const kakaoParams = {
-  client_id: "dbf3d260e4ea71ea45acb4f0c53bd224",
-  redirect_uri: "http://127.0.0.1:3000/user/social/kakao/login",
-  response_type: "code",
-};
-const kParams = new URLSearchParams(kakaoParams).toString();
+function AlertModal({ message, onClose }) {
+  return (
+    <div className="modal-overlay">
+      <div className="alert-modal">
+        <p>{message}</p>
+        <button onClick={onClose}>닫기</button>
+      </div>
+    </div>
+  );
+}
 
 function LoginPage() {
   const [user_id, setUser_id] = useState("");
   const [password, setPassword] = useState("");
-  // const history = useHistory();
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log("Submitting", { user_id, password });
 
     try {
-      const response = await fetch(
-        "https://124f-27-117-139-6.ngrok-free.app/api/v1/user/login/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify({ user_id: user_id, password: password }),
-        }
-      )
-        .then((response) => response.json())
-        .then((jsonData) => {
-          console.log(jsonData);
-          aut_acc = jsonData.access;
-          // history.push("/");
-        })
-        .then(console.log(aut_acc));
-
-      // if (!response.status === 200) {
-      //   throw new Error("로그인에 실패했습니다.");
-      // }
+      handleLoginFailure("로그인에 실패했습니다.");
     } catch (e) {
       console.log(e);
+      handleLoginFailure("로그인에 실패했습니다.");
     }
   };
+
+  function handleLoginFailure(message) {
+    setAlertMessage(message);
+    setShowAlert(true);
+  }
+
+  const kakaoParams = {
+    client_id: "dbf3d260e4ea71ea45acb4f0c53bd224",
+    redirect_uri: "http://127.0.0.1:3000/user/social/kakao/login",
+    response_type: "code",
+  };
+  const kParams = new URLSearchParams(kakaoParams).toString();
 
   return (
     <>
@@ -80,41 +76,43 @@ function LoginPage() {
             <button type="button">회원가입</button>
           </Link>
         </form>
-        <a
-          href={`https://kauuth.kakao.com/oauth/authorize?${kParams}`}
-          style={{
-            backgroundColor: "#fff",
-          }}
-        >
-          {" "}
-          <img
-            className="kakao"
-            src="/images/kakao_login_medium_narrow.png"
-            alt="뻐큐
-              "
-          />{" "}
-        </a>
-        <div className="kakaogoogle">
-          <button
+        <div id="error-message" className="error-message"></div>{" "}
+        <div className="social-button">
+          <a
+            className="kakao-button"
+            href={`https://kauuth.kakao.com/oauth/authorize?${kParams}`}
             style={{
               backgroundColor: "#fff",
-              height: "10px",
             }}
           >
-            {" "}
             <img
-              style={{
-                width: "180px",
-              }}
-              className="google"
-              src="/images/ios_light_sq_SI@3x.png"
-              alt="뻐큐
-              "
-            />{" "}
-          </button>
+              className="kakao"
+              src="/images/kakao_login_medium_narrow.png"
+              alt="뻐큐"
+            />
+          </a>
+          <div>
+            <a>
+              <img
+                style={{
+                  width: "180px",
+                }}
+                className="google"
+                src="/images/ios_light_sq_SI@3x.png"
+                alt="뻐큐"
+              />
+            </a>
+          </div>
         </div>
       </div>
+      {showAlert && (
+        <AlertModal
+          message={alertMessage}
+          onClose={() => setShowAlert(false)}
+        />
+      )}
     </>
   );
 }
+
 export default LoginPage;
