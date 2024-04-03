@@ -28,7 +28,7 @@ class ProductDetail(APIView):
         try:
             return Product.objects.get(id=product_id)
         except Product.DoesNotExist:
-            return None
+            return Response({"error": "상품을 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND)
 
     def get(self, request, product_id):
         product = self.get_object(product_id)

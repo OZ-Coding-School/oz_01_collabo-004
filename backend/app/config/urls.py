@@ -28,6 +28,8 @@ urlpatterns = [
     path('api/v1/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/v1/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     path('api/v1/user/', include('users.urls')),
+    path('api/v1/prouct/', include('products.urls')),
+    path('api/v1/categories/', include('categories.urls'))
     # path('accounts/', include('accounts.urls')), # 소셜 로그인 계정 관련 urls
     # path('accounts/', include('allauth.urls')), # 소셜로그인 관련 urls
     path('api/v1/product/', include('products.urls')),

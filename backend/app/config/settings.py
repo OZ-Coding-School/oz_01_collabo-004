@@ -55,6 +55,7 @@ CUSTOM_USER_APPS = [
     'posts.apps.PostsConfig',
     'products.apps.ProductsConfig',
     'reviews.apps.ReviewsConfig',
+    'categories.apps.CategoriesConfig',
     'wishlist.apps.WishlistConfig',
     'core',
     'rest_framework',
