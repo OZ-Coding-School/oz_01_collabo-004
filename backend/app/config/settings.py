@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+load_dotenv(dotenv_path='/Users/daeyong/Documents/Doggo/backend/local.env')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,8 +31,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+SITE_ID = 1 # 현재 Django 사이트의 고유 식별자를 설정
 
-# Application definition
 
 DJANGO_SYSTEM_APPS = [
     'django.contrib.admin',
@@ -37,25 +40,47 @@ DJANGO_SYSTEM_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles'
+    'django.contrib.staticfiles',
+    'django.contrib.sites',# 여러 도메인을 관리해주는 장고 내장 시스템
 ]
 
 CUSTOM_USER_APPS = [    
+    'corsheaders',
+    'allauth', # 로그인, 로그아웃, 회원가입, 비밀번호 변경, 비밀번호 초기화 등과 같은 기본적인 사용자 인증 기능을 제공
+    'allauth.account', # 사용자의 계정 설정을 커스터마이징하고 관리
+    'allauth.socialaccount', # 소셜 로그인 및 회원가입 기능을 제공
+    'allauth.socialaccount.providers.kakao', # 카카오 로그인 제공
     'users.apps.UsersConfig',
     'orders.apps.OrdersConfig',
     'posts.apps.PostsConfig',
     'products.apps.ProductsConfig',
     'reviews.apps.ReviewsConfig',
     'categories.apps.CategoriesConfig',
+    'wishlist.apps.WishlistConfig',
     'core',
     'rest_framework',
     'drf_spectacular',
     'rest_framework_simplejwt',
+
 ]
 
 INSTALLED_APPS = CUSTOM_USER_APPS + DJANGO_SYSTEM_APPS
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+LOGIN_REDIRECT_URL = '/' # 로그인 후에 메인페이지로 리다이렉트ㄴ
+
+from django.urls.base import reverse_lazy
+
+# LOGIN_URL = reverse_lazy('users:login') # 로그인 페이지로 리다이렉트
+# ACCOUNT_LOGOUT_REDIRECT_URL = reverse_lazy('users:login') # 로그아웃 후에 리다이렉트 될 경로 
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -118,8 +143,18 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication'
-    )
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 15
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'DogGo API Documentation',
+    'DESCRIPTION': 'This is a description of DogGo API',
 }
 
 from datetime import timedelta
@@ -187,3 +222,14 @@ STATIC_ROOT = '/vol/web/static'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "users.User"
+
+# 스케줄러 : 정해놓은 시간에 해당 메서드가 실행되도록함
+# CRONJOBS = [
+#     ('0 0 * * *', 'your_app_name.cron.delete_old_users'),  
+# ]
+
+# CORS_ALLOWED_ORIGINS = ['http://127.0.0.1:3000/', 'http://127.0.0.1:8000/']
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ORIGIN_ALLOW_ALL = True
