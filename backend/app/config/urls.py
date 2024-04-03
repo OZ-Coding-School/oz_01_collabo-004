@@ -39,8 +39,8 @@ urlpatterns = [
     path("api/v1/categories/", include("categories.urls")),
     # path('accounts/', include('accounts.urls')), # 소셜 로그인 계정 관련 urls
     # path('accounts/', include('allauth.urls')), # 소셜로그인 관련 urls
-    path("api/v1/product/", include("products.urls")),
-    path("api/v1/wishlist/", include("wishlist.urls")),
+    path('api/v1/products/', include('products.urls')),
+    path('api/v1/wishlist/', include('wishlist.urls')),
     # path('api/v1/order/', include('orders.urls')),
     # path('api/v1/review/', include('reviews.urls')),
     # path('api/v1/post/', include('posts.urls')),

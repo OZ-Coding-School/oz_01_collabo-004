@@ -51,8 +51,3 @@ class UserInfoModifySerializer(serializers.ModelSerializer):
                 instance.set_password(password)  # 비밀번호를 해시화하여 저장
         return super().update(instance, validated_data)
 
-
-class UserDeleteSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ["is_active", "del_req_time"]

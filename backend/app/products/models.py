@@ -4,9 +4,12 @@ from django.db import models
 
 class Product(CommonModel):
     name = models.CharField(max_length=100)
+    product_img = models.URLField(null=True, default=None)
     description_img = models.URLField(null=True, default=None)
     description_text = models.TextField(null=True, default=None)
     price = models.IntegerField()
-    sale = models.IntegerField(null=True, default=None)
-    view_count = models.IntegerField(null=False, default=0)
-    status = models.BooleanField(null=False, default=False)
+    sale = models.IntegerField(null=True, default=0)
+    view_count = models.IntegerField(default=0)
+    status = models.BooleanField(default=False)
+
+    
