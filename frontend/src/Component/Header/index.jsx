@@ -1,20 +1,26 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React from "react";
 import { Link } from "react-router-dom";
+import Navbar from "../navbar";
 import "./index.css";
 
 function Search() {
 
 
   return (
+    <header className="header">
     <div className="header-container">
-        <div className="header-title">
-        <Link to="/">
-          <img className="logo" src="/images/doggologo.png" />
-        </Link>
+      <div className="header-title">
+      <Link to="/">
+      <img className="logo" src="/images/doggologo.png" />
+      </Link>
       </div>
+
+      <Navbar />
+
       <div className="header-login">
         <ul>
-          <span>웰컴</span>
+          {/* <span>웰컴</span> */}
           <Link to="/login">
             <li>로그인</li>
           </Link>
@@ -26,7 +32,9 @@ function Search() {
           </Link>
         </ul>
       </div>
+      
     </div>
+    </header>
   );
 }
 

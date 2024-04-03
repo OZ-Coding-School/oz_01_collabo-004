@@ -4,8 +4,54 @@ body{
 }
 .main-container{
     position: relative;
+    height: 100vh;
     background-size: cover;
+    background-position: center;
+    display: flex;
+    color: white;
 }
-.main-img{
+.mainvideo-container {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    z-index: -1;
+}  
+.mainvideo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.main-content{
+    display: flex;
+    align-items: flex-end;
+    margin-left: 30px;
+}
+.main-content-introduction{
+    font-size: 1.25rem;
+    font-weight: 800;
+}
+.main-content-introduction h1{
+    font-size: 3.5rem;
+    margin: 0;
+}
+.main-content-introduction h1,
+.main-content-introduction p {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.25s ease, transform 0.4s ease;
+}
+.main-container.loadedH1 .main-content-introduction h1 {
+    opacity: 1;
+    transform: translateY(0);
+}
+.main-content-introduction .show {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.25s;
 }
