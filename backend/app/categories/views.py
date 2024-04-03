@@ -9,11 +9,11 @@ from .serializers import CategorySerializer
 class CategoryListView(APIView):
     def get(self, request):
         category = Category.objects.all()
-        if category:
-            serializer = CategorySerializer(category, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response({"msg":"There is no part count for this category."}, status=status.HTTP_404_NOT_FOUND)
-
+        if not category.exists():
+            Response({"mag":"There are no registered categories."}, status=status.HTTP_404_NOT_FOUND)
+        serializer = CategorySerializer(category, many=True)
+        return Response(serializer.data)
+    
     def post(self, request):
         serializer = CategorySerializer(data=request.data)
         if serializer.is_valid():
@@ -47,4 +47,4 @@ class CategoryDetailView(APIView):
     def delete(self, request, category_pk):
         category = self.get_object(category_pk)
         category.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_200_OK)
