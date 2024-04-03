@@ -3,6 +3,7 @@ from common.models import CommonModel
 from users.models import User
 from products.models import Product
 
+
 class Wishlist(CommonModel):
     status = models.BooleanField(default=True)
 

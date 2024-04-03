@@ -4,6 +4,7 @@ from django.core.management.base import BaseCommand
 from MySQLdb import OperationalError as MysqlOpError
 import time
 
+
 class Command(BaseCommand):
     def handle(self, *args, **options):
         self.stdout.write("Waiting for DB Connection...")
@@ -12,11 +13,8 @@ class Command(BaseCommand):
 
         while not is_db_connected:
             try:
-                is_db_connected = connections['default']
+                is_db_connected = connections["default"]
             except (MysqlOpError, OperationalError):
                 self.stdout.write("Connection Trying...")
 
-        self.stdout.write(
-            self.style.SUCCESS("MySQL Connection Successful")
-        )
-
+        self.stdout.write(self.style.SUCCESS("MySQL Connection Successful"))

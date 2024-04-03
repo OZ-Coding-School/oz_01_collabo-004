@@ -3,6 +3,7 @@ from common.models import CommonModel
 from products.models import Product
 from users.models import User
 
+
 # 주문
 class Order(CommonModel):
     product = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL)
@@ -11,4 +12,3 @@ class Order(CommonModel):
     sale_price = models.IntegerField()
     total_price = models.IntegerField()
     status = models.BooleanField(default=False)
-    

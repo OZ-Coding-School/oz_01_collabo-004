@@ -7,26 +7,33 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Product',
+            name="Product",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('modified_at', models.DateTimeField(auto_now=True)),
-                ('name', models.CharField(max_length=100)),
-                ('description_img', models.URLField(default=None, null=True)),
-                ('description_text', models.TextField(default=None, null=True)),
-                ('price', models.IntegerField()),
-                ('sale', models.IntegerField(default=None, null=True)),
-                ('view_count', models.IntegerField(default=0)),
-                ('status', models.BooleanField(default=False)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("modified_at", models.DateTimeField(auto_now=True)),
+                ("name", models.CharField(max_length=100)),
+                ("description_img", models.URLField(default=None, null=True)),
+                ("description_text", models.TextField(default=None, null=True)),
+                ("price", models.IntegerField()),
+                ("sale", models.IntegerField(default=None, null=True)),
+                ("view_count", models.IntegerField(default=0)),
+                ("status", models.BooleanField(default=False)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]

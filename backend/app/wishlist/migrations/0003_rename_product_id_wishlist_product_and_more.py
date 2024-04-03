@@ -6,18 +6,18 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('wishlist', '0002_rename_product_wishlist_product_id_and_more'),
+        ("wishlist", "0002_rename_product_wishlist_product_id_and_more"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='wishlist',
-            old_name='product_id',
-            new_name='product',
+            model_name="wishlist",
+            old_name="product_id",
+            new_name="product",
         ),
         migrations.RenameField(
-            model_name='wishlist',
-            old_name='user_id',
-            new_name='user',
+            model_name="wishlist",
+            old_name="user_id",
+            new_name="user",
         ),
     ]

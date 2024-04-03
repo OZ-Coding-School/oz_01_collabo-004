@@ -9,6 +9,7 @@ class Category(CommonModel):
     product = models.ManyToManyField(Product)
     user = models.ManyToManyField(User)
 
+
 class UserConnector(CommonModel):
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
