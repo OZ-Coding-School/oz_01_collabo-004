@@ -1,14 +1,18 @@
 body{
-    margin: 0 50px 0 50px;
+    margin: 0;
+    padding: 0;
 }
 .banner-container{
     width: 100%;
 }
 .banner-description{
+    position: relative;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: center;
     text-align: center;
+    height: 430px;
+    overflow: hidden;
 }
 .banner{
     width: 100%;
@@ -30,4 +34,7 @@ body{
 .banner-description_p_box{
     border: 1px solid black;
     padding: 0 5px 0 5px;
+    background-color: white;
+    border-radius: 10px;
+    border: 3px solid #289aff;
 }

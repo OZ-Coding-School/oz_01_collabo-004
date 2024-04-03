@@ -2,6 +2,13 @@
   margin: 0;
   width: 220px;
 }
+<<<<<<< HEAD
+.header-title{
+    margin-left:12px;
+}
+.header-title span{
+    color: #289aff;
+=======
 
 .header-container {
   display: flex;
@@ -10,6 +17,7 @@
 }
 .header-title span {
   color: #289aff;
+>>>>>>> 5c8dd24f09a10d96a76074d16955cf06cc92d907
 }
 .header-title,
 .header-search {
@@ -28,10 +36,18 @@
   border-radius: 20px;
   box-sizing: border-box;
 }
+<<<<<<< HEAD
+.header-search_input input{
+    border: none;
+    width: 100%;
+    height: 100%;
+    background: none;
+=======
 .header-search_input input {
   border: none;
   width: 100%;
   height: 100%;
+>>>>>>> 5c8dd24f09a10d96a76074d16955cf06cc92d907
 }
 .header-search_icon {
   padding: 0 5px 0 10px;
@@ -51,8 +67,13 @@
 }
 
 .header-login {
+<<<<<<< HEAD
+    position: relative;
+    right: 0;
+=======
   position: relative;
   right: 0;
+>>>>>>> 5c8dd24f09a10d96a76074d16955cf06cc92d907
 }
 
 .header-login ul {
