@@ -1,16 +1,19 @@
-from rest_framework.serializers import ModelSerializer, Serializer
-
+from rest_framework import serializers
 from .models import ProductReview
+from products.serializers import ProductInfoSerializer
 
 
-class ProductReviewListSerializer(ModelSerializer):
+class ProductReviewListSerializer(serializers.ModelSerializer):
+    product_info = ProductInfoSerializer(source="product", read_only=True)
+
     class Meta:
         model = ProductReview
         fields = "__all__"
-        depth = 1
 
 
-class ProductReviewSerializer(ModelSerializer):
+class ProductReviewDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductReview
         fields = "__all__"
+        read_only_fields = ["status", "created_at", "updated_at"]
+
