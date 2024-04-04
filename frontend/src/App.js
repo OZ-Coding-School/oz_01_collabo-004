@@ -1,21 +1,21 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Search from "./Component/Header/index.jsx";
+import Headerbar from "./Component/Header/index.jsx";
 import Footer from "./Component/footer/index.jsx";
-import Home from "./Page/Homepage/index.jsx";
 import Login from "./Page/Loginpage/index.jsx";
 import MyPage from "./Page/MyPage/index.jsx";
 import PetHouse from "./Page/PetHousePage/index.js";
 import PetRestaurant from "./Page/PetRestauntPage/index.js";
-import PetShop from "./Page/PetShopPage/index.js";
+import PetShop from "./Page/PetShopPage/index.jsx";
 import Service from "./Page/SevicePage/index.jsx";
 import SignupForm from "./Page/SignUpPage/index.jsx";
 import Travel from "./Page/TravelPage/index.js";
+import Home from "./Page/mainpage/index.jsx";
 
 function App() {
   return (
     <BrowserRouter>
-      <Search />
+      <Headerbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/petshop" element={<PetShop />} />
