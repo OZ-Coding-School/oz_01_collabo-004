@@ -1,5 +1,3 @@
-import pdb
-
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from products.models import Product
@@ -75,7 +73,6 @@ class WishlistTestCase(APITestCase):
         url = reverse("wishlist")
 
         response = self.client.get(url, headers={"Authorization": f"Bearer {self.token}"})
-        pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 3)
         self.assertEqual(response.data[0]["product"]["id"], self.product1.id)
