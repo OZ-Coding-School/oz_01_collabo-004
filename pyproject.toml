@@ -22,7 +22,18 @@ django-cors-headers = ">=4.3.1,<5.0.0"
 django-allauth = ">=0.61.1,<1.0.0"
 mypy = ">=1.8.0,<2.0.0"
 black = ">=24.3.0,<25.0.0"
+isort = ">=5.13.2,<6.0.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+python_version = 3.12
+strict = true

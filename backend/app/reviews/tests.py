@@ -16,19 +16,25 @@ class ProductReviewListTestCase(APITestCase):
             email='test@example.com',
             phone='01012345678'
             )
+        
         self.product = Product.objects.create(
-            user_id=self.user.id,
             name='testname',
             description='testdescription',
-            price=10,
-            category='testcategory',      
-            image='testimage'
+            price=1000000,
             )
+        
+        self.product2 = Product.objects.create(
+            name='testname2',
+            description='testdescription2',
+            price=2000000,
+            )
+        
         self.review = ProductReview.objects.create(
             user_id=self.user.id,
             product_id=self.product.id,
-            review='testreview',
-            rating=5
+            title='testtitle',
+            content='testcontent',
+            status=True,
             )
 
         self.token = AccessToken.for_user(self.user)
