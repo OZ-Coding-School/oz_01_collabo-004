@@ -1,9 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.urls import reverse
-from products.models import Product
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework_simplejwt.tokens import AccessToken
+
+from products.models import Product
 
 from .models import ProductReview
 
@@ -11,7 +12,11 @@ from .models import ProductReview
 class ProductReviewListTestCase(APITestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            user_id="testuserid", password="password123", name="testname", email="test@example.com", phone="01012345678"
+            user_id="testuserid",
+            password="password123",
+            name="testname",
+            email="test@example.com",
+            phone="01012345678",
         )
 
         self.product = Product.objects.create(

@@ -29,12 +29,29 @@ class CustomUserAdmin(UserAdmin):
             None,
             {
                 "classes": ("wide",),
-                "fields": ("user_id", "password", "password_check", "name", "email", "phone"),
+                "fields": (
+                    "user_id",
+                    "password",
+                    "password_check",
+                    "name",
+                    "email",
+                    "phone",
+                ),
             },
         ),
     )
 
     # 표에서 보이는 정보
-    list_display = ("id", "user_id", "name", "email", "phone", "is_active", "is_staff", "is_superuser", "last_login")
+    list_display = (
+        "id",
+        "user_id",
+        "name",
+        "email",
+        "phone",
+        "is_active",
+        "is_staff",
+        "is_superuser",
+        "last_login",
+    )
     search_fields = ("email", "name", "user_id", "phone")
     ordering = ("id",)
