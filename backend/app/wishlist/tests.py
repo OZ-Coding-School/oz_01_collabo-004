@@ -1,11 +1,13 @@
-from rest_framework.test import APITestCase
-from rest_framework import status
-from django.contrib.auth import get_user_model
-from rest_framework_simplejwt.tokens import AccessToken
-from products.models import Product
-from django.urls import reverse
-from .models import Wishlist
 import pdb
+
+from django.contrib.auth import get_user_model
+from django.urls import reverse
+from products.models import Product
+from rest_framework import status
+from rest_framework.test import APITestCase
+from rest_framework_simplejwt.tokens import AccessToken
+
+from .models import Wishlist
 
 
 class WishlistTestCase(APITestCase):

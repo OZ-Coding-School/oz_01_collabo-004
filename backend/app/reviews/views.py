@@ -1,11 +1,12 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
+from config.paginations import ProductReviewPagination
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
+
 from .models import ProductReview
-from .serializers import ProductReviewSerializer, ProductReviewListSerializer
-from config.paginations import ProductReviewPagination
+from .serializers import ProductReviewListSerializer, ProductReviewSerializer
 
 
 class ProductReviewListView(APIView):

@@ -1,9 +1,10 @@
-from rest_framework.test import APITestCase
-from django.urls import reverse
-from rest_framework import status
 from django.contrib.auth import get_user_model
-from rest_framework_simplejwt.tokens import AccessToken
+from django.urls import reverse
 from products.models import Product
+from rest_framework import status
+from rest_framework.test import APITestCase
+from rest_framework_simplejwt.tokens import AccessToken
+
 from .models import ProductReview
 
 
