@@ -50,4 +50,3 @@ class UserInfoModifySerializer(serializers.ModelSerializer):
             if password is not None:
                 instance.set_password(password)  # 비밀번호를 해시화하여 저장
         return super().update(instance, validated_data)
-

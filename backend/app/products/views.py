@@ -11,7 +11,7 @@ class ProductListView(APIView):
 
     def get(self, request):
         product = Product.objects.all()
-        
+
         if not product.exists():
             return Response({"msg": "상품이 없습니다."}, status=status.HTTP_404_NOT_FOUND)
         else:
@@ -27,14 +27,13 @@ class ProductListView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class ProductDetailView(APIView):
     def get_object(self, product_id):
         try:
             return Product.objects.get(id=product_id)
         except Product.DoesNotExist:
-            return Response(
-                {"error": "상품을 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND
-            )
+            return Response({"error": "상품을 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND)
 
     def get(self, request, product_id):
         product = self.get_object(product_id)
@@ -42,9 +41,7 @@ class ProductDetailView(APIView):
             serializer = ProductSerializer(product)
             return Response(serializer.data)
         else:
-            return Response(
-                {"error": "상품을 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND
-            )
+            return Response({"error": "상품을 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, product_id):
         product = self.get_object(product_id)
@@ -56,9 +53,7 @@ class ProductDetailView(APIView):
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response(
-                {"error": "상품을 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND
-            )
+            return Response({"error": "상품을 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND)
 
     def delete(self, request, product_id):
         product = self.get_object(product_id)
@@ -70,7 +65,7 @@ class ProductDetailView(APIView):
             )
         else:
             return Response({"error": "상품을 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND)
-        
+
 
 class GetProductByCategoryView(APIView):
     def get(self, request, category_id):
@@ -83,10 +78,10 @@ class GetProductByCategoryView(APIView):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
 class ProductSearchView(APIView):
     def get(self, request):
-        keyword = request.query_params.get('keyword', '')
-        category_id = request.query_params.get('ct', '')
-        min_price = request.query_params.get('min_price', '')
-        max_price = request.query_params.get('max_price', '')
-
+        keyword = request.query_params.get("keyword", "")
+        category_id = request.query_params.get("ct", "")
+        min_price = request.query_params.get("min_price", "")
+        max_price = request.query_params.get("max_price", "")

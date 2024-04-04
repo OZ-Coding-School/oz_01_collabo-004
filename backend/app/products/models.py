@@ -11,5 +11,3 @@ class Product(CommonModel):
     sale = models.IntegerField(null=True, default=0)
     view_count = models.IntegerField(default=0)
     status = models.BooleanField(default=False)
-
-    

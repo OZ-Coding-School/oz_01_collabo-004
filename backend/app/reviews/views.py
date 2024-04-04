@@ -7,15 +7,16 @@ from .models import ProductReview
 from .serializers import ProductReviewSerializer, ProductReviewListSerializer
 from config.paginations import ProductReviewPagination
 
+
 class ProductReviewListView(APIView):
     serializer_class = ProductReviewListSerializer
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
-    pagination_class = ProductReviewPagination 
+    pagination_class = ProductReviewPagination
 
     def get(self, request, *args, **kwargs):
         try:
-            queryset = ProductReview.objects.filter(user_id=request.user.id).all() 
+            queryset = ProductReview.objects.filter(user_id=request.user.id).all()
             pagenated_queryset = self.paginate_queryset(queryset)
             serializer = ProductReviewListSerializer(pagenated_queryset, many=True)
             return self.get_paginated_response(serializer.data)
@@ -24,12 +25,13 @@ class ProductReviewListView(APIView):
 
     def post(self, request, *args, **kwargs):
         review_data = request.data
-        review_data['user'] = request.user.id
+        review_data["user"] = request.user.id
         serializer = ProductReviewSerializer(data=request.data)
-        if serializer.is_valid(): 
+        if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class ProductReviewDetailView(APIView):
     serializer_class = ProductReviewSerializer
@@ -43,7 +45,7 @@ class ProductReviewDetailView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
+
     def put(self, request, product_id, *args):
         try:
             review = ProductReview.objects.get(user_id=request.user.id, product_id=product_id)
@@ -63,4 +65,3 @@ class ProductReviewDetailView(APIView):
         review.status = False
         review.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
-

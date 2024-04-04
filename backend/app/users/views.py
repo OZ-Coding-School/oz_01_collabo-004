@@ -14,6 +14,7 @@ from django.contrib.auth import login
 
 class Signup(APIView):
     serializer_class = serializers.UserSignUpSerializer
+
     def post(self, request):
         serializer = serializers.UserSignUpSerializer(data=request.data)
         if serializer.is_valid():
@@ -64,9 +65,7 @@ class JWTRefreshView(APIView):
         refresh_token = request.COOKIES["AUT_REF"]
 
         if not refresh_token:
-            raise Response(
-                {"msg": "required refresh token."}, status=status.HTTP_400_BAD_REQUEST
-            )
+            raise Response({"msg": "required refresh token."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             refresh_token_validate = RefreshToken(refresh_token)
@@ -93,19 +92,17 @@ class UserDetailView(APIView):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request):
-        serializer = serializers.UserInfoModifySerializer(
-            request.user, data=request.data
-        )
+        serializer = serializers.UserInfoModifySerializer(request.user, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request):
-    # 회원탈퇴 요청이 들어오면 상태를 False로 바꿔 탈퇴예정임을 나타내고
-    # del_req_time 을 요청이 들어온 현재시간으로 세팅한다.
-    # 이후 장고의 Cron을 이용하여 매일 정각에 삭제요청 후 시점이 6개월이 지난 데이터들을 삭제할 예정 
-    # 필드가 수정되고나면 로그아웃을 시킴
+        # 회원탈퇴 요청이 들어오면 상태를 False로 바꿔 탈퇴예정임을 나타내고
+        # del_req_time 을 요청이 들어온 현재시간으로 세팅한다.
+        # 이후 장고의 Cron을 이용하여 매일 정각에 삭제요청 후 시점이 6개월이 지난 데이터들을 삭제할 예정
+        # 필드가 수정되고나면 로그아웃을 시킴
         try:
             user = request.user
             user.is_active = False
@@ -117,7 +114,7 @@ class UserDetailView(APIView):
             return response
         except Exception as e:
             return Response({"msg": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-    
+
 
 import os
 
