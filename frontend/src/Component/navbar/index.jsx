@@ -7,21 +7,11 @@ function Navbar() {
     <div className="navbar">
       <div className="navbar-links">
         <ul>
-          <li>
-            <Link to="/">홈</Link>
-          </li>
-          <li>
-            <Link to="/petshop">반려 여행 상품</Link>
-          </li>
-          <li>
-            <Link to="/pethouse">반려 동반 숙소</Link>
-          </li>
-          <li>
-            <Link to="/petrestaurant">반려 동반 식당</Link>
-          </li>
-          <li>
-            <Link to="/travel">반려 추천 여행지</Link>
-          </li>
+            <Link to="/"><li>Main</li></Link>
+            <Link to="/petshop"><li>Travel Package</li></Link>
+            <Link to="/pethouse"><li>Hotel</li></Link>
+            <Link to="/petrestaurant"><li>Restaurant</li></Link>
+            <Link to="/travel"><li>Recommended Spot</li></Link>
         </ul>
       </div>
     </div>

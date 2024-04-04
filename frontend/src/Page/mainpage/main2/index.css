@@ -1,0 +1,26 @@
+.main-content2{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: whitesmoke;
+    height: 100vh;
+    margin: 50px 20px 0 20px;
+}
+.main-content2 ul{
+    display: flex;
+    text-align: center;
+}
+.main-content2 ul li{
+    list-style-type: none;
+    border: 1px solid black;
+    margin: 20px;
+    width: 200px;
+    height: 200px;
+    background-image: url('../../../../public/images/반려2.jpg');
+    background-size: cover;
+    transition: transform 0.3s ease;
+    border-radius: 25px;
+}
+.main-content2 ul li:hover {
+    transform: scale(1.15);
+}
