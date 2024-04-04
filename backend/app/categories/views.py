@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from .models import Category
 from .serializers import CategorySerializer
 
@@ -13,7 +14,7 @@ class CategoryListView(APIView):
             Response({"mag":"There are no registered categories."}, status=status.HTTP_404_NOT_FOUND)
         serializer = CategorySerializer(category, many=True)
         return Response(serializer.data)
-    
+
     def post(self, request):
         serializer = CategorySerializer(data=request.data)
         if serializer.is_valid():
@@ -38,6 +39,7 @@ class CategoryDetailView(APIView):
     
     def put(self, request, category_pk):
         category = self.get_object(category_pk)
+
         serializer = CategorySerializer(category, data=request.data)
         if serializer.is_valid():
             serializer.save()

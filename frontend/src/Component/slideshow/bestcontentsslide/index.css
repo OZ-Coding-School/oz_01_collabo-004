@@ -5,20 +5,16 @@
     padding: 20px;
     margin-top: 20px;
 }
-.slide-container-items {
+.slide-container-items{
     width: 100%;
     padding: 30px;
-    border: 2px solid #289aff;
+    border-radius: 10px;
+    border: 2px solid rgb(0, 0, 0);
     border-radius: 10px;
   }
   .slide-item img {
-    width: 330px;
-    height: 200px;
+    width: 140px;
     margin-left: 50px;
-  }
-  .prev-arrow {
-    display: block;
-    background-color: #289aff;
-    width: 50px;
-    height: 50px;
+    border-radius: 10px;
+    object-fit: contain;
   }
