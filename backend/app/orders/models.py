@@ -1,7 +1,8 @@
-from django.db import models
 from common.models import CommonModel
+from django.db import models
 from products.models import Product
 from users.models import User
+
 
 # 주문
 class Order(CommonModel):
@@ -11,4 +12,3 @@ class Order(CommonModel):
     sale_price = models.IntegerField()
     total_price = models.IntegerField()
     status = models.BooleanField(default=False)
-    

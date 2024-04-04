@@ -2,16 +2,47 @@
   margin: 0;
   width: 100px;
 }
-.header{
-  position: fixed;
-  top: 0;
-  width: 100%;background-image: linear-gradient(to bottom,rgba(255, 255, 255, 0.4),rgba(255, 255, 255, 0));
-  z-index: 999;
+.header-title{
+    margin-left:12px;
 }
-.header-container {
+.header-title span{
+    color: #289aff;
+}
+.header-title,
+.header-search {
+  margin-top: calc(20px + 30px);
+}
+
+.header-search_input {
+  margin-top: 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 400px;
+  height: 40px;
+  padding: 8px;
+  border: 2px solid black;
+  border-radius: 20px;
+  box-sizing: border-box;
+}
+<<<<<<< HEAD
+.header-search_input input{
+    border: none;
+    width: 100%;
+    height: 100%;
+    background: none;
+=======
+.header-search_input input {
+  border: none;
+  width: 100%;
+  height: 100%;
+>>>>>>> 5c8dd24f09a10d96a76074d16955cf06cc92d907
+}
+.header-search_icon {
+  padding: 0 5px 0 10px;
+}
+.header-search_icon:hover {
+  cursor: pointer;
 }
 .header-login ul span {
   font-size: 0.75rem;
@@ -23,6 +54,17 @@
   font-weight: 500;
   margin-right: 5px;
 }
+
+.header-login {
+<<<<<<< HEAD
+    position: relative;
+    right: 0;
+=======
+  position: relative;
+  right: 0;
+>>>>>>> 5c8dd24f09a10d96a76074d16955cf06cc92d907
+}
+
 .header-login ul {
   display: flex;
   align-items: center;

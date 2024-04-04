@@ -1,6 +1,8 @@
-from .models import Wishlist
-from rest_framework import serializers
 from products.serializers import ProductSerializer
+from rest_framework import serializers
+
+from .models import Wishlist
+
 
 class WishlistSerializer(serializers.ModelSerializer):
     product = ProductSerializer(read_only=True)
@@ -8,10 +10,19 @@ class WishlistSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Wishlist
-        exclude = ('id', 'created_at', 'modified_at',)
+        exclude = (
+            "id",
+            "created_at",
+            "modified_at",
+        )
         depth = 1
+
 
 class CreateWishlistSerializer(serializers.ModelSerializer):
     class Meta:
         model = Wishlist
-        exclude = ('id', 'created_at', 'modified_at',)
+        exclude = (
+            "id",
+            "created_at",
+            "modified_at",
+        )

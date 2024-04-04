@@ -1,8 +1,9 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./index.css";
 
 function MyPage() {
+  // 이전 내용 시작
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
@@ -59,20 +60,52 @@ function MyPage() {
       console.error("Error updating password:", error);
     }
   };
+  // 이전 내용 끝
+
+  // 위시 리스트 시작
+  const [wishList, setWishList] = useState([]);
+  const [wishItem, setWishItem] = useState("");
+
+  const handleAddWishItem = () => {
+    if (wishItem.trim() !== "") {
+      setWishList([...wishList, wishItem]);
+      setWishItem("");
+    }
+  };
+
+  const handleRemoveWishItem = (index) => {
+    const updatedWishList = [...wishList];
+    updatedWishList.splice(index, 1);
+    setWishList(updatedWishList);
+  };
+  // 위시 리스트 끝
+
+  // 내 정보 불러오기 시작
+  useEffect(() => {
+    // 이 부분에서 내 정보를 불러오는 API를 호출하고, 그 결과를 이용하여 상태를 업데이트합니다.
+    const fetchUserInfo = async () => {
+      try {
+        const response = await axios.get("https://example.com/api/user-info");
+        const { email, phone } = response.data; // 예시: response.data에는 email과 phone 정보가 있다고 가정합니다.
+        setEmail(email);
+        setPhone(phone);
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
+  // 내 정보 불러오기 끝
 
   return (
     <div className="my-page-container">
+      {/* 프로필 정보 */}
       <div className="profile-section">
         <h2>프로필 정보</h2>
         <div className="profile-info">
           <p>
-            <strong>아이디:</strong> user123
-          </p>
-          <p>
-            <strong>이름:</strong> 홍길동
-          </p>
-          <p>
-            <strong>이메일:</strong> user@example.com
+            <strong>이메일:</strong> {email}
           </p>
           <p>
             <strong>전화번호:</strong>{" "}
@@ -81,6 +114,29 @@ function MyPage() {
           </p>
         </div>
       </div>
+
+      {/* 위시 리스트 */}
+      <div className="wish-list-section">
+        <h2>위시 리스트</h2>
+        <div>
+          <input
+            type="text"
+            value={wishItem}
+            onChange={(e) => setWishItem(e.target.value)}
+          />
+          <button onClick={handleAddWishItem}>추가</button>
+        </div>
+        <ul>
+          {wishList.map((item, index) => (
+            <li key={index}>
+              {item}
+              <button onClick={() => handleRemoveWishItem(index)}>삭제</button>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* 비밀번호 수정 */}
       <div className="edit-section">
         <h2>비밀번호 수정</h2>
         <form onSubmit={handlePasswordSubmit}>

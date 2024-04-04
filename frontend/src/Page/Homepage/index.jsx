@@ -31,7 +31,7 @@ function Mainpage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default Mainpage;
