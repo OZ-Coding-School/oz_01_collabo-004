@@ -10,7 +10,11 @@ from .models import ProductReview
 class ProductReviewListTestCase(APITestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            user_id="testuserid", password="password123", name="testname", email="test@example.com", phone="01012345678"
+            user_id="testuserid",
+            password="password123",
+            name="testname",
+            email="test@example.com",
+            phone="01012345678",
         )
 
         self.product_set = []
