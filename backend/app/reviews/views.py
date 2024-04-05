@@ -7,30 +7,34 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from config.paginations import ProductReviewPagination
 
 from .models import ProductReview
-from .serializers import ProductReviewListSerializer, ProductReviewSerializer
+from .serializers import ProductReviewListSerializer, ProductReviewDetailSerializer
 
 
 class ProductReviewListView(APIView):
     serializer_class = ProductReviewListSerializer
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
-    pagination_class = ProductReviewPagination
 
     def get(self, request, *args, **kwargs):
         try:
             queryset = ProductReview.objects.filter(user_id=request.user.id).all()
-            pagenated_queryset = self.paginate_queryset(queryset)
+            paginator = ProductReviewPagination()
+            pagenated_queryset = paginator.paginate_queryset(queryset, request)
             serializer = ProductReviewListSerializer(pagenated_queryset, many=True)
-            return self.get_paginated_response(serializer.data)
+            return paginator.get_paginated_response(serializer.data)
         except Exception as e:
             return Response(
                 {"msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
     def post(self, request, *args, **kwargs):
-        review_data = request.data
-        review_data["user"] = request.user.id
-        serializer = ProductReviewSerializer(data=request.data)
+        data = {
+            "user": request.user.id,
+            "product": request.data.get("product_id"),
+            "title": request.data.get("title"),
+            "content": request.data.get("content")
+        }
+        serializer = ProductReviewListSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -38,16 +42,14 @@ class ProductReviewListView(APIView):
 
 
 class ProductReviewDetailView(APIView):
-    serializer_class = ProductReviewSerializer
+    serializer_class = ProductReviewDetailSerializer
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
 
     def get(self, request, product_id, *args, **kwargs):
         try:
-            review = ProductReview.objects.get(
-                user_id=request.user.id, product_id=product_id
-            )
-            serializer = ProductReviewSerializer(review)
+            review = ProductReview.objects.get(user_id=request.user.id, product_id=product_id)
+            serializer = ProductReviewDetailSerializer(review)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response(
@@ -56,12 +58,11 @@ class ProductReviewDetailView(APIView):
 
     def put(self, request, product_id, *args):
         try:
-            review = ProductReview.objects.get(
-                user_id=request.user.id, product_id=product_id
-            )
+            review = ProductReview.objects.get(user_id=request.user.id, product_id=product_id)
+
         except ProductReview.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = ProductReviewSerializer(review, data=request.data)
+        serializer = ProductReviewDetailSerializer(review, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -76,4 +77,4 @@ class ProductReviewDetailView(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
         review.status = False
         review.save()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_200_OK)
