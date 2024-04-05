@@ -1,5 +1,6 @@
-from products.serializers import ProductSerializer
 from rest_framework import serializers
+
+from products.serializers import ProductSerializer
 
 from .models import Wishlist
 
