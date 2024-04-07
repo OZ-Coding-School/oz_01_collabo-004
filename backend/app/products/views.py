@@ -2,13 +2,15 @@ from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from rest_framework.permissions import AllowAny
 from .models import Product
 from .serializers import ProductSerializer
 
 
 class ProductListView(APIView):
     serializer_class = ProductSerializer
+    authentication_classes = []
+    permission_classes = [AllowAny]
 
     def get(self, request):
         product = Product.objects.all()
@@ -32,6 +34,9 @@ class ProductListView(APIView):
 
 
 class ProductDetailView(APIView):
+    authentication_classes = []
+    permission_classes = [AllowAny]
+
     def get_object(self, product_id):
         try:
             return Product.objects.get(id=product_id)
@@ -67,7 +72,7 @@ class ProductDetailView(APIView):
     def delete(self, request, product_id):
         product = self.get_object(product_id)
         if product is not None:
-            product.status = False()
+            product.status = False
             return Response(
                 {"message": "상품이 성공적으로 삭제되었습니다."},
                 status=status.HTTP_204_NO_CONTENT,
@@ -79,6 +84,9 @@ class ProductDetailView(APIView):
 
 
 class GetProductByCategoryView(APIView):
+    authentication_classes = []
+    permission_classes = [AllowAny]
+
     def get(self, request, category_id):
         try:
             queryset = Product.objects.filter(category_id=category_id).all()
@@ -93,6 +101,9 @@ class GetProductByCategoryView(APIView):
 
 
 class ProductSearchView(APIView):
+    authentication_classes = []
+    permission_classes = [AllowAny]
+
     def get(self, request):
         keyword = request.query_params.get("keyword", "")
         category_id = request.query_params.get("ct", "")

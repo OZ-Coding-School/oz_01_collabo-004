@@ -15,9 +15,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-load_dotenv(
-    dotenv_path="/Users/gimhyeongbin/Documents/oz_01_collabo-004/backend/local.env"
-)
+load_dotenv(dotenv_path="../local.env")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -60,6 +58,7 @@ CUSTOM_USER_APPS = [
     "reviews.apps.ReviewsConfig",
     "categories.apps.CategoriesConfig",
     "wishlist.apps.WishlistConfig",
+    "coupons.apps.CouponsConfig",
     "core",
     "rest_framework",
     "drf_spectacular",
@@ -147,8 +146,9 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-        "rest_framework.authentication.BasicAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.IsAuthenticated",
     ),
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 15,

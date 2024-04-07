@@ -12,8 +12,6 @@ from .serializers import ProductReviewListSerializer, ProductReviewDetailSeriali
 
 class ProductReviewListView(APIView):
     serializer_class = ProductReviewListSerializer
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
 
     def get(self, request, *args, **kwargs):
         try:
@@ -43,8 +41,6 @@ class ProductReviewListView(APIView):
 
 class ProductReviewDetailView(APIView):
     serializer_class = ProductReviewDetailSerializer
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
 
     def get(self, request, product_id, *args, **kwargs):
         try:

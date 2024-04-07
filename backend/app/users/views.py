@@ -1,21 +1,21 @@
 from datetime import datetime, timedelta
-
 import requests
 from django.contrib.auth import login
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
-
 from . import serializers
 from .models import User
 
 
 class Signup(APIView):
     serializer_class = serializers.UserSignUpSerializer
+    authentication_classes = []
+    permission_classes = [AllowAny]
 
     def post(self, request):
         serializer = serializers.UserSignUpSerializer(data=request.data)
@@ -48,9 +48,6 @@ class JWTLoginView(TokenObtainPairView):
 
 
 class JWTLogoutView(APIView):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
-
     def post(self, request):
         try:
             # 응답으로 로그인한 사용자의 쿠키에서 토큰을 제거하는 설정

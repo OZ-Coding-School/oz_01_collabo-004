@@ -18,9 +18,6 @@ def get_wishlist(user_id, product_id):
 
 
 class WishlistView(APIView):
-    authentication_classes = (JWTAuthentication,)
-    permission_classes = (IsAuthenticated,)
-
     # 위시리스트 목록 가져오기
     def get(self, request):
         wishlist = Wishlist.objects.filter(user_id=request.user.id, status=True).all()
@@ -59,9 +56,6 @@ class WishlistView(APIView):
 
 
 class WishlistDetailView(APIView):
-    authentication_classes = (JWTAuthentication,)
-    permission_classes = (IsAuthenticated,)
-
     # 위시리스트의 상품 상세내역
     def get(self, request, product_id):
         wishlist_product = get_wishlist(user_id=request.user.id, product_id=product_id)
@@ -74,7 +68,7 @@ class WishlistDetailView(APIView):
     def delete(self, request, product_id):
         wishlist = get_wishlist(user_id=request.user.id, product_id=product_id)
         if wishlist:
-            if wishlist.status == False:
+            if not wishlist.status:
                 return Response({"msg": "already deleted"}, status=status.HTTP_200_OK)
             wishlist.status = False
             wishlist.save()
