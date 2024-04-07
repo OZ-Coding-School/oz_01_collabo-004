@@ -1,6 +1,5 @@
 name: Django CI
 
-# 브랜치에 푸쉬가 되면 ci 실행
 on:
   push:
 
@@ -40,8 +39,6 @@ jobs:
       - name: Install Poetry
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
-# ${HOME} -> home/runner
-# 포에트리가 설치된 경로를 깃허브 패스에 등록
           echo "${HOME}/.local/bin" >> $GITHUB_PATH
 
       - name: Install dependencies
@@ -56,6 +53,12 @@ jobs:
         run: |
           poetry run isort . --check --diff
 
+#      - name: Run Mypy
+#        run: |
+#          poetry run mypy .
+
       - name: Test python project
         run: |
+          cd backend/app
           poetry run python manage.py test
+
