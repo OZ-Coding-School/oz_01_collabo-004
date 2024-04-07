@@ -7,7 +7,7 @@ jobs:
   ci:
     runs-on: ubuntu-20.04
     env:
-    
+      SECRET_KEY: didtjdgns1dltngus2fpcmrh3
       DB_HOST: 127.0.0.1
       DB_PORT: 3306
       DB_USER: root
@@ -21,7 +21,7 @@ jobs:
         id: setup-python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.11
+          python-version: 3.12
 
       - name: Set timezone to KST
         run: |
@@ -38,7 +38,7 @@ jobs:
 
       - name: Install Poetry
         run: |
-          curl -sSL curl -sSL https://install.python-poetry.org | python3 -
+          curl -sSL https://install.python-poetry.org | python3 -
           echo "${HOME}/.local/bin" >> $GITHUB_PATH
 
       - name: Install dependencies
@@ -59,5 +59,6 @@ jobs:
 
       - name: Test python project
         run: |
+          cd backend/app
           poetry run python manage.py test
 

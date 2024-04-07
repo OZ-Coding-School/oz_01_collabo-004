@@ -67,9 +67,7 @@ class JWTRefreshView(APIView):
         refresh_token = request.COOKIES["AUT_REF"]
 
         if not refresh_token:
-            raise Response(
-                {"msg": "required refresh token."}, status=status.HTTP_400_BAD_REQUEST
-            )
+            raise Response({"msg": "required refresh token."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             refresh_token_validate = RefreshToken(refresh_token)
@@ -96,9 +94,7 @@ class UserDetailView(APIView):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request):
-        serializer = serializers.UserInfoModifySerializer(
-            request.user, data=request.data
-        )
+        serializer = serializers.UserInfoModifySerializer(request.user, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
