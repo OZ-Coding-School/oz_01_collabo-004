@@ -12,7 +12,7 @@ jobs:
       DB_PORT: 3306
       DB_USER: root
       DB_PASSWORD: 1234
-      DB_DATABASE: oz_django
+      DB_NAME: oz_django
     steps:
       - name: Check out the codes
         uses: actions/checkout@v2
@@ -34,7 +34,7 @@ jobs:
         run: |
           sudo systemctl start mysql
           mysql -e "use mysql; FLUSH PRIVILEGES; ALTER USER '${{ env.DB_USER }}'@'localhost' IDENTIFIED BY '${{ env.DB_PASSWORD }}';" -uroot -proot
-          mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
+          mysql -e 'CREATE DATABASE ${{ env.DB_NAME }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
 
       - name: Install Poetry
         run: |
