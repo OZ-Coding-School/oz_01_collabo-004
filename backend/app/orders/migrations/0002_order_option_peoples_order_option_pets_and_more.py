@@ -39,7 +39,12 @@ class Migration(migrations.Migration):
             model_name="order",
             name="status",
             field=models.CharField(
-                choices=[("CANCEL", "cancel"), ("PAID", "paid"), ("ORDERED", "ordered")], max_length=7
+                choices=[
+                    ("CANCEL", "cancel"),
+                    ("PAID", "paid"),
+                    ("ORDERED", "ordered"),
+                ],
+                max_length=7,
             ),
         ),
     ]

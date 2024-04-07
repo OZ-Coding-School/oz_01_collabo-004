@@ -37,8 +37,8 @@ urlpatterns = [
     # path('accounts/', include('allauth.urls')), # 소셜로그인 관련 urls
     path("api/v1/product/", include("products.urls")),
     path("api/v1/wishlist/", include("wishlist.urls")),
-    path('api/v1/order/', include('orders.urls')),
-    path('api/v1/review/', include('reviews.urls')),
-    path('api/v1/coupon/', include('coupon.urls')),
+    path("api/v1/order/", include("orders.urls")),
+    path("api/v1/review/", include("reviews.urls")),
+    path("api/v1/coupon/", include("coupon.urls")),
     # path('api/v1/post/', include('posts.urls')),
 ]

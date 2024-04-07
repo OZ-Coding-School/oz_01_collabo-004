@@ -7,7 +7,8 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from config.paginations import ProductReviewPagination
 
 from .models import ProductReview
-from .serializers import ProductReviewListSerializer, ProductReviewDetailSerializer
+from .serializers import (ProductReviewDetailSerializer,
+                          ProductReviewListSerializer)
 
 
 class ProductReviewListView(APIView):
@@ -30,7 +31,7 @@ class ProductReviewListView(APIView):
             "user": request.user.id,
             "product": request.data.get("product_id"),
             "title": request.data.get("title"),
-            "content": request.data.get("content")
+            "content": request.data.get("content"),
         }
         serializer = ProductReviewListSerializer(data=data)
         if serializer.is_valid():
@@ -44,7 +45,9 @@ class ProductReviewDetailView(APIView):
 
     def get(self, request, product_id, *args, **kwargs):
         try:
-            review = ProductReview.objects.get(user_id=request.user.id, product_id=product_id)
+            review = ProductReview.objects.get(
+                user_id=request.user.id, product_id=product_id
+            )
             serializer = ProductReviewDetailSerializer(review)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
@@ -54,7 +57,9 @@ class ProductReviewDetailView(APIView):
 
     def put(self, request, product_id, *args):
         try:
-            review = ProductReview.objects.get(user_id=request.user.id, product_id=product_id)
+            review = ProductReview.objects.get(
+                user_id=request.user.id, product_id=product_id
+            )
 
         except ProductReview.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)

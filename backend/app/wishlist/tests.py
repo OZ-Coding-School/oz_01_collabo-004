@@ -81,7 +81,9 @@ class WishlistTestCase(APITestCase):
 
         url = reverse("wishlist")
 
-        response = self.client.get(url, headers={"Authorization": f"Bearer {self.token}"})
+        response = self.client.get(
+            url, headers={"Authorization": f"Bearer {self.token}"}
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 3)
         self.assertEqual(response.data[0]["product"]["id"], self.product1.id)

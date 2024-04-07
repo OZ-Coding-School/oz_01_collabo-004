@@ -3,6 +3,7 @@ from django.db import models
 from common.models import CommonModel
 from products.models import Product
 from users.models import User
+
 # from coupons.models import Coupon
 # from payments.models import Payment
 
@@ -10,9 +11,9 @@ from users.models import User
 # 주문
 class Order(CommonModel):
     ORDER_CHOICES = (
-        ('CANCEL', 'cancel'),
-        ('PAID', 'paid'),
-        ('ORDERED', 'ordered'),
+        ("CANCEL", "cancel"),
+        ("PAID", "paid"),
+        ("ORDERED", "ordered"),
     )
     payment_method = models.CharField(max_length=100)
     sale_price = models.IntegerField()
