@@ -1,6 +1,5 @@
-from rest_framework import serializers
-
 from products.serializers import ProductInfoSerializer
+from rest_framework import serializers
 
 from .models import ProductReview
 

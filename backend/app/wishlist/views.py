@@ -39,9 +39,7 @@ class WishlistView(APIView):
             # 기존에 위시리스트에 추가된 상품이 있으면 해당 상품의 위시리스트 상태를 확인.
             # 위시리스트 상태가 True이면 이미 위시리스트에 존재한다고 알림.
             # False 이면 상태를 변경해주고 성공적으로 위시리스트에 추가되었다고 알림.
-            check_wishlist = get_wishlist(
-                user_id=request.user.id, product_id=request.data.get("product_id")
-            )
+            check_wishlist = get_wishlist(user_id=request.user.id, product_id=request.data.get("product_id"))
             if check_wishlist:
                 if check_wishlist.status == True:
                     return Response({"msg": "already added"}, status=status.HTTP_200_OK)

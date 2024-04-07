@@ -1,12 +1,12 @@
 from django.shortcuts import get_object_or_404
+from products.models import Product
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from products.models import Product
-
 from .models import Order
+
 # from coupons.models import Coupon, UserCoupon
 from .serializers import OrderDetailSerializer, OrderListSerializer
 
@@ -16,15 +16,11 @@ class OrderListView(APIView):
 
     def check_pet_count(self, data):
         pet_count = data["option_pets"]
-        sum_selected_size = (
-            data["pet_size_big"] + data["pet_size_medium"] + data["pet_size_small"]
-        )
+        sum_selected_size = data["pet_size_big"] + data["pet_size_medium"] + data["pet_size_small"]
         return pet_count == sum_selected_size
 
     def get(self, request):
-        orders = Order.objects.filter(
-            user_id=request.user.id, status__ne="CANCEL"
-        ).all()
+        orders = Order.objects.filter(user_id=request.user.id, status__ne="CANCEL").all()
         if orders:
             serializer = OrderListSerializer(orders, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -97,9 +93,5 @@ class OrderDetailView(APIView):
             order.save()
             return Response({"msg": "Successfully Canceled"}, status=status.HTTP_200_OK)
         elif order.status == "CANCEL":
-            return Response(
-                {"msg": "already cancelled"}, status=status.HTTP_400_BAD_REQUEST
-            )
-        return Response(
-            {"msg": "invalid request plz try again"}, status=status.HTTP_400_BAD_REQUEST
-        )
+            return Response({"msg": "already cancelled"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"msg": "invalid request plz try again"}, status=status.HTTP_400_BAD_REQUEST)

@@ -1,14 +1,12 @@
+from config.paginations import ProductReviewPagination
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from config.paginations import ProductReviewPagination
-
 from .models import ProductReview
-from .serializers import (ProductReviewDetailSerializer,
-                          ProductReviewListSerializer)
+from .serializers import ProductReviewDetailSerializer, ProductReviewListSerializer
 
 
 class ProductReviewListView(APIView):
@@ -22,9 +20,7 @@ class ProductReviewListView(APIView):
             serializer = ProductReviewListSerializer(pagenated_queryset, many=True)
             return paginator.get_paginated_response(serializer.data)
         except Exception as e:
-            return Response(
-                {"msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
+            return Response({"msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def post(self, request, *args, **kwargs):
         data = {
@@ -45,21 +41,15 @@ class ProductReviewDetailView(APIView):
 
     def get(self, request, product_id, *args, **kwargs):
         try:
-            review = ProductReview.objects.get(
-                user_id=request.user.id, product_id=product_id
-            )
+            review = ProductReview.objects.get(user_id=request.user.id, product_id=product_id)
             serializer = ProductReviewDetailSerializer(review)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
-            return Response(
-                {"msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
+            return Response({"msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def put(self, request, product_id, *args):
         try:
-            review = ProductReview.objects.get(
-                user_id=request.user.id, product_id=product_id
-            )
+            review = ProductReview.objects.get(user_id=request.user.id, product_id=product_id)
 
         except ProductReview.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
@@ -71,9 +61,7 @@ class ProductReviewDetailView(APIView):
 
     def delete(self, request, product_id, *args):
         try:
-            review = ProductReview.objects.get(
-                user_id=request.user.id, product_id=product_id
-            )
+            review = ProductReview.objects.get(user_id=request.user.id, product_id=product_id)
         except ProductReview.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         review.status = False

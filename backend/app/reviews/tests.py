@@ -1,10 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.urls import reverse
+from products.models import Product
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework_simplejwt.tokens import AccessToken
-
-from products.models import Product
 
 from .models import ProductReview
 
@@ -58,9 +57,7 @@ class ProductReviewListTestCase(APITestCase):
             "contents": "ummm...",
             "product": "invalid type",
         }
-        response = self.client.post(
-            url, data, headers={"Authorization": f"Bearer {self.token}"}
-        )
+        response = self.client.post(url, data, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(ProductReview.objects.count(), 20)
@@ -71,9 +68,7 @@ class ProductReviewListTestCase(APITestCase):
             "product_id": self.product.id,
         }
 
-        response = self.client.post(
-            url, data, headers={"Authorization": f"Bearer {self.token}"}
-        )
+        response = self.client.post(url, data, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(ProductReview.objects.count(), 21)
@@ -85,9 +80,7 @@ class ProductReviewListTestCase(APITestCase):
     def test_get_product_review(self):
         url = reverse("product-review-list")
 
-        response = self.client.get(
-            url, headers={"Authorization": f"Bearer {self.token}"}
-        )
+        response = self.client.get(url, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data["results"]), 10)
@@ -100,9 +93,7 @@ class ProductReviewListTestCase(APITestCase):
             self.assertEqual(review["product_info"]["name"], self.product_set[i].name)
             self.assertEqual(review["product_info"]["price"], self.product_set[i].price)
             self.assertEqual(review["product_info"]["sale"], self.product_set[i].sale)
-            self.assertEqual(
-                review["product_info"]["product_img"], self.product_set[i].product_img
-            )
+            self.assertEqual(review["product_info"]["product_img"], self.product_set[i].product_img)
 
 
 class ProductReviewDetailTestCase(APITestCase):
@@ -134,9 +125,7 @@ class ProductReviewDetailTestCase(APITestCase):
 
     def test_get_product_review_detail(self):
         url = reverse("product-review-detail", kwargs={"product_id": self.product.id})
-        response = self.client.get(
-            url, headers={"Authorization": f"Bearer {self.token}"}
-        )
+        response = self.client.get(url, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["user"], self.user.id)
@@ -152,9 +141,7 @@ class ProductReviewDetailTestCase(APITestCase):
             "content": "testcontent_update",
             "status": True,
         }
-        response = self.client.put(
-            url, data=data, headers={"Authorization": f"Bearer {self.token}"}
-        )
+        response = self.client.put(url, data=data, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["user"], self.user.id)
@@ -169,16 +156,12 @@ class ProductReviewDetailTestCase(APITestCase):
             "name": "invalid_value",
             "status": True,
         }
-        response = self.client.put(
-            url, data=invalid_data, headers={"Authorization": f"Bearer {self.token}"}
-        )
+        response = self.client.put(url, data=invalid_data, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         url = reverse("product-review-detail", kwargs={"product_id": 9919283})
-        response = self.client.delete(
-            url, headers={"Authorization": f"Bearer {self.token}"}
-        )
+        response = self.client.delete(url, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(ProductReview.objects.count(), 1)
@@ -187,9 +170,7 @@ class ProductReviewDetailTestCase(APITestCase):
         # 유효하지않은 상품 아이디인 경우
         url = reverse("product-review-detail", kwargs={"product_id": 810938091839})
 
-        response = self.client.delete(
-            url, headers={"Authorization": f"Bearer {self.token}"}
-        )
+        response = self.client.delete(url, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(ProductReview.objects.filter(status=True).count(), 1)
@@ -197,9 +178,7 @@ class ProductReviewDetailTestCase(APITestCase):
         # 유저가 구매한 상품인 경우
         url = reverse("product-review-detail", kwargs={"product_id": self.product.id})
 
-        response = self.client.delete(
-            url, headers={"Authorization": f"Bearer {self.token}"}
-        )
+        response = self.client.delete(url, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(ProductReview.objects.filter(status=True).count(), 0)
