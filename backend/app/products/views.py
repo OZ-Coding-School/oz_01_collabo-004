@@ -14,7 +14,9 @@ class ProductListView(APIView):
         product = Product.objects.all()
 
         if not product.exists():
-            return Response({"msg": "상품이 없습니다."}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"msg": "상품이 없습니다."}, status=status.HTTP_404_NOT_FOUND
+            )
         else:
             serializer = ProductSerializer(product, many=True)
             return Response(serializer.data)
@@ -34,7 +36,9 @@ class ProductDetailView(APIView):
         try:
             return Product.objects.get(id=product_id)
         except Product.DoesNotExist:
-            return Response({"error": "상품을 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"error": "상품을 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND
+            )
 
     def get(self, request, product_id):
         product = self.get_object(product_id)
@@ -42,7 +46,9 @@ class ProductDetailView(APIView):
             serializer = ProductSerializer(product)
             return Response(serializer.data)
         else:
-            return Response({"error": "상품을 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"error": "상품을 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND
+            )
 
     def put(self, request, product_id):
         product = self.get_object(product_id)
@@ -54,7 +60,9 @@ class ProductDetailView(APIView):
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response({"error": "상품을 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"error": "상품을 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND
+            )
 
     def delete(self, request, product_id):
         product = self.get_object(product_id)
@@ -65,7 +73,9 @@ class ProductDetailView(APIView):
                 status=status.HTTP_204_NO_CONTENT,
             )
         else:
-            return Response({"error": "상품을 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"error": "상품을 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND
+            )
 
 
 class GetProductByCategoryView(APIView):
@@ -77,7 +87,9 @@ class GetProductByCategoryView(APIView):
             serializer = ProductSerializer(pagenated_queryset, many=True)
             return paginator.get_paginated_response(serializer.data)
         except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(
+                {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 
 class ProductSearchView(APIView):
