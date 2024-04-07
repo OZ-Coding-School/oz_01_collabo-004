@@ -39,7 +39,9 @@ jobs:
 
       - name: Install Poetry
         run: |
-          curl -sSL curl -sSL https://install.python-poetry.org | python3 -
+          curl -sSL https://install.python-poetry.org | python3 -
+# ${HOME} -> home/runner
+# 포에트리가 설치된 경로를 깃허브 패스에 등록
           echo "${HOME}/.local/bin" >> $GITHUB_PATH
 
       - name: Install dependencies
