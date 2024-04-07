@@ -39,6 +39,6 @@ urlpatterns = [
     path("api/v1/wishlist/", include("wishlist.urls")),
     path("api/v1/order/", include("orders.urls")),
     path("api/v1/review/", include("reviews.urls")),
-    path("api/v1/coupon/", include("coupon.urls")),
+    path("api/v1/coupon/", include("coupons.urls")),
     # path('api/v1/post/', include('posts.urls')),
 ]
