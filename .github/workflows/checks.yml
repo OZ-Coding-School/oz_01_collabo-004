@@ -12,7 +12,7 @@ jobs:
       DB_PORT: 3306
       DB_USER: root
       DB_PASSWORD: 1234
-      DB_DATABASE: oz_django
+      DB_NAME: oz_django
     steps:
       - name: Check out the codes
         uses: actions/checkout@v2
