@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .connectorserializer import ConnectorSerializer
+from .connectorserializer import ConnectorDetailSerializer, ConnectorSerializer
 from .models import Category, CategoryUserConnector
 from .serializers import CategorySerializer
 
@@ -32,7 +32,7 @@ class CategoryListView(APIView):
 class CategoryDetailView(APIView):
     def get_object(self, category_pk):
         try:
-            return Category.objects.get(category_pk=category_pk)
+            return Category.objects.get(id=category_pk)
         except Category.DoesNotExist:
             return Response(
                 {"msg": "There is no part count for this category."},
@@ -68,9 +68,11 @@ class UserCategorySurveyView(APIView):
     def post(self, request):
         user = request.user
         if user.last_login is None:
-            select_category_id = request.data.get("select_category")
-            select_category = Category.objects.get(id=select_category_id)
-            connector, created = CategoryUserConnector.objects.get_or_create(user=user, category=select_category)
-            serializer = ConnectorSerializer(connector)
+            select_category_ids = request.data.get("select_category")
+            connector_list = []
+            for category_id in select_category_ids:
+                connector = CategoryUserConnector.objects.create(user_id=request.user.id, category_id=category_id)
+                connector_list.append(connector)
+            serializer = ConnectorDetailSerializer(connector_list, many=True)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_200_OK)

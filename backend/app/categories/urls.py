@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import CategoryDetailView, CategoryListView
+from .views import CategoryDetailView, CategoryListView, UserCategorySurveyView
 
 urlpatterns = [
     path("categories/", CategoryListView.as_view(), name="category-list"),
@@ -9,4 +9,5 @@ urlpatterns = [
         CategoryDetailView.as_view(),
         name="category-detail",
     ),
+    path("categories/user-surver/", UserCategorySurveyView.as_view(), name="user-survey"),
 ]
