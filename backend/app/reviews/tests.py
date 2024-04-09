@@ -124,7 +124,7 @@ class ProductReviewDetailTestCase(APITestCase):
         self.client.force_login(user=self.user)
 
     def test_get_product_review_detail(self):
-        url = reverse("product-review-detail", kwargs={"product_id": self.product.id})
+        url = reverse("product-review-detail", kwargs={"review_id": self.review.pk})
         response = self.client.get(url, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -135,7 +135,7 @@ class ProductReviewDetailTestCase(APITestCase):
         self.assertEqual(response.data["product"], self.review.product.id)
 
     def test_put_product_review_detail(self):
-        url = reverse("product-review-detail", kwargs={"product_id": self.product.id})
+        url = reverse("product-review-detail", kwargs={"review_id": self.review.pk})
         data = {
             "title": "testtitle_update",
             "content": "testcontent_update",
