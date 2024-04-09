@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import axios from "../../api/axios";
+import SignupForm from "../SignUpPage";
 import "./index.css";
 
 function AlertModal({ message, onClose }) {
@@ -18,13 +19,23 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const [signUp, setSignUp] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log("Submitting", { user_id, password });
 
     try {
-      handleLoginFailure("로그인에 실패했습니다.");
+      const response = await axios.post("/login", {
+        id: user_id,
+        pw: password,
+      });
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${response.date.token}`;
+      console.log(response.data.token);
+
+      handleLoginFailure("로그인에 성공했습니다.");
     } catch (e) {
       console.log(e);
       handleLoginFailure("로그인에 실패했습니다.");
@@ -42,15 +53,19 @@ function LoginPage() {
     response_type: "code",
   };
   const kParams = new URLSearchParams(kakaoParams).toString();
+  console.log(signUp);
 
   return (
     <>
       <div className="login-container">
+        {/* <div className="signUpModal"> */}
+        {signUp ? <SignupForm setSignUp={setSignUp} /> : null}
+        {/* </div> */}
         <div className="doggo">
           <h1>D o g</h1>
           <h1 className="go">G o</h1>
         </div>
-        <form onSubmit={handleSubmit}>
+        <form className="login-form" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="user_id">아이디</label>
             <input
@@ -72,9 +87,11 @@ function LoginPage() {
             />
           </div>
           <button type="submit">로그인</button>
-          <Link to="/signup">
-            <button type="button">회원가입</button>
-          </Link>
+          {/* <Link to="/signup"> */}
+          <button type="button" onClick={() => setSignUp(true)}>
+            회원가입
+          </button>
+          {/* </Link> */}
         </form>
         <div id="error-message" className="error-message"></div>{" "}
         <div className="social-button">
@@ -86,9 +103,13 @@ function LoginPage() {
             }}
           >
             <img
+              style={{
+                width: "170px",
+                margin: "0",
+              }}
               className="kakao"
               src="/images/kakao_login_medium_narrow.png"
-              alt="뻐큐"
+              alt="카카오 로그인"
             />
           </a>
           <div>
@@ -99,7 +120,7 @@ function LoginPage() {
                 }}
                 className="google"
                 src="/images/ios_light_sq_SI@3x.png"
-                alt="뻐큐"
+                alt="구글 로그인"
               />
             </a>
           </div>

@@ -1,23 +1,35 @@
 .footer {
     background-color: #f0f0f0;
     margin-top: 50px;
-    margin: 0 -50px 0 -50px;
     font-size: 0.75rem;
     padding: 30px;
-  }
+}
 .container {
     display: flex;
     justify-content: space-around;
 }
-  
+
 .column {
     flex: 1;
     margin: 0 10px;
 }
-  
+
 .copyRight {
     margin-top: 20px;
     font-size: 12px;
     color: #666;
 }
-  
+.column ul{
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+.column ul a{
+    list-style-type: none;
+    text-decoration-line: none;
+    margin-right: 10px;
+    color: black;
+}
+.column ul a:hover{
+    text-decoration-line: underline;
+}

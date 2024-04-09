@@ -11,7 +11,7 @@ jobs:
       DB_HOST: 127.0.0.1
       DB_PORT: 3306
       DB_USER: root
-      DB_PASS: gudqls0516
+      DB_PASS: 1234
       DB_NAME: oz_django
     steps:
       - name: Check out the codes
@@ -59,6 +59,6 @@ jobs:
 
       - name: Test python project
         run: |
-          cd backend/app
+          cd app
           poetry run python manage.py test
 
