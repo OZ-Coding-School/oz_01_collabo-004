@@ -34,6 +34,7 @@ ALLOWED_HOSTS = ["*"]
 
 SITE_ID = 1  # 현재 Django 사이트의 고유 식별자를 설정
 
+AUTH_USER_MODEL = "users.User"
 
 DJANGO_SYSTEM_APPS = [
     "django.contrib.admin",
@@ -209,7 +210,6 @@ STATIC_ROOT = "/vol/web/static"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTH_USER_MODEL = "users.User"
 
 # 스케줄러 : 정해놓은 시간에 해당 메서드가 실행되도록함
 # CRONJOBS = [

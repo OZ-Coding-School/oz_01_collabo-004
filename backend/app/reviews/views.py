@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
+from django.shortcuts import get_object_or_404
 from .models import ProductReview
 from .serializers import ProductReviewDetailSerializer, ProductReviewListSerializer
 
@@ -39,31 +39,27 @@ class ProductReviewListView(APIView):
 class ProductReviewDetailView(APIView):
     serializer_class = ProductReviewDetailSerializer
 
-    def get(self, request, product_id, *args, **kwargs):
-        try:
-            review = ProductReview.objects.get(user_id=request.user.id, product_id=product_id)
-            serializer = ProductReviewDetailSerializer(review)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({"msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    def get(self, request, review_id, *args, **kwargs):
+        review = get_object_or_404(ProductReview, id=review_id)
+        serializer = ProductReviewDetailSerializer(review)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def put(self, request, product_id, *args):
-        try:
-            review = ProductReview.objects.get(user_id=request.user.id, product_id=product_id)
+    def put(self, request, review_id, *args):
+        review = get_object_or_404(ProductReview, id=review_id)
+        if review.user == request.user:  # 리뷰를 작성한 유저가 보낸 수정 요청인지를 확인함
+            serializer = ProductReviewDetailSerializer(review, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-        except ProductReview.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = ProductReviewDetailSerializer(review, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def delete(self, request, review_id, *args):
+        review = get_object_or_404(ProductReview, id=review_id)
+        if review.user == request.user:  # 리뷰를 작성한 유저가 보낸 삭제요청인지를 확인함
+            review.status = False
+            review.save()
+            return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-    def delete(self, request, product_id, *args):
-        try:
-            review = ProductReview.objects.get(user_id=request.user.id, product_id=product_id)
-        except ProductReview.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        review.status = False
-        review.save()
-        return Response(status=status.HTTP_200_OK)
+

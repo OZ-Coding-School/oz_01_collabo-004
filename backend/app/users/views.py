@@ -66,11 +66,11 @@ class JWTRefreshView(APIView):
         refresh_token = request.COOKIES["AUT_REF"]
 
         if not refresh_token:
-            raise Response({"msg": "required refresh token."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"msg": "required refresh token."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             refresh_token_validate = RefreshToken(refresh_token)
-            access_token = str(refresh_token_validate.access_token())
+            access_token = str(refresh_token_validate.access_token)
             return access_token
         except:
             return Response(

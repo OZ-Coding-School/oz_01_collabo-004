@@ -160,15 +160,15 @@ class ProductReviewDetailTestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        url = reverse("product-review-detail", kwargs={"product_id": 9919283})
+        url = reverse("product-review-detail", kwargs={"review_id": 9919283123})
         response = self.client.delete(url, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(ProductReview.objects.count(), 1)
 
     def test_delete_product_review_detail(self):
-        # 유효하지않은 상품 아이디인 경우
-        url = reverse("product-review-detail", kwargs={"product_id": 810938091839})
+        # 유효하지않은 리뷰 아이디인 경우
+        url = reverse("product-review-detail", kwargs={"review_id": 810938091839})
 
         response = self.client.delete(url, headers={"Authorization": f"Bearer {self.token}"})
 
@@ -176,7 +176,7 @@ class ProductReviewDetailTestCase(APITestCase):
         self.assertEqual(ProductReview.objects.filter(status=True).count(), 1)
 
         # 유저가 구매한 상품인 경우
-        url = reverse("product-review-detail", kwargs={"product_id": self.product.id})
+        url = reverse("product-review-detail", kwargs={"review_id": self.product.id})
 
         response = self.client.delete(url, headers={"Authorization": f"Bearer {self.token}"})
 
