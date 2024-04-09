@@ -1,26 +1,98 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useEffect } from 'react';
 import './index.css';
 
 function Main2() {
+  useEffect(() => {
+    const handleNextClick = () => {
+      const items = document.querySelectorAll('.item');
+      document.querySelector('.slide').appendChild(items[0]);
+    };
+
+    const handlePrevClick = () => {
+      const items = document.querySelectorAll('.item');
+      document.querySelector('.slide').prepend(items[items.length - 1]);
+    };
+
+    document.querySelector('.next').addEventListener('click', handleNextClick);
+    document.querySelector('.prev').addEventListener('click', handlePrevClick);
+
+    return () => {
+      document.querySelector('.next').removeEventListener('click', handleNextClick);
+      document.querySelector('.prev').removeEventListener('click', handlePrevClick);
+    };
+  }, []);
   return (
-    <div className='main-content2'>
-      <div className='main-content2-btn'>
-      <div className='main-content-btn_title'>
-      <h1>DogGo에서 보여드립니다.</h1>
-      <p>제주도에서 반려동물과 함께할 수 있는</p>
-      <p>패키지, 숙소, 식당, 장소를 추천받고</p>
-      <p>DogGo에서 추천받고 행복한 여행 되세요</p>
-      </div>
-        <ul>
-          <Link to='/petshop'><li>여행패키지</li></Link>
-          <Link to='/pethouse'><li>숙소</li></Link>
-          <Link to='/petrestaurant'><li>식당</li></Link>
-          <Link to='/travel'><li>추천장소</li></Link>
-        </ul>
-      </div>
-      </div>
+    <div className='main2-contanier'>
+    <div className='main2slideshow-container'>
+
+      <div className='slide'>
+
+        <div className='item' style={{ backgroundImage: "url(./images/반려2.jpg)" }}>
+          <div className='main2slideshow-content'>
+            <div className='name'>1번째이미지</div>
+            <div className='des'>
+              콘텐츠설명설명콘텐츠설명설명콘텐츠설명설명콘텐츠설명설명콘텐츠설명설명
+            </div>
+            <button>See More</button>
+          </div>
+        </div>
+        <div className='item' style={{ backgroundImage: "url(./images/산책1.jpg)" }}>
+          <div className='main2slideshow-content'>
+            <div className='name'>2번째이미지</div>
+            <div className='des'>
+              콘텐츠설명설명콘텐츠설명설명콘텐츠설명설명콘텐츠설명설명콘텐츠설명설명
+            </div>
+            <button>See More</button>
+          </div>
+        </div>
+        <div className='item' style={{ backgroundImage: "url(./images/산책2.jpg)" }}>
+          <div className='main2slideshow-content'>
+            <div className='name'>3번째이미지</div>
+            <div className='des'>
+              콘텐츠설명설명콘텐츠설명설명콘텐츠설명설명콘텐츠설명설명콘텐츠설명설명
+            </div>
+            <button>See More</button>
+          </div>
+        </div>
+        <div className='item' style={{ backgroundImage: "url(./images/산책3.jpg)" }}>
+          <div className='main2slideshow-content'>
+            <div className='name'>4번째이미지</div>
+            <div className='des'>
+              콘텐츠설명설명콘텐츠설명설명콘텐츠설명설명콘텐츠설명설명콘텐츠설명설명
+            </div>
+            <button>See More</button>
+          </div>
+        </div>
+        <div className='item' style={{ backgroundImage: "url(./images/캠핑.jpg)" }}>
+          <div className='main2slideshow-content'>
+            <div className='name'>5번째이미지</div>
+            <div className='des'>
+              콘텐츠설명설명콘텐츠설명설명콘텐츠설명설명콘텐츠설명설명콘텐츠설명설명
+            </div>
+            <button>See More</button>
+          </div>
+        </div>
+        <div className='item' style={{ backgroundImage: "url(./images/캠핑5.jpg)" }}>
+          <div className='main2slideshow-content'>
+            <div className='name'>6번째이미지</div>
+            <div className='des'>
+              콘텐츠설명설명콘텐츠설명설명콘텐츠설명설명콘텐츠설명설명콘텐츠설명설명
+            </div>
+            <button>See More</button>
+          </div>
+        </div>
+    </div>
+
+    <div className='main2slideshow-btn'>
+    <button className='prev'><FontAwesomeIcon icon={faArrowLeft} /></button>
+            <button className='next'><FontAwesomeIcon icon={faArrowRight} /></button>
+    </div>
+
+    </div>
+    </div>
   )
 }
 
-export default Main2
+export default Main2;

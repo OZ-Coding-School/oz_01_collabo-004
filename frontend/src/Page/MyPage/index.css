@@ -1,6 +1,12 @@
+.flex-column {
+  margin: 100px;
+  margin-top: 150px;
+}
+
 .my-page-container {
   max-width: 500px;
-  margin: 0 auto;
+  margin: auto;
+  margin-top: 100px;
   padding: 20px;
 }
 
@@ -23,7 +29,8 @@
 }
 
 .input-field input {
-  width: 50%;
+  width: 40%;
+  height: 30px;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -31,7 +38,8 @@
 }
 
 button {
-  padding: 5px 10px;
+  padding: 1px 5px;
+  font-size: 15px;
   background-color: #007bff;
   color: #fff;
   border: none;
@@ -43,9 +51,8 @@ button:hover {
   background-color: #0056b3;
 }
 
-/* index.css */
 .my-page-container {
-  /* 페이지 컨테이너 스타일 */
+  margin: 100px;
 }
 
 .wishlist-modal {
@@ -60,7 +67,6 @@ button:hover {
   z-index: 999;
 }
 
-/* 모달 내부 요소 스타일 */
 .wishlist-modal h2 {
   font-size: 20px;
   margin-bottom: 10px;
