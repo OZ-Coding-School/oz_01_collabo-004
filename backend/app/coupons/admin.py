@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import UserCoupon, Coupon
+from .models import Coupon, UserCoupon
 
 
 @admin.register(Coupon)
@@ -63,13 +63,7 @@ class UserCouponAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             "쿠폰 정보",
-            {
-                "fields": (
-                    "user",
-                    "coupon",
-                    "expired_at"
-                )
-            },
+            {"fields": ("user", "coupon", "expired_at")},
         ),
     )
 
@@ -100,5 +94,3 @@ class UserCouponAdmin(admin.ModelAdmin):
     )
     search_fields = ("user_id", "coupon_id", "expired_at")
     ordering = ("id",)
-
-

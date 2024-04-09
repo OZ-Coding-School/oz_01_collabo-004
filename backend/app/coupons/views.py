@@ -3,13 +3,14 @@ from coupons.serializers import CouponSerializer, UserCouponSerializer
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import status
-from rest_framework.permissions import IsAdminUser, AllowAny
+from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 
 class CouponListView(APIView):
     permission_classes = [IsAdminUser]
+
     def get(self, request):
         coupons = Coupon.objects.all()
         if coupons:
@@ -137,6 +138,7 @@ class UserCouponIssueView(APIView):
     시리얼라이저에서 유효성 검증 실패시 400 상태 코드, 시리얼라이저의 error 메시지를 반환.
     생성이 완료되면 응답으로 생성된 쿠폰의 정보와, 201 상태코드 반환.
     """
+
     serializer_class = UserCouponSerializer
 
     def post(self, request, coupon_id):
