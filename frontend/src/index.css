@@ -1,3 +1,16 @@
 body {
   padding: 0;
 }
+@font-face {
+  font-family: 'BinggraeII-Bold';
+  src: url(../public/font/BinggraeII-Bold.ttf);
+}
+@font-face {
+  font-family: 'TiltNeon-Regular-VariableFont_XROT,YROT';
+  src: url(../public/font/TiltNeon-Regular-VariableFont_XROT\,YROT.ttf);
+}
+.kanit-thin {
+  font-family: "Kanit", sans-serif;
+  font-weight: 100;
+  font-style: normal;
+}

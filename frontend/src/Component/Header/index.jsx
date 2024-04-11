@@ -9,9 +9,9 @@ function Search() {
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 0) {
-        setScrolled(true); // 스크롤이 발생하면 scrolled를 true로 설정
+        setScrolled(true); 
       } else {
-        setScrolled(false); // 스크롤이 상단으로 올라가면 scrolled를 false로 설정
+        setScrolled(false);
       }
     };
 
