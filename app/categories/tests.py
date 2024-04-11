@@ -1,3 +1,5 @@
+import pdb
+
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import status
@@ -30,6 +32,7 @@ class CategoryTest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Category.objects.count(), 1)
+        self.assertEqual(response.data["name"], "newcategory")
 
 
 class CategoryDetailsTest(APITestCase):
@@ -81,9 +84,19 @@ class UserCategorySurveyTest(APITestCase):
     def test_post_category_survey(self):
         self.assertIsNone(self.user.last_login)
         category_ids = [self.category1.id, self.category2.id]
-
         data = {"select_category": category_ids}
+
         url = reverse("user-survey")
         response = self.client.post(url, data)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(int(response.data[0]["category"]), self.category1.id)
+        self.assertEqual(int(response.data[1]["category"]), self.category2.id)
+
+
+# class UserCategoryListViewTest(APITestCase):
+#     pass
+#
+#
+# class UserCategoryDetailViewTest(APITestCase):
+#     pass

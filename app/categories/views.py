@@ -3,9 +3,12 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .connectorserializer import ConnectorDetailSerializer, ConnectorSerializer
 from .models import Category, CategoryUserConnector
-from .serializers import CategorySerializer
+from .serializers import (
+    CategorySerializer,
+    ProductConnectorSerializer,
+    UserConnectorSerializer,
+)
 
 
 class CategoryListView(APIView):
@@ -65,14 +68,40 @@ class CategoryDetailView(APIView):
 
 
 class UserCategorySurveyView(APIView):
+
     def post(self, request):
         user = request.user
         if user.last_login is None:
-            select_category_ids = request.data.get("select_category")
-            connector_list = []
-            for category_id in select_category_ids:
-                connector = CategoryUserConnector.objects.create(user_id=request.user.id, category_id=category_id)
-                connector_list.append(connector)
-            serializer = ConnectorDetailSerializer(connector_list, many=True)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(status=status.HTTP_200_OK)
+            select_category_ids = request.data.getlist("select_category")
+            if select_category_ids:
+                connector_list = []
+                for category_id in select_category_ids:
+                    connector = CategoryUserConnector.objects.create(user_id=request.user.id, category_id=category_id)
+                    connector_list.append(connector)
+                serializer = UserConnectorSerializer(connector_list, many=True)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response({"msg": "no category selected."}, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+# 유저가 자기가 선택한 카테고리 조회
+class UserCategoryListView(APIView):
+    def get(self, request):
+        user = request.user
+        connectors = CategoryUserConnector.objects.filter(user_id=user.user_id)
+
+        if connectors():
+            serializer = ProductConnectorSerializer(connectors, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({"msg": "no category selected."}, status=status.HTTP_404_NOT_FOUND)
+
+
+# 유저가 자기가 선택한 카테고리 삭제
+# 커넥터를 통해서 정보 가져오기
+class UserCategoryDetailView(APIView):
+    def delete(self, request, category_id):
+        connector = CategoryUserConnector.objects.filter(id=category_id, user_id=request.user)
+        if connector:
+            connector.delete()
+            return Response(status=status.HTTP_200_OK)
+        return Response({"msg": "no category selected"}, status=status.HTTP_404_NOT_FOUND)
