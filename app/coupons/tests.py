@@ -11,7 +11,7 @@ from .models import Coupon, UserCoupon
 
 
 class CouponListViewTestCase(APITestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.admin_user = get_user_model().objects.create_superuser(
             user_id="testuserid",
             password="password123",
@@ -19,7 +19,7 @@ class CouponListViewTestCase(APITestCase):
 
         self.token = AccessToken.for_user(self.admin_user)
 
-    def test_get_coupon_list(self):
+    def test_get_coupon_list(self) -> None:
         url = reverse("coupon-list")
         response = self.client.get(url, headers={"Authorization": f"Bearer {self.token}"})
 
@@ -42,7 +42,7 @@ class CouponListViewTestCase(APITestCase):
         self.assertEqual(response.data[1]["sale_price"], 30000)
         self.assertEqual(response.data[1]["duration"], 7)
 
-    def test_post_coupon_list(self):
+    def test_post_coupon_list(self) -> None:
         url = reverse("coupon-list")
         data = {
             "type": "REGULAR",
@@ -61,7 +61,7 @@ class CouponListViewTestCase(APITestCase):
 
 
 class CouponDetailViewTest(APITestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.admin_user = get_user_model().objects.create_superuser(
             user_id="testuserid",
             password="password123",
@@ -71,7 +71,7 @@ class CouponDetailViewTest(APITestCase):
 
         self.token = AccessToken.for_user(self.admin_user)
 
-    def test_get_coupon_detail(self):
+    def test_get_coupon_detail(self) -> None:
         url = reverse("coupon-detail", kwargs={"coupon_id": self.coupon.pk})
         response = self.client.get(url, headers={"Authorization": f"Bearer {self.token}"})
 
@@ -95,7 +95,7 @@ class CouponDetailViewTest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_put_coupon_detail(self):
+    def test_put_coupon_detail(self) -> None:
         url = reverse("coupon-detail", kwargs={"coupon_id": self.coupon.pk})
         data = {"duration": 60, "sale_price": 30000}
 
@@ -111,7 +111,7 @@ class CouponDetailViewTest(APITestCase):
         self.assertEqual(self.coupon.sale_price, 30000)
         self.assertEqual(self.coupon.duration, 60)
 
-    def test_delete_coupon_detail(self):
+    def test_delete_coupon_detail(self) -> None:
         url = reverse("coupon-detail", kwargs={"coupon_id": self.coupon.pk})
         response = self.client.delete(url, headers={"Authorization": f"Bearer {self.token}"})
 
@@ -131,7 +131,7 @@ class CouponDetailViewTest(APITestCase):
 
 
 class UserCouponTestCase(APITestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
             user_id="testuser",
             password="password123",
@@ -143,7 +143,7 @@ class UserCouponTestCase(APITestCase):
         self.coupon2 = Coupon.objects.create(type="EVENT", content="빅세일 이벤트 쿠폰", sale_price=30000, duration=7)
         self.token = AccessToken.for_user(self.user)
 
-    def test_user_coupon_issue(self):
+    def test_user_coupon_issue(self) -> None:
         # 처음 발급요청을 테스트
         url = reverse("user-coupon-issue", kwargs={"coupon_id": self.coupon.pk})
         response = self.client.post(url, headers={"Authorization": f"Bearer {self.token}"})
@@ -160,7 +160,7 @@ class UserCouponTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["msg"], "already issued coupon.")
 
-    def test_user_coupon_list(self):
+    def test_user_coupon_list(self) -> None:
         url = reverse("user-coupon-list")
         UserCoupon.objects.create(user_id=self.user.pk, coupon_id=self.coupon.pk, expired_at=timezone.now())
         UserCoupon.objects.create(user_id=self.user.pk, coupon_id=self.coupon2.pk, expired_at=timezone.now())
@@ -181,7 +181,7 @@ class UserCouponTestCase(APITestCase):
         self.assertEqual(response.data[1]["user"], self.user.pk)
         self.assertEqual(response.data[1]["coupon"], self.coupon2.pk)
 
-    def test_available_user_coupon_list(self):
+    def test_available_user_coupon_list(self) -> None:
         url = reverse("available-user-coupons")
         UserCoupon.objects.create(user_id=self.user.pk, coupon_id=self.coupon.pk, expired_at=timezone.now())
         UserCoupon.objects.create(user_id=self.user.pk, coupon_id=self.coupon2.pk, expired_at=timezone.now())
@@ -204,7 +204,7 @@ class UserCouponTestCase(APITestCase):
         self.assertEqual(response.data[1]["coupon"], self.coupon2.pk)
         self.assertTrue(response.data[0]["expired_at"] < response.data[1]["expired_at"])
 
-    def test_used_user_coupon_list(self):
+    def test_used_user_coupon_list(self) -> None:
         url = reverse("used-user-coupons")
         # 아무런 쿠폰을 소유하지 않았을때 테스트
         response = self.client.get(url, headers={"Authorization": f"Bearer {self.token}"})
@@ -232,7 +232,7 @@ class UserCouponTestCase(APITestCase):
         self.assertEqual(response.data[0]["coupon"], self.coupon2.pk)
         self.assertFalse(response.data[0]["status"])
 
-    def test_get_user_coupon_detail(self):
+    def test_get_user_coupon_detail(self) -> None:
         # 유저가 발급한 쿠폰이 있는 경우 상세정보 불러오기 테스트
         user_coupon = UserCoupon.objects.create(
             user_id=self.user.pk,

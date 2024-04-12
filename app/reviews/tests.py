@@ -10,7 +10,7 @@ from .models import ProductReview
 
 
 class ProductReviewListTestCase(APITestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
             user_id="testuserid",
             password="password123",
@@ -50,7 +50,7 @@ class ProductReviewListTestCase(APITestCase):
         self.token = AccessToken.for_user(self.user)
         self.client.force_login(user=self.user)
 
-    def test_post_product_review(self):
+    def test_post_product_review(self) -> None:
         url = reverse("product-review-list")
 
         data = {
@@ -66,7 +66,7 @@ class ProductReviewListTestCase(APITestCase):
         data = {
             "title": "testtitle21",
             "content": "testcontent21",
-            "product_id": self.product.id,
+            "product_id": self.product.id,  # type: ignore
         }
 
         response = self.client.post(url, data, headers={"Authorization": f"Bearer {self.token}"})
@@ -78,7 +78,7 @@ class ProductReviewListTestCase(APITestCase):
         self.assertEqual(response.data["product"], self.product.id)
         self.assertEqual(response.data["user"], self.user.id)
 
-    def test_get_product_review(self):
+    def test_get_product_review(self) -> None:
         url = reverse("product-review-list")
 
         response = self.client.get(url, headers={"Authorization": f"Bearer {self.token}"})
@@ -98,7 +98,7 @@ class ProductReviewListTestCase(APITestCase):
 
 
 class ProductReviewDetailTestCase(APITestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
             user_id="testuserid",
             password="password123",
@@ -124,7 +124,7 @@ class ProductReviewDetailTestCase(APITestCase):
         self.token = AccessToken.for_user(self.user)
         self.client.force_login(user=self.user)
 
-    def test_get_product_review_detail(self):
+    def test_get_product_review_detail(self) -> None:
         url = reverse("product-review-detail", kwargs={"review_id": self.review.pk})
         response = self.client.get(url, headers={"Authorization": f"Bearer {self.token}"})
 
@@ -133,9 +133,9 @@ class ProductReviewDetailTestCase(APITestCase):
         self.assertEqual(response.data["title"], self.review.title)
         self.assertEqual(response.data["content"], self.review.content)
         self.assertTrue(response.data["status"])
-        self.assertEqual(response.data["product"], self.review.product.id)
+        self.assertEqual(response.data["product"], self.review.product.id)  # type: ignore
 
-    def test_put_product_review_detail(self):
+    def test_put_product_review_detail(self) -> None:
         url = reverse("product-review-detail", kwargs={"review_id": self.review.pk})
         data = {
             "title": "testtitle_update",
@@ -167,7 +167,7 @@ class ProductReviewDetailTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(ProductReview.objects.count(), 1)
 
-    def test_delete_product_review_detail(self):
+    def test_delete_product_review_detail(self) -> None:
         # 유효하지않은 리뷰 아이디인 경우
         url = reverse("product-review-detail", kwargs={"review_id": 810938091839})
 

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import './index.css';
 
 function Product({products}) {
+console.log(products.product_img)
 return (
     <div className="product">
     
@@ -10,7 +11,7 @@ return (
     
     className="product-link" 
     state={{products}}>
-    <img src={products.product__img} 
+    <img src={products.product_img} 
     alt='상품이미지' 
     className='product-img'
     />

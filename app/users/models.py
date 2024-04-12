@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
@@ -6,8 +8,8 @@ from django.contrib.auth.models import (
 from django.db import models
 
 
-class UserManager(BaseUserManager):
-    def create_user(self, user_id, password, **extra_fields):
+class UserManager(BaseUserManager["User"]):
+    def create_user(self, user_id: str, password: str, **extra_fields: Any) -> "User":
         if not user_id:
             raise ValueError("Users must have an email address")
 
@@ -17,7 +19,7 @@ class UserManager(BaseUserManager):
 
         return user
 
-    def create_superuser(self, user_id, password):
+    def create_superuser(self, user_id: str, password: str) -> "User":
         user = self.create_user(user_id, password)
 
         user.is_superuser = True
@@ -37,7 +39,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     # 회원 탈퇴 요청시 6개월 이후에 회원정보가 db상에서 삭제되도록 할 예정
     is_active = models.BooleanField(default=True)  # 가입시 true, 탈퇴요청시 false
     del_req_time = models.DateTimeField(null=True)  # 회원탈퇴요청 시간
-    ##category_id = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)

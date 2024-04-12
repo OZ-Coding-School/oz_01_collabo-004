@@ -13,7 +13,7 @@ from products.models import Product
 
 
 class OrderListTestCase(APITestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
             user_id="testuser", password="password123", name="testname", email="test@example.com", phone="0101010011"
         )
@@ -25,7 +25,7 @@ class OrderListTestCase(APITestCase):
         )
         self.token = AccessToken.for_user(self.user)
 
-    def test_post_order_list(self):
+    def test_post_order_list(self) -> None:
         url = reverse("order-list")
         data = {
             "product": self.product.pk,
@@ -92,7 +92,7 @@ class OrderListTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["msg"], "plz check pet size count & pet count.")
 
-    def test_get_order_list(self):
+    def test_get_order_list(self) -> None:
         self.order1 = Order.objects.create(
             product_id=self.product.pk,
             user_id=self.user.pk,
@@ -136,7 +136,7 @@ class OrderListTestCase(APITestCase):
 
 
 class OrderDetailViewTestCase(APITestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
             user_id="testuser", password="password123", name="testname", email="test@example.com", phone="0101010011"
         )
@@ -189,7 +189,7 @@ class OrderDetailViewTestCase(APITestCase):
         )
         self.token = AccessToken.for_user(self.user)
 
-    def test_order_detail_get(self):
+    def test_order_detail_get(self) -> None:
         # 유저가 주문한 내역을 조회
         url = reverse("order-detail", kwargs={"order_id": self.order.order_id})
         response = self.client.get(url, headers={"Authorization": f"Bearer {self.token}"})
@@ -225,7 +225,7 @@ class OrderDetailViewTestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_order_detail_put(self):
+    def test_order_detail_put(self) -> None:
         data = {
             "people": 3,
             "pet": 2,
@@ -263,7 +263,7 @@ class OrderDetailViewTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["msg"], "already paid order.")
 
-    def test_order_detail_delete(self):
+    def test_order_detail_delete(self) -> None:
         # 'ORDERED' 상태의 주문 취소시 주문의 상태를 'CANCEL' 로 바꾸는지 테스트
         url = reverse("order-detail", kwargs={"order_id": self.order.order_id})
         response = self.client.delete(url, headers={"Authorization": f"Bearer {self.token}"})

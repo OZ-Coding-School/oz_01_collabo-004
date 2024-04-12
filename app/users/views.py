@@ -1,3 +1,4 @@
+import os
 from datetime import datetime, timedelta
 
 import requests
@@ -64,15 +65,15 @@ class JWTLogoutView(APIView):
 
 class JWTRefreshView(APIView):
     def post(self, request: Request) -> Response:
-        refresh_token = request.COOKIES["AUT_REF"]
+        refresh_token = request.COOKIES.get("AUT_REF")
 
         if not refresh_token:
             return Response({"msg": "required refresh token."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            refresh_token_validate = RefreshToken(refresh_token)
+            refresh_token_validate = RefreshToken(refresh_token)  # type: ignore
             access_token = str(refresh_token_validate.access_token)
-            return access_token
+            return Response({"access_token": access_token}, status=status.HTTP_200_OK)
         except:
             return Response(
                 {"msg": "invalid refresh token. try login again"},
@@ -86,8 +87,7 @@ class UserDetailView(APIView):
     serializer_class = serializers.UserInfoSerializer
 
     def get(self, request: Request) -> Response:
-        user_data = request.user
-        user = User.objects.get(user_id=user_data.user_id)
+        user = User.objects.get(id=request.user.id)  # type: ignore
         if user:
             serializer = serializers.UserInfoSerializer(user)
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -108,7 +108,7 @@ class UserDetailView(APIView):
         try:
             user = request.user
             user.is_active = False
-            user.del_req_time = datetime.now()
+            user.del_req_time = datetime.now()  # type: ignore
 
             # 로그아웃
             response = Response(status=status.HTTP_200_OK)
@@ -116,9 +116,6 @@ class UserDetailView(APIView):
             return response
         except Exception as e:
             return Response({"msg": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-
-import os
 
 
 class KakaoLoginView(APIView):

@@ -1,7 +1,9 @@
 import re
 
+from django.http.request import QueryDict
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -17,7 +19,7 @@ from .serializers import (
 )
 
 
-def check_pet_count(data):
+def check_pet_count(data) -> bool:  # type: ignore
     pet_count = int(data.get("pet", 0))
     size_big = int(data.get("pet_size_big", 0))
     size_medium = int(data.get("pet_size_medium", 0))
@@ -32,17 +34,17 @@ def check_pet_count(data):
 class OrderListView(APIView):
     serializer_class = OrderListSerializer
 
-    def get(self, request):
+    def get(self, request: Request) -> Response:
         """
         취소된 주문을 제외한 모든 주문을 조회할 수 있음.
         """
-        orders = Order.objects.filter(user_id=request.user.id).exclude(status="CANCEL").all()
+        orders = Order.objects.filter(user_id=request.user.id).exclude(status="CANCEL").all()  # type: ignore
         if orders:
             serializer = OrderListSerializer(orders, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         order_data = request.data
 
         if not check_pet_count(order_data):
@@ -85,7 +87,7 @@ class OrderListView(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-def is_uuid4(value):
+def is_uuid4(value: str) -> bool:
     pattern = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$", re.IGNORECASE)
     return bool(pattern.match(value))
 
@@ -93,14 +95,14 @@ def is_uuid4(value):
 class OrderDetailView(APIView):
     serializer_class = OrderDetailSerializer
 
-    def get(self, request, order_id):
+    def get(self, request: Request, order_id: str) -> Response:
         if not is_uuid4(order_id):
             return Response({"msg": "Invalid order_id"}, status=status.HTTP_400_BAD_REQUEST)
         order = get_object_or_404(Order, order_id=order_id, user_id=request.user.id)
         serializer = OrderDetailSerializer(order)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def put(self, request, order_id):
+    def put(self, request: Request, order_id: str) -> Response:
         order = get_object_or_404(Order, order_id=order_id, user_id=request.user.id)
         # 취소된 주문은 수정이 불가함을 알림
         if order.status == "CANCEL":
@@ -115,12 +117,13 @@ class OrderDetailView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, order_id):
+    def delete(self, request: Request, order_id: str) -> Response:
         order = get_object_or_404(Order, order_id=order_id, user_id=request.user.id)
         if order.status == "ORDERED" or order.status == "PAID":
             order.status = "CANCEL"  # 주문 취소상태 설정
             if order.user_coupon_id is not None:  # 만약 주문시 사용한 쿠폰이 있으면
-                order.user_coupon.status = True  # 쿠폰을 사용가능 상태로 만들어줌
+                # 쿠폰을 사용가능 상태로 만들어줌
+                order.user_coupon.status = True  # type: ignore
             order.save()
             return Response({"msg": "Successfully Canceled"}, status=status.HTTP_200_OK)
         elif order.status == "CANCEL":

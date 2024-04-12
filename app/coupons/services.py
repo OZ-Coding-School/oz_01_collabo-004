@@ -1,12 +1,13 @@
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import status
+from rest_framework.request import Request
 from rest_framework.response import Response
 
 from coupons.models import UserCoupon
 
 
-def coupon_apply(request, user_coupon_id):
+def coupon_apply(request: Request, user_coupon_id: int) -> Response:
     """
     유저가 쿠폰 사용시 status를 False로 바꿔주는 메서드
     """

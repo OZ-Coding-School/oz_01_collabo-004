@@ -5,7 +5,7 @@ from products.serializers import ProductInfoSerializer
 from .models import ProductReview
 
 
-class ProductReviewListSerializer(serializers.ModelSerializer):
+class ProductReviewListSerializer(serializers.ModelSerializer):  # type: ignore
     product_info = ProductInfoSerializer(source="product", read_only=True)
 
     class Meta:
@@ -13,7 +13,7 @@ class ProductReviewListSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class ProductReviewDetailSerializer(serializers.ModelSerializer):
+class ProductReviewDetailSerializer(serializers.ModelSerializer):  # type: ignore
     class Meta:
         model = ProductReview
         fields = "__all__"
