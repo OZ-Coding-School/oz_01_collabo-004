@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from common.utils import S3ImgUploader
+
 from .models import Product
 from .serializers import ProductSerializer
 
@@ -83,7 +84,7 @@ class GetProductByCategoryView(APIView):
 
     def get(self, request, category_id):
         try:
-            queryset = Product.objects.filter(category_id=category_id).order_by('-id')
+            queryset = Product.objects.filter(category_id=category_id).order_by("-id")
             paginator = PageNumberPagination()
             pagenated_queryset = paginator.paginate_queryset(queryset, request)
             serializer = ProductSerializer(pagenated_queryset, many=True)
@@ -94,16 +95,17 @@ class GetProductByCategoryView(APIView):
 
 class ProductImageUploadView(APIView):
     permission_classes = [AllowAny]
+
     def post(self, request, product_id):
         """
         이미지 업로드를 시도하면 boto3를 이용해서 s3로 이미지를 업로드하는 메서드
         """
         pdb.set_trace()
         if "description_img" in request.FILES:
-            image_file = request.FILES['description_img']
+            image_file = request.FILES["description_img"]
             prefix = f"products/{product_id}/description_img/"
-        elif 'product_img' in request.FILES:
-            image_file = request.FILES['product_img']
+        elif "product_img" in request.FILES:
+            image_file = request.FILES["product_img"]
             prefix = f"products/{product_id}/product_images/"
         try:
             image_uploader = S3ImgUploader()
@@ -116,11 +118,11 @@ class ProductImageUploadView(APIView):
 
     def delete(self, request):
         try:
-            image_file_url = request.data.get('image_file_url')
+            image_file_url = request.data.get("image_file_url")
             image_uploader = S3ImgUploader()
             response = image_uploader.delete_img_file(image_file_url)
 
-            if response['status'] in [200, 204]:
+            if response["status"] in [200, 204]:
                 return Response(response["msg"], status=status.HTTP_200_OK)
             return Response(response["msg"], status=response["status"])
         except Exception as e:
