@@ -9,9 +9,9 @@ function Search() {
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 0) {
-        setScrolled(true); // 스크롤이 발생하면 scrolled를 true로 설정
+        setScrolled(true); 
       } else {
-        setScrolled(false); // 스크롤이 상단으로 올라가면 scrolled를 false로 설정
+        setScrolled(false);
       }
     };
 
@@ -26,7 +26,10 @@ function Search() {
     <div className={`header-content ${scrolled ? 'scrolled' : ''}`}>
       <div className="header-logo">
         <Link to="/">
-          <img className="logo" src="/images/doggologo.png" />
+        <img 
+        src='/images/doggologo.png' alt='로고'
+        className='logo'
+        />
         </Link>
       </div>
       <Navbar />

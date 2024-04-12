@@ -11,8 +11,9 @@
   text-decoration: none;
   margin-right: 50px;
   color: black;
-  font-size: 1.15rem;
-  font-weight: 600;
+  font-family: 'TiltNeon-Regular-VariableFont_XROT,YROT';
+  font-size: 1.25rem;
+  font-weight: 900;
 }
 .navbar-links ul a:nth-child(5){
   margin-right: 0;
