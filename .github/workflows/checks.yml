@@ -43,6 +43,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+	  cd app
           poetry install
 
       - name: Run black
@@ -59,6 +60,5 @@ jobs:
 
       - name: Test python project
         run: |
-          cd backend/app
           poetry run python manage.py test
 
