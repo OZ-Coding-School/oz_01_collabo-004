@@ -43,7 +43,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-	  cd app
+          cd app
           poetry install
 
       - name: Run black
