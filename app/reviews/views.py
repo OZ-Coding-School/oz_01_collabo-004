@@ -1,12 +1,10 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.authentication import JWTAuthentication
-
 from config.paginations import ProductReviewPagination
-
+from common.utils import S3ImgUploader
 from .models import ProductReview
 from .serializers import ProductReviewDetailSerializer, ProductReviewListSerializer
 
@@ -16,7 +14,7 @@ class ProductReviewListView(APIView):
 
     def get(self, request, *args, **kwargs):
         try:
-            queryset = ProductReview.objects.filter(user_id=request.user.id).all()
+            queryset = ProductReview.objects.filter(user_id=request.user.id).order_by('id')
             paginator = ProductReviewPagination()
             pagenated_queryset = paginator.paginate_queryset(queryset, request)
             serializer = ProductReviewListSerializer(pagenated_queryset, many=True)
@@ -63,3 +61,31 @@ class ProductReviewDetailView(APIView):
             review.save()
             return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+
+class ProductReviewImageUploadView(APIView):
+    def post(self, request):
+        """
+        이미지 업로드를 시도하면 boto3를 이용해서 s3로 이미지를 업로드하는 메서드
+        """
+        try:
+            image_file = request.FILES['image']
+            prefix = f"users/reviews/"
+            image_uploader = S3ImgUploader()
+            image_url = image_uploader.upload(image_file, prefix)
+            return Response({"image_url": image_url}, status=status.HTTP_200_OK)
+        except ValueError as ve:
+            return Response({"error": str(ve)}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def delete(self, request):
+        try:
+            image_file_url = request.data['image_file_url']
+            image_uploader = S3ImgUploader()
+            response = image_uploader.delete_img_file(image_file_url)
+            if response['status'] in [200, 204]:
+                return Response(response["msg"], status=status.HTTP_200_OK)
+            return Response(response["msg"], status=response["status"])
+        except Exception as e:
+            return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
