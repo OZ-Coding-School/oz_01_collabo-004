@@ -177,7 +177,7 @@ class ProductReviewDetailTestCase(APITestCase):
         self.assertEqual(ProductReview.objects.filter(status=True).count(), 1)
 
         # 유저가 구매한 상품인 경우
-        url = reverse("product-review-detail", kwargs={"review_id": self.product.id})
+        url = reverse("product-review-detail", kwargs={"review_id": self.review.id})
 
         response = self.client.delete(url, headers={"Authorization": f"Bearer {self.token}"})
 
