@@ -26,7 +26,10 @@ function Search() {
     <div className={`header-content ${scrolled ? 'scrolled' : ''}`}>
       <div className="header-logo">
         <Link to="/">
-          <img className="logo" src="/images/doggologo.png" />
+        <img 
+        src='/images/doggologo.png' alt='로고'
+        className='logo'
+        />
         </Link>
       </div>
       <Navbar />

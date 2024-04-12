@@ -52,6 +52,7 @@ function Main2() {
             <button>See More</button>
           </div>
         </div>
+
         <div className='item' style={{ backgroundImage: "url(./images/산책1.jpg)" }}>
           <div className='main2slideshow-content'>
             <div className='name'>제주 펫 비치워크</div>
@@ -67,6 +68,7 @@ function Main2() {
             <button>See More</button>
           </div>
         </div>
+
         <div className='item' style={{ backgroundImage: "url(./images/산책2.jpg)" }}>
           <div className='main2slideshow-content'>
             <div className='name'>3번째 가상상품 컨텐츠</div>
@@ -76,6 +78,7 @@ function Main2() {
             <button>See More</button>
           </div>
         </div>
+
         <div className='item' style={{ backgroundImage: "url(./images/산책3.jpg)" }}>
           <div className='main2slideshow-content'>
             <div className='name'>4번째 가상상품 컨텐츠</div>
@@ -85,6 +88,7 @@ function Main2() {
             <button>See More</button>
           </div>
         </div>
+
         <div className='item' style={{ backgroundImage: "url(./images/캠핑.jpg)" }}>
           <div className='main2slideshow-content'>
             <div className='name'>5번째 가상상품 컨텐츠</div>
@@ -94,6 +98,7 @@ function Main2() {
             <button>See More</button>
           </div>
         </div>
+
         <div className='item' style={{ backgroundImage: "url(./images/캠핑5.jpg)" }}>
           <div className='main2slideshow-content'>
             <div className='name'>6번째 가상상품 컨텐츠</div>
@@ -103,7 +108,8 @@ function Main2() {
             <button>See More</button>
           </div>
         </div>
-    </div>
+
+      </div>
 
     <div className='main2slideshow-btn'>
     <button className='prev'><FontAwesomeIcon icon={faChevronLeft} /></button>
