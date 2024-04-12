@@ -48,17 +48,21 @@ jobs:
 
       - name: Run black
         run: |
+          cd app
           poetry run black . --check
 
       - name: Run isort
         run: |
+          cd app
           poetry run isort . --check --diff
 
       - name: Run Mypy
         run: |
+          cd app
           poetry run mypy .
 
       - name: Test python project
         run: |
+          cd app
           poetry run python manage.py test
 
