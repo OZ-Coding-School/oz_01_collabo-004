@@ -18,7 +18,6 @@ function Travelpackage() {
       const response = await request.get(`/api/v1/product/`,{
         headers: {
           "Content-Type": "application/json",
-          "ngrok-skip-browser-warning": "69420",
         },
         withCredentials: true,
       });      

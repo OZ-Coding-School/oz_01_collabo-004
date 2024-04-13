@@ -1,6 +1,6 @@
 import axios from "axios";
 
 const request = axios.create({
-    baseURL: "https://a2fe-27-117-139-6.ngrok-free.app",
+    baseURL: "http://localhost:8000",
 });
 export default request;

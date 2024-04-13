@@ -1,4 +1,4 @@
-from rest_framework.urls import path
+from django.urls import path
 
 from . import views
 
@@ -9,4 +9,5 @@ urlpatterns = [
         views.ProductReviewDetailView.as_view(),
         name="product-review-detail",
     ),
+    path("upload/imagefile/", views.ProductReviewImageUploadView.as_view(), name="review-image-upload"),
 ]

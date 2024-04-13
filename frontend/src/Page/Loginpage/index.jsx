@@ -26,7 +26,7 @@ function LoginPage() {
     console.log("Submitting", { user_id, password });
 
     try {
-      const response = await axios.post("/login", {
+      const response = await axios.post("/api/v1/user/login/", {
         id: user_id,
         pw: password,
       });
