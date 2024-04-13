@@ -19,15 +19,17 @@ class CouponListViewTestCase(APITestCase):
 
         self.token = AccessToken.for_user(self.admin_user)
 
-    def test_get_coupon_list(self) -> None:
+    def test_get_coupon_list_not_found(self) -> None:
         url = reverse("coupon-list")
         response = self.client.get(url, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-        self.coupon = Coupon.objects.create(type="WELCOME", content="회원가입 축하 쿠폰", sale_price=10000, duration=30)
-        self.coupon2 = Coupon.objects.create(type="EVENT", content="빅세일 이벤트 쿠폰", sale_price=30000, duration=7)
+    def test_get_coupon_list(self) -> None:
+        Coupon.objects.create(type="WELCOME", content="회원가입 축하 쿠폰", sale_price=10000, duration=30)
+        Coupon.objects.create(type="EVENT", content="빅세일 이벤트 쿠폰", sale_price=30000, duration=7)
 
+        url = reverse("coupon-list")
         response = self.client.get(url, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -42,7 +44,7 @@ class CouponListViewTestCase(APITestCase):
         self.assertEqual(response.data[1]["sale_price"], 30000)
         self.assertEqual(response.data[1]["duration"], 7)
 
-    def test_post_coupon_list(self) -> None:
+    def test_쿠폰_발급(self) -> None:
         url = reverse("coupon-list")
         data = {
             "type": "REGULAR",
