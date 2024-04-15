@@ -2,6 +2,15 @@ body h1 h2 p button input {
   font-family: "TiltNeon-Regular-VariableFont_XROT,YROT";
 }
 
+.coupon_box {
+  width: 500px;
+  height: 500px;
+  border: 1px solid #555;
+  border-radius: 10%;
+  padding: 50px;
+  margin: 20px;
+}
+
 .coupon-image {
   color: white;
   width: 200px;
@@ -14,7 +23,6 @@ body h1 h2 p button input {
 
 .dotted {
   position: absolute;
-
   width: 170px;
   top: -2px;
   left: 50%;

@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import axios from "../../api/axios";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import SignupForm from "../SignUpPage";
 import "./index.css";
 
@@ -20,28 +21,34 @@ function LoginPage() {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [signUp, setSignUp] = useState(false);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      navigate("/");
+    }
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log("Submitting", { user_id, password });
 
     try {
-      const response = await axios.post("/api/v1/user/login/", {
-        id: user_id,
-        pw: password,
-      });
-      axios.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${response.date.token}`;
-      console.log(response.data.token);
-
+      const response = await axios.post(
+        "http://dog-go.store/api/v1/user/login/",
+        {
+          user_id: user_id,
+          password: password,
+        }
+      );
+      localStorage.setItem("token", response.data.access);
+      console.log("로그인 성공:", response);
       handleLoginFailure("로그인에 성공했습니다.");
+      navigate("/");
     } catch (e) {
       console.log(e);
       handleLoginFailure("로그인에 실패했습니다.");
     }
   };
-
   function handleLoginFailure(message) {
     setAlertMessage(message);
     setShowAlert(true);

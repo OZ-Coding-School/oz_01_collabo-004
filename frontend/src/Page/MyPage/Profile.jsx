@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Coupon from "./Coupon";
 import ProfileModal from "./ProfileModal";
 import "./index.css";
 
 function Profile() {
   const user = {
-    user_id: "user_id",
-    name: "홍길동",
-    email: "start@gmail.com",
-    phone: "010-1234-1234",
+    user_id: "",
+    name: "",
+    email: "",
+    phone: "",
   };
 
   const [showModal, setShowModal] = useState(false);
@@ -17,18 +19,35 @@ function Profile() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [coupons, setCoupons] = useState([]);
-
+  const [userData, setUserData] = useState({});
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
-
+  console.log(`Bearer ${localStorage.getItem("token")}`);
   const handleSaveChanges = async () => {
     try {
-      // 저장하는 API 호출
+      const response = await axios.get(
+        "http://dog-go.store/api/v1/user/info/",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setUserData(response.data);
+      console.log("User info:", response.data);
+
       handleCloseModal();
     } catch (error) {
       console.error("Error saving changes:", error);
     }
   };
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      navigate("/login");
+    }
+  }, []);
 
   const handleReceiveCoupon = async () => {
     try {
@@ -37,7 +56,9 @@ function Profile() {
       console.error("Error receiving coupon:", error);
     }
   };
-
+  useEffect(() => {
+    handleSaveChanges();
+  }, []);
   return (
     <div className="my-page-container">
       <div className="profile-section">
@@ -45,16 +66,16 @@ function Profile() {
         <hr />
         <div className="profile-info">
           <p>
-            <strong>아이디 :</strong> {user.user_id}
+            <strong>아이디 :</strong> {userData.user_id}
           </p>
           <p>
-            <strong>이름 :</strong> {user.name}
+            <strong>이름 :</strong> {userData.name}
           </p>
           <p>
-            <strong>Email:</strong> {email}{" "}
+            <strong>Email:</strong> {userData.email}{" "}
           </p>
           <p>
-            <strong>Phone:</strong> {phone}{" "}
+            <strong>Phone:</strong> {userData.phone}{" "}
           </p>
 
           <button onClick={handleShowModal}>회원정보 수정</button>
@@ -83,7 +104,7 @@ function Profile() {
         confirmPassword={confirmPassword}
         setConfirmPassword={setConfirmPassword}
         handleSave={handleSaveChanges}
-        user={user}
+        user={userData}
       />
     </div>
   );
