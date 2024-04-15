@@ -1,0 +1,47 @@
+body {
+  font-family: "TiltNeon-Regular-VariableFont_XROT,YROT";
+}
+
+.review {
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.review-title {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.review-author {
+  font-style: italic;
+  margin-bottom: 5px;
+}
+
+.review-rating {
+  margin-bottom: 5px;
+}
+
+.review-content {
+  line-height: 1.5;
+}
+
+/* ReviewBoard.css */
+
+.review-board {
+  padding: 20px;
+}
+
+.review-list {
+  display: grid;
+  gap: 20px;
+}
+
+/* ReviewPage.css */
+
+.review-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}

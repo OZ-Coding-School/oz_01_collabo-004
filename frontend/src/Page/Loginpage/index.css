@@ -1,3 +1,7 @@
+body {
+  font-family: "TiltNeon-Regular-VariableFont_XROT,YROT";
+}
+
 .signUpModal {
   position: relative;
   display: flex;
@@ -8,12 +12,13 @@
   max-width: 400px;
   margin: auto;
   margin-top: 50px;
-  /* padding: 20px; */
+  padding: 20px;
   border-radius: 5px;
 }
 .login-container h1 {
   display: flex;
 }
+
 .doggo {
   margin-bottom: 40px;
   display: flex;
@@ -21,9 +26,6 @@
 .go {
   margin-left: 10px;
   color: rgb(90, 120, 250);
-}
-.login-container form div {
-  margin-bottom: 15px;
 }
 
 .login-container form div label {
@@ -39,7 +41,7 @@
   border-radius: 4px;
 }
 
-.login-container form button {
+.login-form button {
   margin: 5px;
   width: 100%;
   padding: 10px;
@@ -50,8 +52,7 @@
   cursor: pointer;
 }
 
-.kakao,
-google {
+.kakao .google {
   display: flex;
   justify-content: space-around;
   padding: 0%;
