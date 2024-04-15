@@ -39,6 +39,9 @@ class Order(CommonModel):
     departure_date = models.DateField(default=None)
     return_date = models.DateField(default=None)
 
+    def cal_return_date(self) -> Any:
+        return self.departure_date + timedelta(days=self.product.travel_period)  # type: ignore
+
 
 class Payment(CommonModel):
     PAYMENT_STATUS_CHOICES = (
