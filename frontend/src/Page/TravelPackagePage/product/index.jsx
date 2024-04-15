@@ -8,7 +8,6 @@ return (
     <div className="product">
     
     <Link to={`/petshop/${products}`}
-    
     className="product-link" 
     state={{products}}>
     <img src={products.product_img} 
