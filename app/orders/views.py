@@ -1,14 +1,15 @@
 import re
+from datetime import datetime, timedelta
 
-from django.http.request import QueryDict
+from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from coupons.models import Coupon, UserCoupon
-from coupons.services import coupon_apply
+from coupons.models import UserCoupon
+from coupons.services import change_coupon_status
 from products.models import Product
 
 from .models import Order
@@ -38,20 +39,25 @@ class OrderListView(APIView):
         """
         취소된 주문을 제외한 모든 주문을 조회할 수 있음.
         """
-        orders = Order.objects.filter(user_id=request.user.id).exclude(status="CANCEL").all()  # type: ignore
+        orders = Order.objects.filter(user_id=request.user.id).exclude(status="CANCEL").order_by("created_at")  # type: ignore
         if orders:
             serializer = OrderListSerializer(orders, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request: Request) -> Response:
+        """
+        유저가 주문을 요청하면 각각의 데이터의 유효성을 검증하고 주문을 생성해주는 post 메서드
+        """
+
         order_data = request.data
 
-        if not check_pet_count(order_data):
-            return Response(
-                {"msg": "plz check pet size count & pet count."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        serializer = OrderListSerializer(data=order_data, partial=True)
+        # 요청을 통해 들어온 데이터가 유효한지 판단
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        # 상품의 아이디 값이 유효한지 판단
         product = Product.objects.filter(id=order_data["product"]).first()
         if product is None:
             return Response(
@@ -59,30 +65,40 @@ class OrderListView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        # 상품의 옵션 중 반려동물의 수 와 사이즈 합계가 맞는지 검증
+        if not check_pet_count(order_data):
+            return Response(
+                {"msg": "plz check pet size count & pet count."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        # timedelta를 사용하여 반환 날짜 계산
+        departure_date = datetime.strptime(order_data["departure_date"], "%Y-%m-%d")
+        return_date = departure_date + timedelta(days=product.travel_period)
+
+        # 할인가는 기본 0원
         sale_price = 0
 
-        if "user_coupon" in order_data:
-            # 유저가 소유한 쿠폰이 맞는지 확인
-            used_coupon = get_object_or_404(UserCoupon, user_id=request.user.id, id=order_data["user_coupon"])
-            coupon_info = get_object_or_404(Coupon, id=used_coupon.coupon_id)  # 유저가 소유한 쿠폰에 대한 정보를 가져옴
-            sale_price = coupon_info.sale_price  # 가져온 정보에서 할인가격을 가져옴
+        # 만약 쿠폰을 사용했다면 쿠폰의 할인가를 적용
+        if "user_coupon_id" in order_data:
+            try:
+                # 쿠폰 적용 시도 후 성공하면 할인가격을 가져옴
+                sale_price = change_coupon_status(user_coupon_id=order_data["user_coupon_id"], new_status=False)
+            except ValidationError as e:
+                return Response({"msg": e.message}, status=status.HTTP_400_BAD_REQUEST)
 
         total_price = product.price - sale_price
 
-        data = {"status": "ORDERED", "sale_price": sale_price, "total_price": total_price, "user": request.user.id}
-        for key, value in order_data.items():
-            data[key] = value
+        serializer.save(
+            product=product,
+            status="ORDERED",
+            sale_price=sale_price,
+            total_price=total_price,
+            return_date=return_date.date(),
+            user=request.user,
+        )
 
-        serializer = OrderListSerializer(data=data)
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-        if "user_coupon" in order_data:
-            response = coupon_apply(request, order_data["user_coupon"])  # 쿠폰 적용 시도
-            if response.status_code != status.HTTP_200_OK:  # 쿠폰 적용 실패시 주문이 취소됨
-                return Response({"msg": response.data["msg"]}, response.status_code)
-
-        serializer.save()
+        serializer.instance.return_date = serializer.instance.cal_return_date()  # type: ignore
+        serializer.instance.save()  # type: ignore
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -104,18 +120,38 @@ class OrderDetailView(APIView):
 
     def put(self, request: Request, order_id: str) -> Response:
         order = get_object_or_404(Order, order_id=order_id, user_id=request.user.id)
+
         # 취소된 주문은 수정이 불가함을 알림
         if order.status == "CANCEL":
             return Response({"msg": "already canceled order."}, status=status.HTTP_400_BAD_REQUEST)
         # 이미 결제된 주문은 수정이 불가함을 알림
         if order.status == "PAID":
             return Response({"msg": "already paid order."}, status=status.HTTP_400_BAD_REQUEST)
-        update_data = request.data
-        serializer = OrderDetailSerializer(order, data=update_data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        update_data = request.data.copy()
+
+        # 주문 수정 데이터에 출발일 변경을 원하면 출발일과 product의 trevel_date를 이용해서 도착일을 계산
+        if "departure_date" in update_data:
+            departure_date = datetime.strptime(update_data["departure_date"], "%Y-%m-%d")
+            return_date = departure_date + timedelta(days=order.product.travel_period)  # type: ignore
+            update_data["return_date"] = return_date.date()
+
+        # request.data에 대한 유효성 검증
+        serializer = OrderDetailSerializer(order, data=update_data, partial=True)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        # 주문 수정하기에서 쿠폰을 변경할 시 기존에 주문에 적용됐던 쿠폰은 되돌리고, 새로 적용할 쿠폰을 적용함
+        if "user_coupon_id" in update_data:
+            try:
+                change_coupon_status(order.user_coupon.id, True)  # type: ignore
+                change_coupon_status(update_data["user_coupon_id"], False)
+            except ValueError as e:
+                return Response({"msg": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request: Request, order_id: str) -> Response:
         order = get_object_or_404(Order, order_id=order_id, user_id=request.user.id)
