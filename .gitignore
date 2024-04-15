@@ -5,6 +5,8 @@
 __pycache__
 db.sqlite3
 media
+*.pem
+
 
 # Backup files # 
 *.bak 
@@ -167,3 +169,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 node_modules
+
+**/migrations/
