@@ -65,24 +65,36 @@ function LoginPage() {
         </div>
         <form className="login-form" onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="user_id">아이디</label>
             <input
+              style={{
+                border: "none",
+                borderBottom: "1px solid #aaaaaa",
+                borderRadius: "0",
+              }}
               type="text"
               id="user_id"
               value={user_id}
               onChange={(e) => setUser_id(e.target.value)}
               required
             />
+            <label htmlFor="user_id">아이디</label>
+            <span></span>
           </div>
           <div>
-            <label htmlFor="password">비밀번호</label>
             <input
+              style={{
+                border: "none",
+                borderBottom: "1px solid #aaaaaa",
+                borderRadius: "0",
+              }}
               type="password"
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+            <label htmlFor="password">비밀번호</label>
+            <span></span>
           </div>
           <button style={{ marginTop: "20px" }} type="submit">
             로그인

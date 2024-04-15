@@ -12,6 +12,8 @@ import Footer from "./Component/footer/index.jsx";
 import Hotel from "./Page/HotelPage/index.jsx";
 import Login from "./Page/Loginpage/index.jsx";
 import Mainpage from "./Page/MainPage/index.jsx";
+
+import PaymentPage from "./Page/MyPage/PaymentPage.jsx";
 import MyPage from "./Page/MyPage/index.jsx";
 import Travel from "./Page/RecommendedSpotPage/index.js";
 import Restaurant from "./Page/RestaurantPage/index.js";
@@ -48,6 +50,7 @@ function App() {
           <Route path="/signup" element={<SignupForm />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/service" element={<Service />} />
+          <Route path="/payment" element={<PaymentPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
