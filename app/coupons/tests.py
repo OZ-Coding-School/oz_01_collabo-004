@@ -1,4 +1,3 @@
-import pdb
 from datetime import timedelta
 
 from django.contrib.auth import get_user_model
@@ -150,7 +149,7 @@ class UserCouponTestCase(APITestCase):
         # 처음 발급요청을 테스트
         url = reverse("user-coupon-issue", kwargs={"coupon_id": self.coupon.pk})
         response = self.client.post(url, headers={"Authorization": f"Bearer {self.token}"})
-        pdb.set_trace()
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data["coupon_info"]["type"], "WELCOME")
         self.assertEqual(response.data["coupon_info"]["content"], "회원가입 축하 쿠폰")
