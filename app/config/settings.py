@@ -50,16 +50,15 @@ CUSTOM_USER_APPS = [
     "corsheaders",
     "users",
     "orders",
-    "posts",
     "products",
     "reviews",
     "categories",
     "wishlist",
     "coupons",
-    "allauth",  # 로그인, 로그아웃, 회원가입, 비밀번호 변경, 비밀번호 초기화 등과 같은 기본적인 사용자 인증 기능을 제공
-    "allauth.account",  # 사용자의 계정 설정을 커스터마이징하고 관리
-    "allauth.socialaccount",  # 소셜 로그인 및 회원가입 기능을 제공
-    "allauth.socialaccount.providers.kakao",  # 카카오 로그인 제공
+    # "allauth",  # 로그인, 로그아웃, 회원가입, 비밀번호 변경, 비밀번호 초기화 등과 같은 기본적인 사용자 인증 기능을 제공
+    # "allauth.account",  # 사용자의 계정 설정을 커스터마이징하고 관리
+    # "allauth.socialaccount",  # 소셜 로그인 및 회원가입 기능을 제공
+    # "allauth.socialaccount.providers.kakao",  # 카카오 로그인 제공
     "core",
     "storages",
     "rest_framework",
@@ -71,7 +70,7 @@ INSTALLED_APPS = CUSTOM_USER_APPS + DJANGO_SYSTEM_APPS
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend",
+    # "allauth.account.auth_backends.AuthenticationBackend",
 )
 
 LOGIN_REDIRECT_URL = "/"  # 로그인 후에 메인페이지로 리다이렉트ㄴ
@@ -83,7 +82,7 @@ from django.urls.base import reverse_lazy
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
-    "allauth.account.middleware.AccountMiddleware",
+    # "allauth.account.middleware.AccountMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
