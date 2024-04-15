@@ -147,12 +147,10 @@ class UserCouponIssueView(APIView):
         expired_date = coupon.get_expire_date()
         serializer = UserCouponSerializer(
             data={
-                "user": request.user.id,
-                "coupon": coupon_id,
                 "expired_at": expired_date,
             }
         )
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(user=request.user, coupon=coupon)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
