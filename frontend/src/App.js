@@ -1,11 +1,17 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import React from "react";
-import { BrowserRouter, Outlet, Route, Routes, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Outlet,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 import Headerbar from "./Component/Header/index.jsx";
 import Footer from "./Component/footer/index.jsx";
 import Hotel from "./Page/HotelPage/index.jsx";
 import Login from "./Page/Loginpage/index.jsx";
-import Mainpage from "./Page/Mainpage/index.jsx";
+import Mainpage from "./Page/MainPage/index.jsx";
 import MyPage from "./Page/MyPage/index.jsx";
 import Travel from "./Page/RecommendedSpotPage/index.js";
 import Restaurant from "./Page/RestaurantPage/index.js";
@@ -31,18 +37,18 @@ function App() {
     <BrowserRouter>
       <Headerbar />
       <Routes>
-      <Route element={<Layout />}>
-        <Route path="/" element={<Mainpage />} />
-        <Route path="/travel" element={<TravelPackagePage />} />
-        <Route path="/travel/:id" element={<ProductDetail />} />
-        <Route path="/hotel" element={<Hotel />} />
-        <Route path="/restaurant" element={<Restaurant />} />
-        <Route path="/recommend" element={<Travel />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignupForm />} />
-        <Route path="/mypage" element={<MyPage />} />
-        <Route path="/service" element={<Service />} />
-        </ Route >
+        <Route element={<Layout />}>
+          <Route path="/" element={<Mainpage />} />
+          <Route path="/travel" element={<TravelPackagePage />} />
+          <Route path="/travel/:id" element={<ProductDetail />} />
+          <Route path="/hotel" element={<Hotel />} />
+          <Route path="/restaurant" element={<Restaurant />} />
+          <Route path="/recommend" element={<Travel />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignupForm />} />
+          <Route path="/mypage" element={<MyPage />} />
+          <Route path="/service" element={<Service />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

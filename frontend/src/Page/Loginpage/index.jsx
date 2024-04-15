@@ -58,9 +58,7 @@ function LoginPage() {
   return (
     <>
       <div className="login-container">
-        {/* <div className="signUpModal"> */}
         {signUp ? <SignupForm setSignUp={setSignUp} /> : null}
-        {/* </div> */}
         <div className="doggo">
           <h1>D o g</h1>
           <h1 className="go">G o</h1>
@@ -86,12 +84,12 @@ function LoginPage() {
               required
             />
           </div>
-          <button type="submit">로그인</button>
-          {/* <Link to="/signup"> */}
+          <button style={{ marginTop: "20px" }} type="submit">
+            로그인
+          </button>
           <button type="button" onClick={() => setSignUp(true)}>
             회원가입
           </button>
-          {/* </Link> */}
         </form>
         <div id="error-message" className="error-message"></div>{" "}
         <div className="social-button">
