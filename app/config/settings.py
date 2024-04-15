@@ -61,6 +61,7 @@ CUSTOM_USER_APPS = [
     "allauth.socialaccount",  # 소셜 로그인 및 회원가입 기능을 제공
     "allauth.socialaccount.providers.kakao",  # 카카오 로그인 제공
     "core",
+    "storages",
     "rest_framework",
     "drf_spectacular",
     "rest_framework_simplejwt",
@@ -216,8 +217,16 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 #     ('0 0 * * *', 'your_app_name.cron.delete_old_users'),
 # ]
 
+# CORS 설정
 # CORS_ALLOWED_ORIGINS = ['http://127.0.0.1:3000/', 'http://127.0.0.1:8000/']
-
 CORS_ALLOW_CREDENTIALS = True
-
 CORS_ORIGIN_ALLOW_ALL = True
+
+# AWS S3 설정
+
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_REGION_NAME = os.environ.get("AWS_S3_REGION_NAME")
+
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"

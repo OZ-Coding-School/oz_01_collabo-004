@@ -43,19 +43,23 @@ jobs:
 
       - name: Install dependencies
         run: |
+          cd app
           poetry install
 
       - name: Run black
         run: |
+          cd app
           poetry run black . --check
 
       - name: Run isort
         run: |
+          cd app
           poetry run isort . --check --diff
 
-#      - name: Run Mypy
-#        run: |
-#          poetry run mypy .
+      - name: Run Mypy
+        run: |
+          cd app
+          poetry run mypy .
 
       - name: Test python project
         run: |

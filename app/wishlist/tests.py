@@ -10,7 +10,7 @@ from .models import Wishlist
 
 
 class WishlistTestCase(APITestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
             user_id="testuserid",
             password="password123",
@@ -39,7 +39,7 @@ class WishlistTestCase(APITestCase):
         self.token = AccessToken.for_user(self.user)
         self.client.force_login(user=self.user)
 
-    def test_post_wishlist(self):
+    def test_post_wishlist(self) -> None:
         # 위시리스트에 처음 넣는 경우 테스트
         url = reverse("wishlist")
         data = {"product_id": self.product1.id}
@@ -66,7 +66,7 @@ class WishlistTestCase(APITestCase):
         self.assertEqual(response.data["product"], self.product1.id)
         self.assertEqual(response.data["user"], self.user.id)
 
-    def test_get_wishlist(self):
+    def test_get_wishlist(self) -> None:
         Wishlist.objects.create(user_id=self.user.id, product_id=self.product1.id)
         Wishlist.objects.create(user_id=self.user.id, product_id=self.product2.id)
         Wishlist.objects.create(user_id=self.user.id, product_id=self.product3.id)
@@ -84,7 +84,7 @@ class WishlistTestCase(APITestCase):
 
 
 class WishlistDetailTestCase(APITestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
             user_id="testuserid",
             password="password123",
@@ -107,7 +107,7 @@ class WishlistDetailTestCase(APITestCase):
         self.token = AccessToken.for_user(self.user)
         self.client.force_login(user=self.user)
 
-    def test_get_wishlist_detail(self):
+    def test_get_wishlist_detail(self) -> None:
         url = reverse("wishlist_detail", kwargs={"product_id": self.product.id})
         response = self.client.get(url, headers={"Authorization": f"Bearer {self.token}"})
 
@@ -123,7 +123,7 @@ class WishlistDetailTestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_delete_product_detail(self):
+    def test_delete_product_detail(self) -> None:
         url = reverse("wishlist_detail", kwargs={"product_id": self.product.id})
         response = self.client.delete(url, headers={"Authorization": f"Bearer {self.token}"})
         deleted_wishlist = Wishlist.objects.get(user_id=self.user.id, product_id=self.product.id)

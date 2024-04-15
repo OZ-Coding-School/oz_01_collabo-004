@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import Navbar from '../navbar';
-import './index.css';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import Navbar from "../navbar";
+import "./index.css";
 
 function Search() {
   const [scrolled, setScrolled] = useState(false);
@@ -9,31 +9,38 @@ function Search() {
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 0) {
-        setScrolled(true); // 스크롤이 발생하면 scrolled를 true로 설정
+        setScrolled(true); 
       } else {
-        setScrolled(false); // 스크롤이 상단으로 올라가면 scrolled를 false로 설정
+        setScrolled(false);
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
   return (
-    <div className={`header-content ${scrolled ? 'scrolled' : ''}`}>
+    <div className={`header-content ${scrolled ? "scrolled" : ""}`}>
       <div className="header-logo">
         <Link to="/">
-          <img className="logo" src="/images/doggologo.png" />
+        <img 
+        src='/images/doggologo.png' alt='로고'
+        className='logo'
+        />
         </Link>
       </div>
       <Navbar />
       <div className="header-login">
         <ul>
-          <Link to="/login"><li>로그인</li></Link>
-          <Link to="/mypage"><li>마이도꼬</li></Link>
+          <Link to="/login">
+            <li>로그인</li>
+          </Link>
+          <Link to="/mypage">
+            <li>마이도꼬</li>
+          </Link>
         </ul>
       </div>
     </div>
@@ -41,5 +48,3 @@ function Search() {
 }
 
 export default Search;
-
-

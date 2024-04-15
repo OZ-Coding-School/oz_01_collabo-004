@@ -3,6 +3,7 @@ from django.urls import path
 from .views import (
     CategoryDetailView,
     CategoryListView,
+    UserCategoryDetailView,
     UserCategoryListView,
     UserCategorySurveyView,
 )
@@ -15,5 +16,6 @@ urlpatterns = [
         name="category-detail",
     ),
     path("categories/user-surver/", UserCategorySurveyView.as_view(), name="user-survey"),
-    path("categories/user-categories/", UserCategoryListView.as_view(), name="user-categories"),
+    path("categories/user-categories/<int:category_id>", UserCategoryListView.as_view(), name="user-categories"),
+    path("categories/user-detail/<int:category_id>", UserCategoryDetailView.as_view(), name="user-detail"),
 ]

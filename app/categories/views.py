@@ -1,7 +1,11 @@
-from django.shortcuts import render
+from typing import Union
+
 from rest_framework import status
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from products.models import Product
 
 from .models import Category, CategoryUserConnector
 from .serializers import (
@@ -24,7 +28,7 @@ class CategoryListView(APIView):
         serializer = CategorySerializer(category, many=True)
         return Response(serializer.data)
 
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         serializer = CategorySerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -33,7 +37,7 @@ class CategoryListView(APIView):
 
 
 class CategoryDetailView(APIView):
-    def get_object(self, category_pk):
+    def get_object(self, category_pk: int) -> Union[Category, Response]:
         try:
             return Category.objects.get(id=category_pk)
         except Category.DoesNotExist:
@@ -42,7 +46,7 @@ class CategoryDetailView(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-    def get(self, request, category_pk):
+    def get(self, request: Request, category_pk: int) -> Response:
         category = self.get_object(category_pk)
         if category is not None:
             serializer = CategorySerializer(category)
@@ -52,7 +56,20 @@ class CategoryDetailView(APIView):
             status=status.HTTP_404_NOT_FOUND,
         )
 
-    def put(self, request, category_pk):
+
+    # def post(self, request, category_pk):
+    #     category = self.get_object(category_pk)
+    #
+    #     if not category:
+    #         return Response({"msg": "category not found"}, status=status.HTTP_404_NOT_FOUND)
+    #     serializer = ProductConnectorSerializer(data=request.data)
+    #
+    #     if serializer.is_valid():
+    #         serializer.save(category=category)
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request: Request, category_pk: int) -> Response:
         category = self.get_object(category_pk)
 
         serializer = CategorySerializer(category, data=request.data)
@@ -61,9 +78,9 @@ class CategoryDetailView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, category_pk):
+    def delete(self, request: Request, category_pk: int) -> Response:
         category = self.get_object(category_pk)
-        category.delete()
+        category.delete()  # type: ignore
         return Response(status=status.HTTP_200_OK)
 
 
@@ -86,11 +103,10 @@ class UserCategorySurveyView(APIView):
 
 # 유저가 자기가 선택한 카테고리 조회
 class UserCategoryListView(APIView):
-    def get(self, request):
+    def get(self, request, category_id):
         user = request.user
-        connectors = CategoryUserConnector.objects.filter(user_id=user.user_id)
-
-        if connectors():
+        connectors = CategoryUserConnector.objects.filter(category_id=category_id, user_id=request.user.id)
+        if connectors:
             serializer = ProductConnectorSerializer(connectors, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({"msg": "no category selected."}, status=status.HTTP_404_NOT_FOUND)
@@ -100,7 +116,7 @@ class UserCategoryListView(APIView):
 # 커넥터를 통해서 정보 가져오기
 class UserCategoryDetailView(APIView):
     def delete(self, request, category_id):
-        connector = CategoryUserConnector.objects.filter(id=category_id, user_id=request.user)
+        connector = CategoryUserConnector.objects.filter(category_id=category_id, user_id=request.user)
         if connector:
             connector.delete()
             return Response(status=status.HTTP_200_OK)

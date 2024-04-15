@@ -3,7 +3,7 @@ from rest_framework import serializers
 from .models import Category, CategoryProductConnector, CategoryUserConnector
 
 
-class CategorySerializer(serializers.ModelSerializer):
+class CategorySerializer(serializers.ModelSerializer):  # type: ignore
     class Meta:
         model = Category
         fields = "__all__"
@@ -18,8 +18,10 @@ class UserConnectorSerializer(serializers.ModelSerializer):
 
 
 class ProductConnectorSerializer(serializers.ModelSerializer):
-    category_name = CategorySerializer(read_only=True)
+    # category = CategorySerializer(source="category", read_only=True)
+    # product = serializers.CharField(source="product", read_only=True)
 
     class Meta:
         model = CategoryProductConnector
         fields = "__all__"
+        depth = 1

@@ -15,7 +15,7 @@ class CouponInfoSerializer(serializers.ModelSerializer):
         exclude = ["created_at", "modified_at", "id"]
 
 
-class UserCouponSerializer(serializers.ModelSerializer):
+class UserCouponSerializer(serializers.ModelSerializer):  # type: ignore
     coupon_info = CouponInfoSerializer(source="coupon", read_only=True)
 
     class Meta:

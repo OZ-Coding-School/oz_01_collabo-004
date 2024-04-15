@@ -1,5 +1,6 @@
+from datetime import datetime, timedelta
+
 from django.db import models
-from django.utils import timezone
 
 from common.models import CommonModel
 from users.models import User
@@ -16,9 +17,9 @@ class Coupon(CommonModel):
     sale_price = models.IntegerField()  # 쿠폰의 할인 금액
     duration = models.PositiveIntegerField()  # 쿠폰의 유효기간(일 수로)을 나타낼 수 있는 필드
 
-    def get_expire_date(self):
+    def get_expire_date(self) -> datetime:
         # 쿠폰 발행일로부터 유효기간(duration)을 더하여 만료일을 계산
-        return self.created_at + timezone.timedelta(days=self.duration)
+        return self.created_at + timedelta(days=self.duration)
 
 
 class UserCoupon(CommonModel):

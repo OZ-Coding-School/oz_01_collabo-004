@@ -1,12 +1,13 @@
-from products.serializers import ProductSerializer
 from rest_framework import serializers
+
+from products.serializers import ProductSerializer
 
 from .models import Wishlist
 
 
-class WishlistSerializer(serializers.ModelSerializer):
+class WishlistSerializer(serializers.ModelSerializer):  # type: ignore
     product = ProductSerializer(read_only=True)
-    user = serializers.PrimaryKeyRelatedField(read_only=True)
+    user = serializers.PrimaryKeyRelatedField(read_only=True)  # type: ignore
 
     class Meta:
         model = Wishlist
@@ -17,7 +18,7 @@ class WishlistSerializer(serializers.ModelSerializer):
         depth = 1
 
 
-class CreateWishlistSerializer(serializers.ModelSerializer):
+class CreateWishlistSerializer(serializers.ModelSerializer):  # type: ignore
     class Meta:
         model = Wishlist
         exclude = (

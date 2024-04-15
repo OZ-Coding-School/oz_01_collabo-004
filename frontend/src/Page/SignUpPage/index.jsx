@@ -49,7 +49,13 @@ function SignupForm({ setSignUp }) {
   return (
     <div ref={ref} className="modal">
       <form className="signup-form" onSubmit={handleSubmit}>
-        <h2>회원가입</h2>
+        <div className="sign-tittle" style={{ margin: "20px" }}>
+          <h2>Dog</h2>
+          <h2 style={{ color: "rgb(90, 120, 250)", marginRight: "10px" }}>
+            Go
+          </h2>
+          <h2>회원가입</h2>
+        </div>
         <div className="input-group">
           <label htmlFor="name">사용자 이름</label>
           <input
