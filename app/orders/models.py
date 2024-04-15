@@ -1,4 +1,6 @@
 import uuid
+from datetime import timedelta
+from typing import Any
 
 from django.db import models
 
@@ -15,10 +17,20 @@ class Order(CommonModel):
         ("PAID", "paid"),  # 결제 완료 상태
         ("ORDERED", "ordered"),  # 주문, 결제 미완 상태
     )
-    order_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    # pk 필드 UUID 사용
+    order_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+    # fk 필드
+    product = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_coupon = models.ForeignKey(UserCoupon, null=True, on_delete=models.SET_NULL)
+    # 주문 금액 정보
     sale_price = models.IntegerField(default=0)
     total_price = models.IntegerField()
+
+    # 주문 상태 정보
     status = models.CharField(max_length=7, choices=ORDER_CHOICES, default="ordered")
+
+    # 주문 옵션
     people = models.IntegerField(default=0)
     pet = models.IntegerField(default=0)
     pet_size_big = models.IntegerField(default=0)
@@ -26,10 +38,6 @@ class Order(CommonModel):
     pet_size_small = models.IntegerField(default=0)
     departure_date = models.DateField(default=None)
     return_date = models.DateField(default=None)
-
-    product = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    user_coupon = models.ForeignKey(UserCoupon, null=True, on_delete=models.SET_NULL)
 
 
 class Payment(CommonModel):
