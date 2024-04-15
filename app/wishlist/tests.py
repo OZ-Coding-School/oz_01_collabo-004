@@ -42,12 +42,11 @@ class WishlistTestCase(APITestCase):
     def test_post_wishlist(self) -> None:
         # 위시리스트에 처음 넣는 경우 테스트
         url = reverse("wishlist")
-        data = {"product_id": self.product1.id}
+        data = {"product": self.product1.id}
         response = self.client.post(url, data, headers={"Authorization": f"Bearer {self.token}"})
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertTrue(response.data["status"])
         self.assertEqual(response.data["product"], self.product1.id)
-        self.assertEqual(response.data["user"], self.user.id)
 
         # 이미 위시리스트에 있는 경우 테스트
         response = self.client.post(url, data, headers={"Authorization": f"Bearer {self.token}"})
@@ -64,7 +63,6 @@ class WishlistTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(response.data["status"])
         self.assertEqual(response.data["product"], self.product1.id)
-        self.assertEqual(response.data["user"], self.user.id)
 
     def test_get_wishlist(self) -> None:
         Wishlist.objects.create(user_id=self.user.id, product_id=self.product1.id)
@@ -79,7 +77,6 @@ class WishlistTestCase(APITestCase):
         self.assertEqual(response.data[0]["product"]["id"], self.product1.id)
         self.assertEqual(response.data[1]["product"]["id"], self.product2.id)
         self.assertEqual(response.data[2]["product"]["id"], self.product3.id)
-        self.assertEqual(response.data[0]["user"], self.user.id)
         self.assertTrue(all(item["status"] for item in response.data))
 
 
@@ -108,7 +105,7 @@ class WishlistDetailTestCase(APITestCase):
         self.client.force_login(user=self.user)
 
     def test_get_wishlist_detail(self) -> None:
-        url = reverse("wishlist_detail", kwargs={"product_id": self.product.id})
+        url = reverse("wishlist_detail", kwargs={"wishlist_id": self.wishlist.id})
         response = self.client.get(url, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -116,15 +113,14 @@ class WishlistDetailTestCase(APITestCase):
         self.assertEqual(response.data["product"]["name"], self.product.name)
         self.assertEqual(response.data["product"]["price"], self.product.price)
         self.assertEqual(response.data["product"]["status"], self.product.status)
-        self.assertEqual(response.data["user"], self.user.id)
 
-        url = reverse("wishlist_detail", kwargs={"product_id": 919919191911})
+        url = reverse("wishlist_detail", kwargs={"wishlist_id": 919919191911})
         response = self.client.get(url, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_product_detail(self) -> None:
-        url = reverse("wishlist_detail", kwargs={"product_id": self.product.id})
+        url = reverse("wishlist_detail", kwargs={"wishlist_id": self.wishlist.id})
         response = self.client.delete(url, headers={"Authorization": f"Bearer {self.token}"})
         deleted_wishlist = Wishlist.objects.get(user_id=self.user.id, product_id=self.product.id)
 
@@ -136,7 +132,7 @@ class WishlistDetailTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["msg"], "already deleted")
 
-        url = reverse("wishlist_detail", kwargs={"product_id": 919919191911})
+        url = reverse("wishlist_detail", kwargs={"wishlist_id": 919919191911})
         response = self.client.get(url, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

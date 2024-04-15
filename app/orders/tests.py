@@ -1,3 +1,4 @@
+import pdb
 from datetime import timedelta
 
 from django.contrib.auth import get_user_model
@@ -17,8 +18,8 @@ class OrderListTestCase(APITestCase):
         self.user = get_user_model().objects.create_user(
             user_id="testuser", password="password123", name="testname", email="test@example.com", phone="0101010011"
         )
-        self.product = Product.objects.create(name="testproduct", price=100000, status=True)
-        self.product2 = Product.objects.create(name="testproduct2", price=200000, status=True)
+        self.product = Product.objects.create(name="testproduct", price=100000, status=True, travel_period=3)
+        self.product2 = Product.objects.create(name="testproduct2", price=200000, status=True, travel_period=3)
         self.coupon = Coupon.objects.create(type="WELCOME", content="회원가입 축하 쿠폰", sale_price=10000, duration=30)
         self.user_coupon = UserCoupon.objects.create(
             user_id=self.user.pk, coupon_id=self.coupon.id, expired_at=self.coupon.get_expire_date()
@@ -39,6 +40,7 @@ class OrderListTestCase(APITestCase):
         }
         # 쿠폰을 사용하지 않은 정상적인 주문 요청
         response = self.client.post(url, data, headers={"Authorization": f"Bearer {self.token}"})
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data["people"], 2)
         self.assertEqual(response.data["pet"], 3)
@@ -46,21 +48,21 @@ class OrderListTestCase(APITestCase):
         self.assertEqual(response.data["pet_size_medium"], 1)
         self.assertEqual(response.data["pet_size_big"], 1)
         self.assertEqual(response.data["departure_date"], "2024-04-21")
-        self.assertEqual(response.data["return_date"], "2024-04-23")
+        self.assertEqual(response.data["return_date"], "2024-04-24")
 
         # 쿠폰을 사용한 정상적인 주문 요청
-        data["user_coupon"] = self.user_coupon.pk
+        data["user_coupon_id"] = self.user_coupon.pk
         response = self.client.post(url, data, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data["user_coupon"], self.user_coupon.id)
+        self.assertEqual(response.data["coupon"]["id"], self.user_coupon.id)
         self.assertEqual(response.data["people"], 2)
         self.assertEqual(response.data["pet"], 3)
         self.assertEqual(response.data["pet_size_small"], 1)
         self.assertEqual(response.data["pet_size_medium"], 1)
         self.assertEqual(response.data["pet_size_big"], 1)
         self.assertEqual(response.data["departure_date"], "2024-04-21")
-        self.assertEqual(response.data["return_date"], "2024-04-23")
+        self.assertEqual(response.data["return_date"], "2024-04-24")
 
         # 주문시 쿠폰을 적용하려 했지만 만료된 경우
         self.user_coupon.expired_at -= timedelta(days=31)
@@ -68,7 +70,7 @@ class OrderListTestCase(APITestCase):
         response = self.client.post(url, data, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["msg"], "coupon has expired.")
+        self.assertEqual(response.data["msg"], "Coupon has expired.")
 
         # 주문시 쿠폰을 사용하려 했지만 이미 사용된 쿠폰인 경우
         self.user_coupon.expired_at = self.coupon.get_expire_date()
@@ -77,13 +79,7 @@ class OrderListTestCase(APITestCase):
         response = self.client.post(url, data, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["msg"], "already used coupon.")
-
-        # product_id가 유효하지않은경우
-        data["product"] = 1233121414
-        response = self.client.post(url, data, headers={"Authorization": f"Bearer {self.token}"})
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["msg"], "plz check product_id")
+        self.assertEqual(response.data["msg"], "Coupon is already used.")
 
         # 입력한 반려 동물 수와 선택한 반려동물 사이즈 수의 합이 다를 경우
         data["pet"] = 4
@@ -91,6 +87,12 @@ class OrderListTestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["msg"], "plz check pet size count & pet count.")
+
+        # product_id가 유효하지않은경우
+        data["product"] = 1233121414
+        response = self.client.post(url, data, headers={"Authorization": f"Bearer {self.token}"})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["msg"], "plz check product_id")
 
     def test_get_order_list(self) -> None:
         self.order1 = Order.objects.create(
@@ -131,7 +133,7 @@ class OrderListTestCase(APITestCase):
         self.assertEqual(response.data[1]["people"], 3)
         self.assertEqual(response.data[1]["pet"], 4)
         self.assertEqual(response.data[1]["status"], "ordered")
-        self.assertEqual(response.data[0]["product_info"]["id"], response.data[0]["product"])
+        self.assertEqual(response.data[0]["product_info"]["id"], self.product.id)
         self.assertEqual(Order.objects.count(), 2)
 
 
@@ -143,7 +145,7 @@ class OrderDetailViewTestCase(APITestCase):
         self.user2 = get_user_model().objects.create_user(
             user_id="testuser2", password="password123", name="testname2", email="test2@example.com", phone="0101010012"
         )
-        self.product = Product.objects.create(name="testproduct", price=100000, status=True)
+        self.product = Product.objects.create(name="testproduct", price=100000, status=True, travel_period=3)
         self.coupon = Coupon.objects.create(type="WELCOME", content="회원가입 축하 쿠폰", sale_price=10000, duration=30)
         self.user_coupon = UserCoupon.objects.create(
             user_id=self.user.pk, coupon_id=self.coupon.pk, expired_at=self.coupon.get_expire_date()
@@ -195,8 +197,7 @@ class OrderDetailViewTestCase(APITestCase):
         response = self.client.get(url, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(response.data["product"], self.product.pk)
-        self.assertEqual(response.data["user"], self.user.pk)
+        self.assertEqual(response.data["product"]["id"], self.product.pk)
         self.assertEqual(response.data["total_price"], self.product.price)
         self.assertEqual(response.data["people"], 2)
         self.assertEqual(response.data["pet"], 3)
@@ -233,7 +234,6 @@ class OrderDetailViewTestCase(APITestCase):
             "pet_size_medium": 1,
             "pet_size_big": 0,
             "departure_date": "2024-04-23",
-            "return_date": "2024-04-26",
         }
         # 유저가 주문한 주문내역의 옵션 수정
         url = reverse("order-detail", kwargs={"order_id": self.order.order_id})
