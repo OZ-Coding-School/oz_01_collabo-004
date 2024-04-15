@@ -8,10 +8,10 @@ function Navbar() {
       <div className="navbar-links">
         <ul>
             <Link to="/"><li>Main</li></Link>
-            <Link to="/petshop"><li>Travel Package</li></Link>
-            <Link to="/pethouse"><li>Hotel</li></Link>
-            <Link to="/petrestaurant"><li>Restaurant</li></Link>
-            <Link to="/travel"><li>Recommended Spot</li></Link>
+            <Link to="/travel"><li>Travel Package</li></Link>
+            <Link to="/hotel"><li>Hotel</li></Link>
+            <Link to="/restaurant"><li>Restaurant</li></Link>
+            <Link to="/recommend"><li>Recommended Spot</li></Link>
         </ul>
       </div>
     </div>

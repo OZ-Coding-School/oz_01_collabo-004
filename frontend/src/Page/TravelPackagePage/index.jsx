@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import request from '../../axios';
 import './index.css';
-import Product from './prouct';
+import Product from './product';
 
 
 
-function Travelpackage() {  
+function Travelpackage() { 
+
   const [products, setProducts] = useState([]);
   useEffect(() => {
     fetchProduct()
   }, [])
-  
-
 
   const fetchProduct = async() => {
     try{
@@ -30,11 +29,9 @@ function Travelpackage() {
         console.log("데이터 받기 실패!!")
       }
     }catch (error){
-      console.error(error);
+      console.log(error.response.data);
     }
   }
-
-
 
   const [searchTerm, setSearchTerm] = useState('');
 

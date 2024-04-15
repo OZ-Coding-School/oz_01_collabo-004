@@ -1,13 +1,9 @@
-body {
-    background-color: #f8f9fa;
-    padding: 20px;
-}
 .product p:nth-child(5){
     display: none;
 }
 .petshop-page {
     width: 85%;
-    margin: 64px auto;
+    margin: 0 auto;
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;

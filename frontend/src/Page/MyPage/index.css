@@ -1,95 +1,117 @@
-.flex-column {
-  margin: 100px;
-  margin-top: 150px;
+body {
+  margin: 0px;
+  font-family: "TiltNeon-Regular-VariableFont_XROT,YROT";
+}
+
+.nav-pills .nav-link.active {
+  background-color: rgb(90, 120, 250) !important;
+}
+.nav {
+  width: 150px;
+  margin-left: 200px;
+  --bs-nav-link-color: rgb(90, 120, 250) !important;
+}
+
+.my-page-container #left-tabs-example {
+  background-color: rgb(90, 120, 250);
 }
 
 .my-page-container {
-  max-width: 500px;
-  margin: auto;
-  margin-top: 100px;
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .profile-section,
-.edit-section {
+.edit-section,
+.wishlist-section,
+.coupon-section {
+  width: 80%;
+  margin-bottom: 20px;
+}
+
+.profile-section {
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.profile-info {
   margin-bottom: 20px;
 }
 
 .profile-info p {
-  margin: 5px 0;
+  font-size: 20px;
+  margin: 10px 0;
 }
-
-.input-field {
-  margin-bottom: 10px;
-}
-
-.input-field label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.input-field input {
-  width: 40%;
-  height: 30px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
-}
-
-button {
-  padding: 1px 5px;
-  font-size: 15px;
-  background-color: #007bff;
-  color: #fff;
+.profile-info button {
+  display: inline-block;
+  padding: 1px 60px;
+  font-size: 20px;
+  text-align: center;
+  text-decoration: none;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  background-color: rgb(90, 120, 250);
+  color: #fff;
 }
-
-button:hover {
+.profile-info button:hover {
   background-color: #0056b3;
 }
 
-.my-page-container {
-  margin: 100px;
+.profile-info button:active {
+  transform: translateY(1px);
 }
 
-.wishlist-modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #fff;
+.edit-section {
   border: 1px solid #ccc;
+  border-radius: 5px;
   padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  z-index: 999;
 }
 
-.wishlist-modal h2 {
-  font-size: 20px;
+.edit-section .input-field {
   margin-bottom: 10px;
 }
 
-.wishlist-modal ul {
+.wishlist-section {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+}
+
+.wishlist-section ul {
   list-style-type: none;
   padding: 0;
 }
 
-.wishlist-modal li {
-  margin-bottom: 5px;
+.wishlist-section li {
+  margin-bottom: 10px;
 }
 
-.wishlist-modal button {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
+.wishlist-section input {
+  margin-right: 10px;
 }
 
-.wishlist-modal button:hover {
-  background-color: #0056b3;
+.coupon-section {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+}
+
+.coupon-section ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.coupon-section .coupon {
+  border: 1px solid #eee;
+  border-radius: 5px;
+  padding: 5px;
+  margin-bottom: 0px;
+}
+
+.modal-backdrop.show {
+  opacity: 0;
+  z-index: -1;
 }

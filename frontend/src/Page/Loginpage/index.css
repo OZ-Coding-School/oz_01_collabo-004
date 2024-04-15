@@ -1,3 +1,7 @@
+body {
+  font-family: "TiltNeon-Regular-VariableFont_XROT,YROT";
+}
+
 .signUpModal {
   position: relative;
   display: flex;
@@ -8,12 +12,13 @@
   max-width: 400px;
   margin: auto;
   margin-top: 50px;
-  /* padding: 20px; */
+  padding: 20px;
   border-radius: 5px;
 }
 .login-container h1 {
   display: flex;
 }
+
 .doggo {
   margin-bottom: 40px;
   display: flex;
@@ -21,9 +26,6 @@
 .go {
   margin-left: 10px;
   color: rgb(90, 120, 250);
-}
-.login-container form div {
-  margin-bottom: 15px;
 }
 
 .login-container form div label {
@@ -39,7 +41,7 @@
   border-radius: 4px;
 }
 
-.login-container form button {
+.login-form button {
   margin: 5px;
   width: 100%;
   padding: 10px;
@@ -50,8 +52,7 @@
   cursor: pointer;
 }
 
-.kakao,
-google {
+.kakao .google {
   display: flex;
   justify-content: space-around;
   padding: 0%;
@@ -79,4 +80,67 @@ google {
 .social-button {
   display: flex;
   margin: 10px;
+}
+
+/* 로그인 css     */
+
+.login-form div {
+  position: relative;
+  width: 300px;
+  margin-left: 30px;
+  margin-top: 40px;
+}
+
+.login-form input {
+  font-size: 15px;
+  color: #222222;
+  width: 300px;
+  border: none;
+  border-bottom: solid #aaaaaa 1px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  position: relative;
+  background: none;
+  z-index: 5;
+}
+
+.login-form input::placeholder {
+  color: #aaaaaa;
+}
+.login-form input:focus {
+  outline: none;
+}
+
+.login-form span {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 2%;
+  background-color: #666;
+  width: 0;
+  height: 3px;
+  border-radius: 2px;
+  transition: 0.5s;
+}
+
+.login-form label {
+  position: absolute;
+  color: #aaa;
+  left: 10px;
+  font-size: 20px;
+  bottom: 8px;
+  transition: all 0.2s;
+}
+
+.login-form input:focus ~ label,
+.login-form input:valid ~ label {
+  font-size: 16px;
+  bottom: 40px;
+  color: #666;
+  font-weight: bold;
+}
+
+.login-form input:focus ~ span,
+.login-form input:valid ~ span {
+  width: 100%;
 }

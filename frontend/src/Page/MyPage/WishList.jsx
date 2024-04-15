@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import "./index.css";
+import "./WishList.css";
 
 function BasicExample() {
   const [cards, setCards] = useState([
@@ -14,6 +14,7 @@ function BasicExample() {
       isBookmarked: false,
     },
   ]);
+  const [productDetail, setProductDetail] = useState("");
 
   const handleBookmarkToggle = (id) => {
     setCards(
@@ -43,8 +44,9 @@ function BasicExample() {
             <Button
               variant={card.isBookmarked ? "success" : "dark"}
               onClick={() => handleBookmarkToggle(card.id)}
+              href={`/product/${card.id}`}
             >
-              {card.isBookmarked ? "Booking" : "Booking"}
+              {card.isBookmarked ? "이동 중..." : "예약하러가기"}
             </Button>
           </Card.Body>
         </Card>

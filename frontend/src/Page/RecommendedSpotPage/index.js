@@ -165,7 +165,7 @@ const RecommendedSpotPage = () => {
 
   return (
     <div className="recommended-spot-page">
-      <h2>반려 동반 추천 여행지</h2>
+      <h2> 반려 동물과 함께 할 추천 여행지 </h2>
       {recommendedSpots.map((spot, index) => (
         <RecommendationItem key={index} spot={spot} />
       ))}

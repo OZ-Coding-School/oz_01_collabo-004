@@ -1,6 +1,10 @@
+body {
+  font-family: "TiltNeon-Regular-VariableFont_XROT,YROT";
+}
+
 .modal {
-  background-color: rgb(208, 222, 237);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: rgb(249, 252, 255);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   position: absolute;
   top: 50%;
   left: 50%;
@@ -9,7 +13,7 @@
   width: 600px;
   height: 700px;
   z-index: 999;
-  animation: fadeIn 500ms;
+  animation: fadeIn 400ms;
   border-radius: 10%;
 }
 
@@ -23,6 +27,10 @@
     scale: 1;
   }
 }
+.sign-tittle {
+  display: flex;
+  justify-content: center;
+}
 
 .signup-form {
   max-width: 400px;
@@ -34,29 +42,26 @@
   text-align: center;
 }
 
-.input-group {
-  margin-bottom: 15px;
-}
-
 .input-group label {
   display: block;
   margin-bottom: 5px;
 }
-
+/* 
 .input-group input {
   width: 100%;
-  padding: 8px;
+  padding: 0px;
   border: 1px solid #ccc;
   border-radius: 4px;
-}
+} */
 
 .signup-form button {
+  height: 40px;
+  margin-top: 10px;
   position: relative;
   align-items: center;
   width: 100%;
-  padding: 10px;
   background-color: rgb(90, 120, 250);
-  color: white;
+  color: rgb(255, 255, 255);
   border: none;
   border-radius: 5px;
   cursor: pointer;
