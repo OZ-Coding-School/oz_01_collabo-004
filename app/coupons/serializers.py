@@ -17,11 +17,10 @@ class CouponInfoSerializer(serializers.ModelSerializer):
 
 class UserCouponSerializer(serializers.ModelSerializer):  # type: ignore
     coupon_info = CouponInfoSerializer(source="coupon", read_only=True)
-    coupon = serializers.IntegerField(write_only=True)
 
     class Meta:
         model = UserCoupon
-        exclude = ["created_at", "modified_at", "user"]
+        exclude = ["created_at", "modified_at", "user", "coupon"]
         read_only_fields = [
             "status",
         ]
