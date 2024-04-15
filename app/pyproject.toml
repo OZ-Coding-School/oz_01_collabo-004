@@ -62,7 +62,7 @@ module = "*.migrations.*"
 ignore_errors = true
 
 [[tool.mypy.overrides]]
-module = "manage"
+module = "manage.*"
 ignore_errors = true
 
 [[tool.mypy.overrides]]
