@@ -60,10 +60,14 @@ function ProfileModal({
           </div>
           <br />
           <div className={styles.input_container}>
-            <input type="email" value={email} onChange={handleEmailChange} />
+            <input
+              type="email"
+              value={user.email}
+              onChange={handleEmailChange}
+            />
           </div>
           <div className={styles.input_container}>
-            <input type="tel" value={phone} onChange={handlePhoneChange} />
+            <input type="tel" value={user.phone} onChange={handlePhoneChange} />
           </div>
           <div className={styles.input_container}>
             <input

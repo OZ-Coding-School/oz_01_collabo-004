@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useRef, useState } from "react";
 import useOnclickOutside from "../../hooks/modalClose";
 import "./index.css";
@@ -23,19 +24,20 @@ function SignupForm({ setSignUp }) {
     event.preventDefault();
 
     try {
-      const response = await fetch(
-        "https://124f-27-117-139-6.ngrok-free.app/api/v1/user/signup/",
+      const response = await axios.post(
+        "http://dog-go.store/api/v1/user/signup/",
+        formData,
         {
-          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData),
+          withCredentials: true,
         }
-      ).then(console.log(JSON.stringify(formData)));
+      );
+      console.log(response);
 
-      if (!response.ok) {
-        throw new Error("회원가입에 실패했습니다.");
+      if (response.status === 201) {
+        console.log("회원가입에 성공했습니다.");
       }
     } catch (error) {
       console.error("회원가입 실패:", error.message);
@@ -117,7 +119,7 @@ function SignupForm({ setSignUp }) {
             type="password"
             id="confirmPassword"
             name="confirmPassword"
-            value={formData.confirmPassword}
+            // value={formData.confirmPassword}
             onChange={handleChange}
             required
           />

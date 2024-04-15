@@ -1,6 +1,12 @@
-body {
-  font-family: "TiltNeon-Regular-VariableFont_XROT,YROT";
+@font-face {
+  font-family: "BinggraeII-Bold";
+  src: url("../../../public/font/TiltNeon-Regular-VariableFont_XROTYROT.ttf")
+    format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
 
+body {
   margin-top: 100px;
 }
 .recommended-spot-page h2 {
