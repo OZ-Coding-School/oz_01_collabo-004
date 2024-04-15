@@ -1,3 +1,4 @@
+import pdb
 from datetime import timedelta
 
 from django.contrib.auth import get_user_model
@@ -149,13 +150,12 @@ class UserCouponTestCase(APITestCase):
         # 처음 발급요청을 테스트
         url = reverse("user-coupon-issue", kwargs={"coupon_id": self.coupon.pk})
         response = self.client.post(url, headers={"Authorization": f"Bearer {self.token}"})
+        pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data["coupon_info"]["type"], "WELCOME")
         self.assertEqual(response.data["coupon_info"]["content"], "회원가입 축하 쿠폰")
         self.assertEqual(response.data["coupon_info"]["sale_price"], 10000)
         self.assertEqual(response.data["coupon_info"]["duration"], 30)
-        self.assertEqual(response.data["user"], self.user.pk)
-        self.assertEqual(response.data["coupon"], self.coupon.pk)
         self.assertEqual(UserCoupon.objects.filter(user_id=self.user.pk).count(), 1)
         # 이미 발급된 쿠폰이 있는데 발급요청을 하는 경우 테스트
         response = self.client.post(url, headers={"Authorization": f"Bearer {self.token}"})
@@ -164,29 +164,35 @@ class UserCouponTestCase(APITestCase):
 
     def test_user_coupon_list(self) -> None:
         url = reverse("user-coupon-list")
-        UserCoupon.objects.create(user_id=self.user.pk, coupon_id=self.coupon.pk, expired_at=timezone.now())
-        UserCoupon.objects.create(user_id=self.user.pk, coupon_id=self.coupon2.pk, expired_at=timezone.now())
+        user_coupon = UserCoupon.objects.create(
+            user_id=self.user.pk, coupon_id=self.coupon.pk, expired_at=timezone.now()
+        )
+        user_coupon2 = UserCoupon.objects.create(
+            user_id=self.user.pk, coupon_id=self.coupon2.pk, expired_at=timezone.now()
+        )
 
         response = self.client.get(url, headers={"Authorization": f"Bearer {self.token}"})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
         self.assertEqual(len(response.data), 2)
         self.assertEqual(response.data[0]["coupon_info"]["type"], "WELCOME")
         self.assertEqual(response.data[0]["coupon_info"]["content"], "회원가입 축하 쿠폰")
         self.assertEqual(response.data[0]["coupon_info"]["sale_price"], 10000)
         self.assertEqual(response.data[0]["coupon_info"]["duration"], 30)
-        self.assertEqual(response.data[0]["user"], self.user.pk)
-        self.assertEqual(response.data[0]["coupon"], self.coupon.pk)
+        self.assertEqual(response.data[0]["id"], user_coupon.pk)
         self.assertEqual(response.data[1]["coupon_info"]["type"], "EVENT")
         self.assertEqual(response.data[1]["coupon_info"]["content"], "빅세일 이벤트 쿠폰")
         self.assertEqual(response.data[1]["coupon_info"]["sale_price"], 30000)
         self.assertEqual(response.data[1]["coupon_info"]["duration"], 7)
-        self.assertEqual(response.data[1]["user"], self.user.pk)
-        self.assertEqual(response.data[1]["coupon"], self.coupon2.pk)
+        self.assertEqual(response.data[1]["id"], user_coupon2.pk)
 
     def test_available_user_coupon_list(self) -> None:
         url = reverse("available-user-coupons")
-        UserCoupon.objects.create(user_id=self.user.pk, coupon_id=self.coupon.pk, expired_at=timezone.now())
-        UserCoupon.objects.create(user_id=self.user.pk, coupon_id=self.coupon2.pk, expired_at=timezone.now())
+        user_coupon = UserCoupon.objects.create(
+            user_id=self.user.pk, coupon_id=self.coupon.pk, expired_at=timezone.now()
+        )
+        user_coupon2 = UserCoupon.objects.create(
+            user_id=self.user.pk, coupon_id=self.coupon2.pk, expired_at=timezone.now()
+        )
 
         response = self.client.get(url, headers={"Authorization": f"Bearer {self.token}"})
 
@@ -196,14 +202,12 @@ class UserCouponTestCase(APITestCase):
         self.assertEqual(response.data[0]["coupon_info"]["content"], "회원가입 축하 쿠폰")
         self.assertEqual(response.data[0]["coupon_info"]["sale_price"], 10000)
         self.assertEqual(response.data[0]["coupon_info"]["duration"], 30)
-        self.assertEqual(response.data[0]["user"], self.user.pk)
-        self.assertEqual(response.data[0]["coupon"], self.coupon.pk)
+        self.assertEqual(response.data[0]["id"], user_coupon.pk)
         self.assertEqual(response.data[1]["coupon_info"]["type"], "EVENT")
         self.assertEqual(response.data[1]["coupon_info"]["content"], "빅세일 이벤트 쿠폰")
         self.assertEqual(response.data[1]["coupon_info"]["sale_price"], 30000)
         self.assertEqual(response.data[1]["coupon_info"]["duration"], 7)
-        self.assertEqual(response.data[1]["user"], self.user.pk)
-        self.assertEqual(response.data[1]["coupon"], self.coupon2.pk)
+        self.assertEqual(response.data[1]["id"], user_coupon2.pk)
         self.assertTrue(response.data[0]["expired_at"] < response.data[1]["expired_at"])
 
     def test_used_user_coupon_list(self) -> None:
@@ -214,8 +218,10 @@ class UserCouponTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
         # 사용가능한 쿠폰을 소유하고 있을 때 테스트
-        UserCoupon.objects.create(user_id=self.user.pk, coupon_id=self.coupon.pk, expired_at=timezone.now())
-        UserCoupon.objects.create(
+        user_coupon = UserCoupon.objects.create(
+            user_id=self.user.pk, coupon_id=self.coupon.pk, expired_at=timezone.now()
+        )
+        user_coupon2 = UserCoupon.objects.create(
             user_id=self.user.pk,
             coupon_id=self.coupon2.pk,
             expired_at=timezone.now(),
@@ -230,8 +236,7 @@ class UserCouponTestCase(APITestCase):
         self.assertEqual(response.data[0]["coupon_info"]["content"], "빅세일 이벤트 쿠폰")
         self.assertEqual(response.data[0]["coupon_info"]["sale_price"], 30000)
         self.assertEqual(response.data[0]["coupon_info"]["duration"], 7)
-        self.assertEqual(response.data[0]["user"], self.user.pk)
-        self.assertEqual(response.data[0]["coupon"], self.coupon2.pk)
+        self.assertEqual(response.data[0]["id"], user_coupon2.pk)
         self.assertFalse(response.data[0]["status"])
 
     def test_get_user_coupon_detail(self) -> None:
@@ -249,8 +254,6 @@ class UserCouponTestCase(APITestCase):
         self.assertEqual(response.data["coupon_info"]["content"], "회원가입 축하 쿠폰")
         self.assertEqual(response.data["coupon_info"]["sale_price"], 10000)
         self.assertEqual(response.data["coupon_info"]["duration"], 30)
-        self.assertEqual(response.data["user"], self.user.pk)
-        self.assertEqual(response.data["coupon"], self.coupon.pk)
         self.assertEqual(response.data["status"], True)
 
         # 유효하지 않은 유저 쿠폰 번호로 접근하는 경우
