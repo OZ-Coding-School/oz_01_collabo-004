@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 
 import requests
 from django.contrib.auth import login
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
@@ -93,6 +94,11 @@ class UserDetailView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_404_NOT_FOUND)
 
+    @extend_schema(
+        request=serializers.UserInfoModifySerializer,
+        responses=serializers.UserInfoModifySerializer,
+        description="Update user info",
+    )
     def put(self, request: Request) -> Response:
         serializer = serializers.UserInfoModifySerializer(request.user, data=request.data)
         if serializer.is_valid():

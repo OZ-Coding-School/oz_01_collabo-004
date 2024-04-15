@@ -1,6 +1,7 @@
 from typing import Any
 
 from django.shortcuts import get_object_or_404
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -10,12 +11,15 @@ from common.utils import S3ImgUploader
 from config.paginations import ProductReviewPagination
 
 from .models import ProductReview
-from .serializers import ProductReviewDetailSerializer, ProductReviewListSerializer
+from .serializers import (
+    CreateReviewSerializer,
+    ProductReviewDetailSerializer,
+    ProductReviewListSerializer,
+)
 
 
 class ProductReviewListView(APIView):
-    serializer_class = ProductReviewListSerializer
-
+    @extend_schema(responses=ProductReviewListSerializer, description="Read products reviews for login user")
     def get(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         try:
             queryset = ProductReview.objects.filter(user_id=request.user.id).order_by("id")  # type: ignore
@@ -26,16 +30,20 @@ class ProductReviewListView(APIView):
         except Exception as e:
             return Response({"msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    @extend_schema(
+        request=CreateReviewSerializer,
+        responses=CreateReviewSerializer,
+        description="Get products reviews, After Post product-review",
+    )
     def post(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         data = {
-            "user": request.user.id,
-            "product": request.data.get("product_id"),
+            "product": request.data.get("product"),
             "title": request.data.get("title"),
             "content": request.data.get("content"),
         }
-        serializer = ProductReviewListSerializer(data=data)
+        serializer = CreateReviewSerializer(data=data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
