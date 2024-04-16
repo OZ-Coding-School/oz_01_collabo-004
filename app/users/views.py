@@ -1,4 +1,5 @@
 import os
+
 from datetime import datetime, timedelta
 
 import requests
@@ -113,6 +114,9 @@ class JWTLogoutView(APIView):
 
 
 class JWTRefreshView(APIView):
+    authentication_classes = []
+    permission_classes = [AllowAny]
+
     def post(self, request: Request) -> Response:
         refresh_token = request.COOKIES.get("AUT_REF")
 
