@@ -55,7 +55,6 @@ class CategoryDetailView(APIView):
             status=status.HTTP_404_NOT_FOUND,
         )
 
-
     # def post(self, request, category_pk):
     #     category = self.get_object(category_pk)
     #
