@@ -10,4 +10,6 @@ urlpatterns = [
     path("simple/jwt_verify_token", TokenVerifyView.as_view(), name="token_verify"),
     path("signup/", views.Signup.as_view(), name="signup"),
     path("info/", views.UserDetailView.as_view(), name="user_detail"),
+    path("email-verify/send/verify-code/", views.SendVerificationCodeView.as_view(), name="send_verify_code"),
+    path("email-verify/", views.VerifyCodeView.as_view(), name="email_verify"),
 ]

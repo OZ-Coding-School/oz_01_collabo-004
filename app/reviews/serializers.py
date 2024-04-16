@@ -10,11 +10,21 @@ class ProductReviewListSerializer(serializers.ModelSerializer):  # type: ignore
 
     class Meta:
         model = ProductReview
-        fields = "__all__"
+        exclude = ("user",)
+        read_only_fields = ("status",)
+
+
+class CreateReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductReview
+        exclude = ("user",)
+        read_only_fields = ("status", "created_at", "modified_at")
 
 
 class ProductReviewDetailSerializer(serializers.ModelSerializer):  # type: ignore
+    product = ProductInfoSerializer(read_only=True)
+
     class Meta:
         model = ProductReview
-        fields = "__all__"
+        exclude = ("user",)
         read_only_fields = ["status", "created_at", "updated_at"]

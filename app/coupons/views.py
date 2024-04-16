@@ -10,6 +10,7 @@ from coupons.serializers import CouponSerializer, UserCouponSerializer
 
 
 class CouponListView(APIView):
+    serializer_class = CouponSerializer
     permission_classes = [IsAdminUser]
 
     def get(self, request: Request) -> Response:
@@ -29,6 +30,7 @@ class CouponListView(APIView):
 
 
 class CouponDetailView(APIView):
+    serializer_class = CouponSerializer
     permission_classes = [IsAdminUser]
 
     def get(self, request: Request, coupon_id: int) -> Response:
@@ -52,6 +54,8 @@ class CouponDetailView(APIView):
 
 
 class UserCouponListView(APIView):
+    serializer_class = UserCouponSerializer
+
     def get(self, request: Request) -> Response:
         # 전체 쿠폰 중에서 사용가능한 순으로, 그 중에서도 유효 기간이 짧은 순으로 내려줌
         coupons = UserCoupon.objects.filter(user_id=request.user.id).order_by("-status", "expired_at")  # type: ignore
@@ -66,6 +70,8 @@ class AvailableUserCouponListView(APIView):
     유저가 보유 중인 쿠폰 중 사용가능한 리스트를 내려주는 View
     """
 
+    serializer_class = UserCouponSerializer
+
     def get(self, request: Request) -> Response:
         # 사용가능한 쿠폰 중에서 유효기간이 짧은것부터 내려줌
         coupons = UserCoupon.objects.filter(user_id=request.user.id, status=True).order_by("expired_at")  # type: ignore
@@ -79,6 +85,8 @@ class UsedUserCouponListView(APIView):
     """
     유저가 사용했던 쿠폰 리스트를 내려주는 View
     """
+
+    serializer_class = UserCouponSerializer
 
     def get(self, request: Request) -> Response:
         # 가장 최근에 사용했던 쿠폰순으로 내려줌
@@ -95,6 +103,8 @@ class UserCouponDetailView(APIView):
     """
     유저가 보유한 쿠폰의 상세정보를 내려줄 메서드
     """
+
+    serializer_class = UserCouponSerializer
 
     def get(self, request: Request, user_coupon_id: int) -> Response:
         coupon = get_object_or_404(UserCoupon, id=user_coupon_id)
@@ -137,12 +147,10 @@ class UserCouponIssueView(APIView):
         expired_date = coupon.get_expire_date()
         serializer = UserCouponSerializer(
             data={
-                "user": request.user.id,
-                "coupon": coupon_id,
                 "expired_at": expired_date,
             }
         )
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(user=request.user, coupon=coupon)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

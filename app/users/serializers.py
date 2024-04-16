@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from rest_framework import serializers
 
 from .models import User
@@ -10,6 +11,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserSignUpSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
     class Meta:
         model = User
         fields = ["user_id", "password", "name", "email", "phone"]
@@ -51,3 +54,23 @@ class UserInfoModifySerializer(serializers.ModelSerializer):
             if password is not None:
                 instance.set_password(password)  # 비밀번호를 해시화하여 저장
         return super().update(instance, validated_data)
+
+
+class VerificationCodeSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    code = serializers.CharField(max_length=6)
+
+    def validate(self, data):
+        email = data.get("email")
+        code = data.get("code")
+        verification_code = cache.get(f"{email}-verify_code")
+        if verification_code is None:
+            raise serializers.ValidationError("Email Verification time has expired.")
+        if code != verification_code:  # 인증코드 일치 여부 확인
+            raise serializers.ValidationError("Invalid verification code")
+
+        return data
+
+
+class EmailSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True, max_length=30)

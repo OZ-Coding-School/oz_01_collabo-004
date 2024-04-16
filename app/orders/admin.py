@@ -13,4 +13,4 @@ class OrderAdmin(admin.ModelAdmin):
             },
         ),
     ]
-    list_display = ["id", "user", "status", "product", "total_price"]
+    list_display = ["order_id", "user", "status", "product", "total_price"]

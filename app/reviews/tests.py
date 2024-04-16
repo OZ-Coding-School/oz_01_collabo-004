@@ -66,7 +66,7 @@ class ProductReviewListTestCase(APITestCase):
         data = {
             "title": "testtitle21",
             "content": "testcontent21",
-            "product_id": self.product.id,  # type: ignore
+            "product": self.product.id,  # type: ignore
         }
 
         response = self.client.post(url, data, headers={"Authorization": f"Bearer {self.token}"})
@@ -76,7 +76,6 @@ class ProductReviewListTestCase(APITestCase):
         self.assertEqual(response.data["title"], "testtitle21")
         self.assertEqual(response.data["content"], "testcontent21")
         self.assertEqual(response.data["product"], self.product.id)
-        self.assertEqual(response.data["user"], self.user.id)
 
     def test_get_product_review(self) -> None:
         url = reverse("product-review-list")
@@ -86,7 +85,6 @@ class ProductReviewListTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data["results"]), 10)
         for i, review in enumerate(response.data["results"]):
-            self.assertEqual(review["user"], self.user.id)
             self.assertEqual(review["title"], self.review_set[i].title)
             self.assertEqual(review["content"], self.review_set[i].content)
             self.assertTrue(review["status"])
@@ -129,11 +127,10 @@ class ProductReviewDetailTestCase(APITestCase):
         response = self.client.get(url, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["user"], self.user.id)
         self.assertEqual(response.data["title"], self.review.title)
         self.assertEqual(response.data["content"], self.review.content)
         self.assertTrue(response.data["status"])
-        self.assertEqual(response.data["product"], self.review.product.id)  # type: ignore
+        self.assertEqual(response.data["product"]["id"], self.review.product.id)  # type: ignore
 
     def test_put_product_review_detail(self) -> None:
         url = reverse("product-review-detail", kwargs={"review_id": self.review.pk})
@@ -145,8 +142,7 @@ class ProductReviewDetailTestCase(APITestCase):
         response = self.client.put(url, data=data, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["user"], self.user.id)
-        self.assertEqual(response.data["product"], self.product.id)
+        self.assertEqual(response.data["product"]["id"], self.product.id)
         self.assertEqual(response.data["title"], "testtitle_update")
         self.assertEqual(response.data["content"], "testcontent_update")
         self.assertTrue(response.data["status"])
