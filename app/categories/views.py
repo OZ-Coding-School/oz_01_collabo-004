@@ -5,8 +5,6 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from products.models import Product
-
 from .models import Category, CategoryUserConnector
 from .serializers import (
     CategorySerializer,
@@ -18,7 +16,8 @@ from .serializers import (
 class CategoryListView(APIView):
     serializer_class = CategorySerializer
 
-    def get(self, request):
+    def get(self, request: Request) -> Response:
+
         category = Category.objects.all()
         if not category.exists():
             Response(
@@ -86,7 +85,8 @@ class CategoryDetailView(APIView):
 
 class UserCategorySurveyView(APIView):
 
-    def post(self, request):
+    def post(self, request) -> Response:  # type: ignore
+
         user = request.user
         if user.last_login is None:
             select_category_ids = request.data.getlist("select_category")
@@ -103,9 +103,9 @@ class UserCategorySurveyView(APIView):
 
 # 유저가 자기가 선택한 카테고리 조회
 class UserCategoryListView(APIView):
-    def get(self, request, category_id):
-        user = request.user
-        connectors = CategoryUserConnector.objects.filter(category_id=category_id, user_id=request.user.id)
+    def get(self, request: Request, category_id: int) -> Response:
+        connectors = CategoryUserConnector.objects.filter(category_id=category_id, user_id=request.user.id)  # type: ignore
+
         if connectors:
             serializer = ProductConnectorSerializer(connectors, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -115,8 +115,9 @@ class UserCategoryListView(APIView):
 # 유저가 자기가 선택한 카테고리 삭제
 # 커넥터를 통해서 정보 가져오기
 class UserCategoryDetailView(APIView):
-    def delete(self, request, category_id):
-        connector = CategoryUserConnector.objects.filter(category_id=category_id, user_id=request.user)
+    def delete(self, request: Request, category_id: int) -> Response:
+        connector = CategoryUserConnector.objects.filter(category_id=category_id, user_id=request.user)  # type: ignore
+
         if connector:
             connector.delete()
             return Response(status=status.HTTP_200_OK)

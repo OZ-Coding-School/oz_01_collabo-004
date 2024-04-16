@@ -1,5 +1,3 @@
-import pdb
-
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import status
@@ -45,7 +43,7 @@ class CategoryDetailsTest(APITestCase):
 
         self.category = Category.objects.create(name="testcategory")
 
-        self.product = Product.objects.create(name="testproduct", price=1000)
+        self.product = Product.objects.create(name="testproduct", price=1000, description_text="testdescription")
 
     def test_get_category_details(self) -> None:
         url = reverse("category-detail", kwargs={"category_pk": self.category.pk})
@@ -72,14 +70,6 @@ class CategoryDetailsTest(APITestCase):
 
         with self.assertRaises(Category.DoesNotExist):
             Category.objects.get(id=self.category.pk)
-
-    # def test_post_category_details(self) -> None:
-    #     url = reverse("category-detail", kwargs={"category_pk": self.category.pk})
-    #     data = {"product_id": self.product.pk}
-    #
-    #     response = self.client.post(url, data)
-    #     pdb.set_trace()
-    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
 class UserCategorySurveyTest(APITestCase):
