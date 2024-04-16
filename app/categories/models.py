@@ -8,6 +8,9 @@ from users.models import User
 class Category(CommonModel):
     name = models.CharField(max_length=20)
 
+    def __str__(self):
+        return self.name
+
 
 class CategoryUserConnector(CommonModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

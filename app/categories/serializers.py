@@ -18,9 +18,6 @@ class UserConnectorSerializer(serializers.ModelSerializer):
 
 
 class ProductConnectorSerializer(serializers.ModelSerializer):
-    # category = CategorySerializer(source="category", read_only=True)
-    # product = serializers.CharField(source="product", read_only=True)
-
     class Meta:
         model = CategoryProductConnector
         fields = "__all__"

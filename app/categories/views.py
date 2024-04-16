@@ -5,8 +5,6 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from products.models import Product
-
 from .models import Category, CategoryUserConnector
 from .serializers import (
     CategorySerializer,
@@ -55,19 +53,6 @@ class CategoryDetailView(APIView):
             {"msg": "There is no part count for this category."},
             status=status.HTTP_404_NOT_FOUND,
         )
-
-
-    # def post(self, request, category_pk):
-    #     category = self.get_object(category_pk)
-    #
-    #     if not category:
-    #         return Response({"msg": "category not found"}, status=status.HTTP_404_NOT_FOUND)
-    #     serializer = ProductConnectorSerializer(data=request.data)
-    #
-    #     if serializer.is_valid():
-    #         serializer.save(category=category)
-    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request: Request, category_pk: int) -> Response:
         category = self.get_object(category_pk)
