@@ -3,18 +3,23 @@ from datetime import datetime, timedelta
 
 import requests
 from django.contrib.auth import login
+from django.core.cache import cache
+from django.core.mail import EmailMessage
+from django.utils.crypto import get_random_string
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from . import serializers
-from .models import User
+from users import serializers
+from users.models import User
 
 
 class Signup(APIView):
@@ -27,6 +32,50 @@ class Signup(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SendVerificationCodeView(APIView):
+    authentication_classes = []
+    permission_classes = [AllowAny]
+
+    @extend_schema(
+        request=serializers.EmailSerializer,
+    )
+    def post(self, request: Request) -> Response:
+        email = request.data.get("email", "")
+        if not email:
+            return Response({"msg": "이메일을 입력해주세요."}, status=status.HTTP_400_BAD_REQUEST)
+        elif User.objects.filter(email=email).exists():
+            return Response({"msg": "이미 가입된 이메일입니다."}, status=status.HTTP_400_BAD_REQUEST)
+
+        verification_code = get_random_string(length=6)
+        message = f"""
+            안녕하세요. DogGo 회원가입 시 이메일 인증 코드로 입력해야 할 인증 코드는 아래와 같습니다.
+             {verification_code}
+            인증 코드 란에 입력 후 인증하기 버튼을 눌러 주신 후 인증이 완료되면 남은 정보를 입력하고 회원가입을 마쳐 주세요.
+            감사합니다.
+            """
+        email_message = EmailMessage(
+            subject="Verification Code For DogGo Account Register",
+            body=message,
+            to=[email],
+        )
+        email_message.send()  # 이메일 전송
+        cache.set(f"{email}-verify_code", verification_code, timeout=300)
+        return Response({"msg": "verification code has been sent to email."}, status=status.HTTP_200_OK)
+
+
+class VerifyCodeView(APIView):
+    permission_classes = [AllowAny]
+
+    @extend_schema(
+        request=serializers.VerificationCodeSerializer,
+    )
+    def post(self, request: Request) -> Response:
+        serializer = serializers.VerificationCodeSerializer(data=request.data)
+        if serializer.is_valid():
+            return Response({"msg": "Email Veryfied Successfully."}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -48,7 +97,6 @@ class JWTLoginView(TokenObtainPairView):
             expires=datetime.now() + timedelta(days=1),
         )
         response.status_code = status.HTTP_200_OK
-        print(response.__dict__)
         return response
 
 
@@ -68,18 +116,20 @@ class JWTRefreshView(APIView):
     def post(self, request: Request) -> Response:
         refresh_token = request.COOKIES.get("AUT_REF")
 
-        if not refresh_token:
+        if refresh_token is None:
             return Response({"msg": "required refresh token."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             refresh_token_validate = RefreshToken(refresh_token)  # type: ignore
             access_token = str(refresh_token_validate.access_token)
             return Response({"access_token": access_token}, status=status.HTTP_200_OK)
-        except:
-            return Response(
-                {"msg": "invalid refresh token. try login again"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        except TokenError as e:
+            return Response({"msg": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except ValidationError as e:
+            return Response({"msg": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            # 예상치 못한 다른 예외 처리
+            return Response({"msg": "an unexpected error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class UserDetailView(APIView):
