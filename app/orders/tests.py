@@ -18,8 +18,12 @@ class OrderListTestCase(APITestCase):
         self.user = get_user_model().objects.create_user(
             user_id="testuser", password="password123", name="testname", email="test@example.com", phone="0101010011"
         )
-        self.product = Product.objects.create(name="testproduct", price=100000, status=True, travel_period=3, description_text="testdescription")
-        self.product2 = Product.objects.create(name="testproduct2", price=200000, status=True, travel_period=3, description_text="testdescription")
+        self.product = Product.objects.create(
+            name="testproduct", price=100000, status=True, travel_period=3, description_text="testdescription"
+        )
+        self.product2 = Product.objects.create(
+            name="testproduct2", price=200000, status=True, travel_period=3, description_text="testdescription"
+        )
         self.coupon = Coupon.objects.create(type="WELCOME", content="회원가입 축하 쿠폰", sale_price=10000, duration=30)
         self.user_coupon = UserCoupon.objects.create(
             user_id=self.user.pk, coupon_id=self.coupon.id, expired_at=self.coupon.get_expire_date()
@@ -145,7 +149,9 @@ class OrderDetailViewTestCase(APITestCase):
         self.user2 = get_user_model().objects.create_user(
             user_id="testuser2", password="password123", name="testname2", email="test2@example.com", phone="0101010012"
         )
-        self.product = Product.objects.create(name="testproduct", price=100000, status=True, travel_period=3, description_text="testdescription")
+        self.product = Product.objects.create(
+            name="testproduct", price=100000, status=True, travel_period=3, description_text="testdescription"
+        )
         self.coupon = Coupon.objects.create(type="WELCOME", content="회원가입 축하 쿠폰", sale_price=10000, duration=30)
         self.user_coupon = UserCoupon.objects.create(
             user_id=self.user.pk, coupon_id=self.coupon.pk, expired_at=self.coupon.get_expire_date()
