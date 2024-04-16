@@ -34,8 +34,6 @@ ALLOWED_HOSTS = ["*"]
 
 SITE_ID = 1  # 현재 Django 사이트의 고유 식별자를 설정
 
-AUTH_USER_MODEL = "users.User"
-
 DJANGO_SYSTEM_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -55,10 +53,10 @@ CUSTOM_USER_APPS = [
     "categories",
     "wishlist",
     "coupons",
-    # "allauth",  # 로그인, 로그아웃, 회원가입, 비밀번호 변경, 비밀번호 초기화 등과 같은 기본적인 사용자 인증 기능을 제공
-    # "allauth.account",  # 사용자의 계정 설정을 커스터마이징하고 관리
-    # "allauth.socialaccount",  # 소셜 로그인 및 회원가입 기능을 제공
-    # "allauth.socialaccount.providers.kakao",  # 카카오 로그인 제공
+    "allauth",  # 로그인, 로그아웃, 회원가입, 비밀번호 변경, 비밀번호 초기화 등과 같은 기본적인 사용자 인증 기능을 제공
+    "allauth.account",  # 사용자의 계정 설정을 커스터마이징하고 관리
+    "allauth.socialaccount",  # 소셜 로그인 및 회원가입 기능을 제공
+    "allauth.socialaccount.providers.kakao",  # 카카오 로그인 제공
     "core",
     "storages",
     "rest_framework",
@@ -68,21 +66,62 @@ CUSTOM_USER_APPS = [
 
 INSTALLED_APPS = CUSTOM_USER_APPS + DJANGO_SYSTEM_APPS
 
+# 유저 관련 설정
+AUTH_USER_MODEL = "users.User"
+
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
-    # "allauth.account.auth_backends.AuthenticationBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
 )
 
-LOGIN_REDIRECT_URL = "/"  # 로그인 후에 메인페이지로 리다이렉트ㄴ
+ACCOUNT_AUTHENTICATION_METHOD = "username"
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_EMAIL_VERIFICATION_EXPIRE_DAYS = 1
+
+# 이메일 인증을 위한 설정
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.environ.get("GOOGLE_EMAIL")
+EMAIL_HOST_PASSWORD = os.environ.get("GOOGLE_EMAIL_PASS")
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+LOGIN_REDIRECT_URL = "/"  # 로그인 후에 메인페이지로 리다이렉트
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+    },
+]
 
 from django.urls.base import reverse_lazy
 
 # LOGIN_URL = reverse_lazy('users:login') # 로그인 페이지로 리다이렉트
 # ACCOUNT_LOGOUT_REDIRECT_URL = reverse_lazy('users:login') # 로그아웃 후에 리다이렉트 될 경로
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "unique-snowflake",
+    }
+}
+
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
-    # "allauth.account.middleware.AccountMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -110,11 +149,10 @@ TEMPLATES = [
     },
 ]
 
+# wsgi 설정
 WSGI_APPLICATION = "config.wsgi.application"
 
-
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+# 데이터 베이스 설정
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
@@ -125,23 +163,6 @@ DATABASES = {
         "PORT": "3306",
     }
 }
-# Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
-
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
-]
 
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
@@ -151,16 +172,18 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 15,
 }
 
+# api 문서 설정
 SPECTACULAR_SETTINGS = {
     "TITLE": "DogGo API Documentation",
     "DESCRIPTION": "This is a description of DogGo API",
 }
 
+# simple-jwt 설정
 from datetime import timedelta
 
 SIMPLE_JWT = {
     # 액세스 토큰의 유효 기간을 5분으로 설정합니다.
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     # 리프레시 토큰의 유효 기간을 1일로 설정합니다.
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     # 리프레시 토큰을 갱신할 때마다 새 토큰을 생성하지 않도록 설정합니다.
@@ -184,9 +207,6 @@ SIMPLE_JWT = {
     "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
 }
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.0/topics/i18n/
-
 LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = "UTC"
@@ -194,19 +214,6 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
-
-STATIC_URL = "/static/static/"
-MEDIA_URL = "/static/media/"
-
-MEDIA_ROOT = "/vol/web/media"
-STATIC_ROOT = "/vol/web/static"
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -228,4 +235,10 @@ AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
 AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME")
 AWS_S3_REGION_NAME = os.environ.get("AWS_S3_REGION_NAME")
 
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+DEFAULT_FILE_STORAGE = os.environ.get("DEFAULT_FILE_STORAGE")
+
+STATIC_URL = "/static/static/"
+MEDIA_URL = "/static/media/"
+
+MEDIA_ROOT = "/vol/web/media"
+STATIC_ROOT = "/vol/web/static"
