@@ -43,7 +43,7 @@ class CategoryDetailsTest(APITestCase):
 
         self.category = Category.objects.create(name="testcategory")
 
-        self.product = Product.objects.create(name="testproduct", price=1000)
+        self.product = Product.objects.create(name="testproduct", price=1000, description_text="testdescription")
 
     def test_get_category_details(self) -> None:
         url = reverse("category-detail", kwargs={"category_pk": self.category.pk})

@@ -14,5 +14,5 @@ class Product(CommonModel):
     view_count = models.IntegerField(default=0)
     status = models.BooleanField(default=False)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name

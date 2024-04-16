@@ -8,7 +8,7 @@ from users.models import User
 class Category(CommonModel):
     name = models.CharField(max_length=20)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
