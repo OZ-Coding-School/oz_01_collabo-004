@@ -5,8 +5,8 @@ from common.models import CommonModel
 
 class Product(CommonModel):
     name = models.CharField(max_length=100)
-    product_img = models.ImageField(upload_to="product/img/thumbnail", default=None)
-    description_img = models.ImageField(upload_to="product/img/description", default=None)
+    product_img = models.ImageField(null=True, upload_to="product/img/thumbnail", default=None)
+    description_img = models.ImageField(null=True, upload_to="product/img/description", default=None)
     description_text = models.TextField(default=None)
     price = models.IntegerField(default=0)
     travel_period = models.IntegerField(default=0)
