@@ -1,23 +1,29 @@
-from django.shortcuts import get_object_or_404
+from django.core.exceptions import ValidationError
 from django.utils import timezone
-from rest_framework import status
-from rest_framework.request import Request
-from rest_framework.response import Response
 
 from coupons.models import UserCoupon
 
 
-def coupon_apply(request: Request, user_coupon_id: int) -> Response:
+def change_coupon_status(user_coupon_id: int, new_status: bool) -> int:
     """
-    유저가 쿠폰 사용시 status를 False로 바꿔주는 메서드
+    쿠폰의 상태를 변경하는 메서드
+    만약 쿠폰이 유효하고 사용하려면 new_status = False로 받아 쿠폰을 사용 불가하도록 상태를 변경.
+    만약 쿠폰이 유효하고 쿠폰변경, 사용취소 등의 이유로 쿠폰을 다시 돌려받으려고 한다면,
+    new_status = True를 받아 쿠폰을 다시 사용하도록 변경.
+    이후 coupon의 sale_price 정보를 사용가능하도록 리턴해준다.
     """
-    coupon = get_object_or_404(UserCoupon, id=user_coupon_id)
-    if coupon.user_id != request.user.id:  # 요청을 보낸 유저가 쿠폰을 소지한 유저가 맞는지 확인
-        return Response(status=status.HTTP_401_UNAUTHORIZED)
-    if coupon.status:
-        if coupon.expired_at > timezone.now():
-            coupon.status = False
-            coupon.save()
-            return Response({"msg": "successfully used coupon."}, status=status.HTTP_200_OK)
-        return Response({"msg": "coupon has expired."}, status=status.HTTP_400_BAD_REQUEST)
-    return Response({"msg": "already used coupon."}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        user_coupon = UserCoupon.objects.get(id=user_coupon_id)
+        if user_coupon.status == new_status:
+            if new_status:
+                raise ValidationError("Coupon is already available.")
+            else:
+                raise ValidationError("Coupon is already used.")
+        if user_coupon.expired_at < timezone.now():
+            raise ValidationError("Coupon has expired.")
+
+        user_coupon.status = new_status
+        user_coupon.save()
+        return user_coupon.coupon.sale_price
+    except UserCoupon.DoesNotExist:
+        raise ValidationError("Coupon does not exist.")

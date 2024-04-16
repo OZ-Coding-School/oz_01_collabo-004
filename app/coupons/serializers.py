@@ -20,7 +20,7 @@ class UserCouponSerializer(serializers.ModelSerializer):  # type: ignore
 
     class Meta:
         model = UserCoupon
-        fields = "__all__"
+        exclude = ["created_at", "modified_at", "user", "coupon"]
         read_only_fields = [
             "status",
         ]
