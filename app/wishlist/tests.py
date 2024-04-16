@@ -22,18 +22,21 @@ class WishlistTestCase(APITestCase):
             name="testproduct1",
             price=100000,
             status=True,
+            description_text="testdescription"
         )
 
         self.product2 = Product.objects.create(
             name="testproduct2",
             price=200000,
             status=True,
+            description_text="testdescription"
         )
 
         self.product3 = Product.objects.create(
             name="testproduct3",
             price=300000,
             status=True,
+            description_text="testdescription"
         )
 
         self.token = AccessToken.for_user(self.user)
@@ -94,6 +97,7 @@ class WishlistDetailTestCase(APITestCase):
             name="testproduct1",
             price=100000,
             status=True,
+            description_text="testdescription"
         )
 
         self.wishlist = Wishlist.objects.create(
