@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "list": "^2.0.19",
+    "react-fullpage": "^0.1.19"
+  }
+}
