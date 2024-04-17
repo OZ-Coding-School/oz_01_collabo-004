@@ -1,36 +1,62 @@
 .test-page{
-    margin: 0 20px 0 20px;
     width: 100%;
 }
 .test-page_product-img{
-    width: 500px;
-    height: 300px;
+    width: 100%;
     border-radius: 25px;
 }
 .test-page_detail-img{
-    width: 500px;
+    width: 600px;
 }
 .test-page_contnet{
     display: flex;
     justify-content: center;
-    background-color: #f0f0f0;
-    padding: 20px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    padding: 20px 30px;
+    margin: 0 30px;
+    border-radius: 20px;
+    box-shadow: 0px 1px 3px 0px #333;
+    align-items: center;
+}
+.test-page_contnet_review h3{
+    text-align: center;
 }
 .test-page_contnet_review {
-    margin-left: 80px;
-    width: 40%;
-    background-color: aliceblue;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    width: 85%;
+    padding: 10px;
+    background-color: #fefefe;
+    border-radius: 20px;
 }
+.test-page_contnet_review ul {
+    list-style-type: none;
+    padding: 20px;
+}
+.test-page_contnet_review li {
+    position: relative;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: rgb(90, 120, 250);
+    border-radius: 8px;
+    color: white;
+    font-family: "TiltNeon-Regular-VariableFont_XROT,YROT";
+}
+.test-page_contnet_review li::after {
+    content:"";
+    border-top: 15px solid rgb(90, 120, 250);
+    border-left: 15px solid transparent;
+    border-right: 0px solid transparent;
+    border-bottom: 0px solid transparent;
+    position:absolute;
+    top:5px;
+    left:-15px;
+}
+
 .test-page2{
     display: flex;
     justify-content: space-around;
-    margin-top: 80px;
+    margin: 80px 60px;
     align-items: flex-start;
-}
-.sdasd{
-    width: 50px;
 }
 .reservation-form {
     position: sticky;
