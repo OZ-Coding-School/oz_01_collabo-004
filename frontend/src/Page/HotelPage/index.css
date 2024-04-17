@@ -2,9 +2,13 @@
     margin: 0 20px 0 20px;
     width: 100%;
 }
-.test-page img{
-    width: 400px;
+.test-page_product-img{
+    width: 500px;
     height: 300px;
+    border-radius: 25px;
+}
+.test-page_detail-img{
+    width: 500px;
 }
 .test-page_contnet{
     display: flex;
@@ -15,6 +19,7 @@
 }
 .test-page_contnet_review {
     margin-left: 80px;
+    width: 40%;
     background-color: aliceblue;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
@@ -22,14 +27,90 @@
     display: flex;
     justify-content: space-around;
     margin-top: 80px;
+    align-items: flex-start;
 }
-.payment-form{
-    width: 400px;
-    background-color: antiquewhite;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-    padding: 30px;
+.sdasd{
+    width: 50px;
+}
+.reservation-form {
+    position: sticky;
+    top: 74px;
+    padding:  20px 40px;
+    box-shadow: 0px 1px 3px 0px #333;
+    border-radius: 10px;
     text-align: center;
 }
-.payment-form p{
-    margin-top: 10px;
+
+
+  /* 테이블 스타일 */
+.reservation-form table {
+    margin: 10px 0;
 }
+.reservation-form td,
+.reservation-form th {
+    padding: 4px 0;
+    text-align: right;
+    border: none;
+}
+.reservation-form td:nth-child(1){
+    text-align: left;
+}
+.reservation-form-input{
+    padding: 0 25px;
+}
+.reservation-form select {
+    margin: 0;
+    padding: 5px 0;
+    border: none;
+    text-align: center;
+    width: 100%;
+    border: 1px solid #333;
+}
+.counter-button{
+    margin: 8px;
+    padding: 0 6.5px;
+    font-size: 0.75rem;
+    text-align: center;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    background-color: rgb(90, 120, 250);
+    cursor: pointer;
+}
+.reservation-btn{
+    width: 100%;
+    border-radius: 10px;
+    padding: 5px 0;
+    margin-bottom: 10px;
+    color: #f0f0f0;
+    background-color: rgb(90, 120, 250);
+    border: none;
+}
+.reservation-form button:hover {
+    background-color: #0056b3;
+}
+.petcount_add{
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+.petsize-info{
+    text-align: left;
+    font-size: 0.75rem;
+    margin: 20px 0;
+}
+.petsize-info div{
+    margin-top: -10px;
+}
+.petsize-info div p{
+    margin: 0;
+}
+.petsize-info button{
+    background:none;
+    border: none;
+}
+.petsize-info button:hover{
+    color: blue;
+    background: none;
+    text-decoration: underline;
+}
+
