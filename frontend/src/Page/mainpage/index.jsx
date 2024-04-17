@@ -15,10 +15,10 @@ function Mainpage() {
   return (
     <div className='main-page'>
     <SectionsContainer {...options}>
-    <Section><Main1 /></Section>
-    <Section><Main2 /></Section>
-    <Section><Main3 /></Section>
-    <Section><Main4 /></Section>
+    <Section> <Main1 /> </Section>
+    <Section> <Main2 /> </Section>
+    <Section> <Main3 /> </Section>
+    <Section> <Main4 /> </Section>
   </SectionsContainer>
     </div>
   );

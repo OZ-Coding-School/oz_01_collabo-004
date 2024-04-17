@@ -48,22 +48,22 @@ function PetHousePage() {
 
   return (
     <div className='test-page'>
-      <h2>상세페이지 제목</h2>
       <div className='test-page_contnet'>
         <div>
+        <h2>상세페이지 제목</h2>
           <img
-            src='./images/산책1.jpg'
+            src='./images/캠핑.png'
             alt='상세페이지'
             className='test-page_product-img'
           />
         </div>
         <div className='test-page_contnet_review'>
-          <h3>리뷰</h3>
+        <h3>해당상품 리뷰</h3>
           <ul>
-            <li>리뷰1번asasdasdasdasdasd</li>
-            <li>리뷰2번asdasdasdasdasd</li>
-            <li>리뷰3번asdasdasdasdasd</li>
-            <li>리뷰4번asdasdasadasdasd</li>
+            <li>Woo play like woo 밤새 파티를 열어볼까 봐요</li>
+            <li>둠바둠바둠바둠바둠바둠바웨둠바둠바둠바둠바둠바둠바웨</li>
+            <li>앵두 같은 입술이 달린달린 달린 달린어여쁜 그대 얼굴이내 두 눈을 집어삼켜 버리곤</li>
+            <li>Woo swallow woo책임져 아주 혼내줘야겠어요눈 깜빡하면 사라질 듯이실감이 안 나는 걸That's right</li>
           </ul>
         </div>
       </div>
