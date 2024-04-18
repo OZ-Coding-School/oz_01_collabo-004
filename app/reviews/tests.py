@@ -91,7 +91,7 @@ class ProductReviewListTestCase(APITestCase):
             self.assertEqual(review["product_info"]["id"], self.product_set[i].id)
             self.assertEqual(review["product_info"]["name"], self.product_set[i].name)
             self.assertEqual(review["product_info"]["price"], self.product_set[i].price)
-            self.assertEqual(review["product_info"]["sale"], self.product_set[i].sale)
+            self.assertEqual(review["product_info"]["discount"], self.product_set[i].discount)
             self.assertEqual(review["product_info"]["product_img"], self.product_set[i].product_img)
 
 

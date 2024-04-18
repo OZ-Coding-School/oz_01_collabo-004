@@ -26,8 +26,10 @@ class OrderListTestCase(APITestCase):
         )
         self.coupon = Coupon.objects.create(type="WELCOME", content="회원가입 축하 쿠폰", sale_price=10000, duration=30)
         self.user_coupon = UserCoupon.objects.create(
-            user_id=self.user.pk, coupon_id=self.coupon.id, expired_at=self.coupon.get_expire_date()
+            user_id=self.user.pk,
+            coupon_id=self.coupon.id,
         )
+        self.user_coupon.set_expired_at()
         self.token = AccessToken.for_user(self.user)
 
     def test_post_order_list(self) -> None:
@@ -69,7 +71,7 @@ class OrderListTestCase(APITestCase):
         self.assertEqual(response.data["return_date"], "2024-04-24")
 
         # 주문시 쿠폰을 적용하려 했지만 만료된 경우
-        self.user_coupon.expired_at -= timedelta(days=31)
+        self.user_coupon.expired_at -= timedelta(days=31)  # type: ignore
         self.user_coupon.save()
         response = self.client.post(url, data, headers={"Authorization": f"Bearer {self.token}"})
 
@@ -77,7 +79,7 @@ class OrderListTestCase(APITestCase):
         self.assertEqual(response.data["msg"], "Coupon has expired.")
 
         # 주문시 쿠폰을 사용하려 했지만 이미 사용된 쿠폰인 경우
-        self.user_coupon.expired_at = self.coupon.get_expire_date()
+        self.user_coupon.set_expired_at()
         self.user_coupon.status = False
         self.user_coupon.save()
         response = self.client.post(url, data, headers={"Authorization": f"Bearer {self.token}"})
@@ -102,6 +104,7 @@ class OrderListTestCase(APITestCase):
         self.order1 = Order.objects.create(
             product_id=self.product.pk,
             user_id=self.user.pk,
+            sale_price=self.product.discount,
             total_price=self.product.price,
             people=2,
             pet=3,
@@ -115,6 +118,7 @@ class OrderListTestCase(APITestCase):
             product_id=self.product2.pk,
             user_id=self.user.pk,
             user_coupon_id=self.user_coupon.pk,
+            sale_price=self.product.discount + self.user_coupon.coupon.sale_price,
             total_price=self.product2.price,
             people=3,
             pet=4,
@@ -154,11 +158,14 @@ class OrderDetailViewTestCase(APITestCase):
         )
         self.coupon = Coupon.objects.create(type="WELCOME", content="회원가입 축하 쿠폰", sale_price=10000, duration=30)
         self.user_coupon = UserCoupon.objects.create(
-            user_id=self.user.pk, coupon_id=self.coupon.pk, expired_at=self.coupon.get_expire_date()
+            user_id=self.user.pk,
+            coupon_id=self.coupon.pk,
+            expired_at=timezone.now() + timedelta(days=self.coupon.duration),
         )
         self.order = Order.objects.create(
             product_id=self.product.pk,
             user_id=self.user.pk,
+            sale_price=self.product.discount,
             total_price=self.product.price,
             people=2,
             pet=3,
@@ -172,6 +179,7 @@ class OrderDetailViewTestCase(APITestCase):
         self.order2 = Order.objects.create(
             product_id=self.product.pk,
             user_id=self.user.pk,
+            sale_price=self.product.discount,
             total_price=self.product.price,
             people=2,
             pet=3,
@@ -185,6 +193,7 @@ class OrderDetailViewTestCase(APITestCase):
         self.order3 = Order.objects.create(
             product_id=self.product.pk,
             user_id=self.user2.pk,
+            sale_price=self.product.discount,
             total_price=self.product.price,
             people=2,
             pet=3,

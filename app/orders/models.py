@@ -1,5 +1,5 @@
 import uuid
-from datetime import timedelta
+from datetime import datetime, timedelta
 from typing import Any
 
 from django.db import models
@@ -24,23 +24,28 @@ class Order(CommonModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     user_coupon = models.ForeignKey(UserCoupon, null=True, on_delete=models.SET_NULL)
     # 주문 금액 정보
-    sale_price = models.IntegerField(default=0)
+    sale_price = models.IntegerField()
     total_price = models.IntegerField()
 
     # 주문 상태 정보
     status = models.CharField(max_length=7, choices=ORDER_CHOICES, default="ordered")
 
     # 주문 옵션
-    people = models.IntegerField(default=0)
-    pet = models.IntegerField(default=0)
+    people = models.IntegerField()
+    pet = models.IntegerField()
     pet_size_big = models.IntegerField(default=0)
     pet_size_medium = models.IntegerField(default=0)
     pet_size_small = models.IntegerField(default=0)
-    departure_date = models.DateField(default=None)
-    return_date = models.DateField(default=None)
+    departure_date = models.DateField()
+    return_date = models.DateField()
 
-    def cal_return_date(self) -> Any:
+    def cal_return_date(self) -> datetime:
         return self.departure_date + timedelta(days=self.product.travel_period)  # type: ignore
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        if not self.return_date:
+            self.return_date = self.cal_return_date()
+        super().save(*args, **kwargs)
 
 
 class Payment(CommonModel):

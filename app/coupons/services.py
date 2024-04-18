@@ -19,7 +19,7 @@ def change_coupon_status(user_coupon_id: int, new_status: bool) -> int:
                 raise ValidationError("Coupon is already available.")
             else:
                 raise ValidationError("Coupon is already used.")
-        if user_coupon.expired_at < timezone.now():
+        if user_coupon.expired_at < timezone.now():  # type: ignore
             raise ValidationError("Coupon has expired.")
 
         user_coupon.status = new_status

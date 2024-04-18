@@ -71,18 +71,15 @@ class OrderListView(APIView):
                 {"msg": "plz check pet size count & pet count."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        # timedelta를 사용하여 반환 날짜 계산
-        departure_date = datetime.strptime(order_data["departure_date"], "%Y-%m-%d")
-        return_date = departure_date + timedelta(days=product.travel_period)
 
-        # 할인가는 기본 0원
-        sale_price = 0
+        # 할인가는 기본 상품의 할인가
+        sale_price = product.discount
 
         # 만약 쿠폰을 사용했다면 쿠폰의 할인가를 적용
         if "user_coupon_id" in order_data:
             try:
                 # 쿠폰 적용 시도 후 성공하면 할인가격을 가져옴
-                sale_price = change_coupon_status(user_coupon_id=order_data["user_coupon_id"], new_status=False)
+                sale_price += change_coupon_status(user_coupon_id=order_data["user_coupon_id"], new_status=False)
             except ValidationError as e:
                 return Response({"msg": e.message}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -93,12 +90,8 @@ class OrderListView(APIView):
             status="ORDERED",
             sale_price=sale_price,
             total_price=total_price,
-            return_date=return_date.date(),
             user=request.user,
         )
-
-        serializer.instance.return_date = serializer.instance.cal_return_date()  # type: ignore
-        serializer.instance.save()  # type: ignore
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
