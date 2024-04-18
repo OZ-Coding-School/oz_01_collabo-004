@@ -20,6 +20,7 @@ const HotelItem = ({ spot }) => {
           style={{
             width: "700px",
             height: "350px",
+            alt: "images",
           }}
           src={spot.image}
         />

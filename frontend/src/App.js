@@ -9,17 +9,17 @@ import {
 } from "react-router-dom";
 import Headerbar from "./Component/Header/index.jsx";
 import Footer from "./Component/footer/index.jsx";
-import Hotel from "./Page/HotelPage/index.jsx";
+import Hotel from "./Page/HotelPage/HotelPage.jsx";
 import Login from "./Page/Loginpage/index.jsx";
+import Mainpage from "./Page/MainPage/index.jsx";
 import PaymentPage from "./Page/MyPage/PaymentPage.jsx";
 import MyPage from "./Page/MyPage/index.jsx";
 import Travel from "./Page/RecommendedSpotPage/index.js";
-import Restaurant from "./Page/RestaurantPage/index.js";
+import Restaurant from "./Page/RestaurantPage/RestaurantItem.jsx";
 import Service from "./Page/SevicePage/index.jsx";
 import SignupForm from "./Page/SignUpPage/index.jsx";
 import TravelPackagePage from "./Page/TravelPackagePage/index.jsx";
 import ProductDetail from "./Page/TravelPackagePage/product/productdetail/index.jsx";
-import Mainpage from "./Page/mainpage/index.jsx";
 
 const Layout = () => {
   const location = useLocation();
