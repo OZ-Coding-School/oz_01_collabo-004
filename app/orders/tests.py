@@ -104,6 +104,7 @@ class OrderListTestCase(APITestCase):
         self.order1 = Order.objects.create(
             product_id=self.product.pk,
             user_id=self.user.pk,
+            sale_price=self.product.discount,
             total_price=self.product.price,
             people=2,
             pet=3,
@@ -117,6 +118,7 @@ class OrderListTestCase(APITestCase):
             product_id=self.product2.pk,
             user_id=self.user.pk,
             user_coupon_id=self.user_coupon.pk,
+            sale_price=self.product.discount + self.user_coupon.coupon.sale_price,
             total_price=self.product2.price,
             people=3,
             pet=4,
@@ -163,6 +165,7 @@ class OrderDetailViewTestCase(APITestCase):
         self.order = Order.objects.create(
             product_id=self.product.pk,
             user_id=self.user.pk,
+            sale_price=self.product.discount,
             total_price=self.product.price,
             people=2,
             pet=3,
@@ -176,6 +179,7 @@ class OrderDetailViewTestCase(APITestCase):
         self.order2 = Order.objects.create(
             product_id=self.product.pk,
             user_id=self.user.pk,
+            sale_price=self.product.discount,
             total_price=self.product.price,
             people=2,
             pet=3,
@@ -189,6 +193,7 @@ class OrderDetailViewTestCase(APITestCase):
         self.order3 = Order.objects.create(
             product_id=self.product.pk,
             user_id=self.user2.pk,
+            sale_price=self.product.discount,
             total_price=self.product.price,
             people=2,
             pet=3,
