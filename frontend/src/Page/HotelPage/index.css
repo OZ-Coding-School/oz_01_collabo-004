@@ -1,14 +1,14 @@
-.test-page{
+.productdetail-page{
     width: 100%;
 }
-.test-page_product-img{
+.productdetail-page_product-img{
     width: 100%;
     border-radius: 25px;
 }
-.test-page_detail-img{
+.productdetail-page_detail-img{
     width: 600px;
 }
-.test-page_contnet{
+.productdetail-page_contnet{
     display: flex;
     justify-content: center;
     padding: 20px 30px;
@@ -17,42 +17,46 @@
     box-shadow: 0px 1px 3px 0px #333;
     align-items: center;
 }
-.test-page_contnet_review h3{
+.productdetail-page_contnet_review-content h3{
     text-align: center;
 }
-.test-page_contnet_review {
-    width: 85%;
+.productdetail-page_contnet_review {
     padding: 10px;
-    background-color: #fefefe;
-    border-radius: 20px;
+    height: 400px;
+    overflow: auto;
 }
-.test-page_contnet_review ul {
+.productdetail-page_contnet_review ul {
     list-style-type: none;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
-.test-page_contnet_review li {
+.productdetail-page_contnet_review li {
     position: relative;
+    width: 80%;
     font-size: 1.15rem;
     font-weight: 700;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     padding: 15px;
     background-color: rgb(90, 120, 250);
     border-radius: 8px;
     color: white;
     font-family: "TiltNeon-Regular-VariableFont_XROT,YROT";
 }
-.test-page_contnet_review li::after {
+.productdetail-page_contnet_review li::after {
     content:"";
     border-top: 15px solid rgb(90, 120, 250);
     border-left: 15px solid transparent;
     border-right: 0px solid transparent;
     border-bottom: 0px solid transparent;
     position:absolute;
-    top:5px;
-    left:-15px;
+    top : 10px;
+    left: -15px;
 }
 
-.test-page2{
+/*메인페이지 2번쩨*/
+.productdetail-page2{
     display: flex;
     justify-content: space-around;
     margin: 80px 60px;
