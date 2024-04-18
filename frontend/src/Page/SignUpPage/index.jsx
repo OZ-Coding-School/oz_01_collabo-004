@@ -1,5 +1,5 @@
-import axios from "axios";
 import React, { useRef, useState } from "react";
+import axios from "../../api/axios";
 import useOnclickOutside from "../../hooks/modalClose";
 import "./index.css";
 
@@ -14,32 +14,43 @@ function SignupForm({ setSignUp }) {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+
+    if (name === "phone") {
+      const phoneNumber = value.replace(/\D/g, "");
+      const formattedPhoneNumber = phoneNumber
+        .replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3")
+        .slice(0, 13);
+
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: formattedPhoneNumber,
+      }));
+    } else {
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      const response = await axios.post(
-        "http://dog-go.store/api/v1/user/signup/",
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
-      );
+      const response = await axios.post("/api/v1/user/signup/", formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
       console.log(response);
 
       if (response.status === 201) {
+        alert("DogGo의 가족이 되었습니다. 환영합니다!");
         console.log("회원가입에 성공했습니다.");
       }
     } catch (error) {
+      alert("회원가입 실패:", error.message);
       console.error("회원가입 실패:", error.message);
     }
   };

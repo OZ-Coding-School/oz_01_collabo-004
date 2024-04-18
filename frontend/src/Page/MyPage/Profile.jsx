@@ -1,6 +1,6 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "../../api/axios";
 import Coupon from "./Coupon";
 import ProfileModal from "./ProfileModal";
 import "./index.css";
@@ -14,6 +14,7 @@ function Profile() {
   };
 
   const [showModal, setShowModal] = useState(false);
+  const [userImages, setUserImages] = useState(user.userImages);
   const [email, setEmail] = useState(user.email);
   const [phone, setPhone] = useState(user.phone);
   const [password, setPassword] = useState("");
@@ -22,19 +23,15 @@ function Profile() {
   const [userData, setUserData] = useState({});
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
-  console.log(`Bearer ${localStorage.getItem("token")}`);
+
   const handleSaveChanges = async () => {
     try {
-      const response = await axios.get(
-        "http://dog-go.store/api/v1/user/info/",
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      const response = await axios.get("/api/v1/user/info/", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       setUserData(response.data);
-      console.log("User info:", response.data);
 
       handleCloseModal();
     } catch (error) {
@@ -51,7 +48,9 @@ function Profile() {
 
   const handleReceiveCoupon = async () => {
     try {
-      // 쿠폰 받는 API 호출
+      const response = await axios.get("http://dog-go.store/api/v1/coupon/");
+      setUserData(response.data);
+      console.log("User Coupon:", response.data);
     } catch (error) {
       console.error("Error receiving coupon:", error);
     }
@@ -77,7 +76,6 @@ function Profile() {
           <p>
             <strong>Phone:</strong> {userData.phone}{" "}
           </p>
-
           <button onClick={handleShowModal}>회원정보 수정</button>
         </div>
       </div>

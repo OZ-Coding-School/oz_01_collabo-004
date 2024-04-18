@@ -1,27 +1,32 @@
+/* 기본 스타일 */
 body {
-  margin: 0px;
-  font-family: "TiltNeon-Regular-VariableFont_XROT,YROT";
+  margin: 0;
+  font-family: "BinggraeII-Bold.ttf";
 }
 
+/* 네비게이션 스타일 */
 .nav-pills .nav-link.active {
   background-color: rgb(90, 120, 250) !important;
 }
+
 .nav {
   width: 150px;
   margin-left: 200px;
   --bs-nav-link-color: rgb(90, 120, 250) !important;
 }
 
-.my-page-container #left-tabs-example {
-  background-color: rgb(90, 120, 250);
-}
-
+/* 페이지 컨테이너 스타일 */
 .my-page-container {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+#left-tabs-example {
+  background-color: rgb(90, 120, 250);
+}
+
+/* 프로필 섹션 스타일 */
 .profile-section,
 .edit-section,
 .wishlist-section,
@@ -30,12 +35,16 @@ body {
   margin-bottom: 20px;
 }
 
-.profile-section {
+.profile-section,
+.edit-section,
+.wishlist-section,
+.coupon-section {
   border: 1px solid #ccc;
-  border-radius: 20px;
+  border-radius: 5px;
   padding: 20px;
 }
 
+/* 프로필 정보 스타일 */
 .profile-info {
   margin-bottom: 20px;
 }
@@ -44,6 +53,7 @@ body {
   font-size: 20px;
   margin: 10px 0;
 }
+
 .profile-info button {
   display: inline-block;
   padding: 1px 60px;
@@ -56,6 +66,7 @@ body {
   background-color: rgb(90, 120, 250);
   color: #fff;
 }
+
 .profile-info button:hover {
   background-color: #0056b3;
 }
@@ -64,22 +75,7 @@ body {
   transform: translateY(1px);
 }
 
-.edit-section {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 20px;
-}
-
-.edit-section .input-field {
-  margin-bottom: 10px;
-}
-
-.wishlist-section {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 20px;
-}
-
+/* 위시리스트 스타일 */
 .wishlist-section ul {
   list-style-type: none;
   padding: 0;
@@ -93,12 +89,7 @@ body {
   margin-right: 10px;
 }
 
-.coupon-section {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 20px;
-}
-
+/* 쿠폰 섹션 스타일 */
 .coupon-section ul {
   list-style-type: none;
   padding: 0;
@@ -111,6 +102,7 @@ body {
   margin-bottom: 0px;
 }
 
+/* 모달 백드롭 스타일 */
 .modal-backdrop.show {
   opacity: 0;
   z-index: -1;

@@ -35,13 +35,24 @@ function Search() {
         }
       );
       localStorage.removeItem("token");
-      window.location.reload();
-      navigate("/");
       console.log("로그아웃:", response);
+      navigate("/");
+      alert("로그아웃 되었습니다.");
     } catch (error) {
       console.log("로그아웃 에러:", error);
     }
   };
+
+  const handleScroll = () => {
+    if (window.scrollY > 0) {
+      setScrolled(true);
+    } else {
+      setScrolled(false);
+    }
+  };
+
+  window.addEventListener("scroll", handleScroll);
+
   return (
     <div className={`header-content ${scrolled ? "scrolled" : ""}`}>
       <div className="header-logo">

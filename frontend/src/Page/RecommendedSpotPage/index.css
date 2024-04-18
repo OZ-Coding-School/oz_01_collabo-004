@@ -6,26 +6,17 @@
   font-style: normal;
 }
 
-body {
-  margin-top: 100px;
+.recommended-box {
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
 }
+
 .recommended-spot-page h2 {
   margin: 10px;
   margin-bottom: 50px;
   text-align: center;
   display: block;
-}
-.travel-page-container {
-  margin: 200px;
-  margin-top: 100px;
-  max-height: 80vh;
-  overflow-y: auto;
-}
-
-.travel-item {
-  border: 1px solid #ccc;
-  padding: 50px;
-  margin-bottom: 10px;
 }
 
 .loading {
@@ -38,4 +29,9 @@ body {
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
+}
+
+.profile-section,
+.coupon-section {
+  background-color: rgb(255, 255, 255);
 }
