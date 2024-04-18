@@ -151,11 +151,9 @@ class UserCouponTestCase(APITestCase):
         response = self.client.post(url, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data["coupon_info"]["type"], "WELCOME")
-        self.assertEqual(response.data["coupon_info"]["content"], "회원가입 축하 쿠폰")
-        self.assertEqual(response.data["coupon_info"]["sale_price"], 10000)
-        self.assertEqual(response.data["coupon_info"]["duration"], 30)
         self.assertEqual(UserCoupon.objects.filter(user_id=self.user.pk).count(), 1)
+        self.assertEqual(response.data["msg"], "Successfully issued coupon.")
+
         # 이미 발급된 쿠폰이 있는데 발급요청을 하는 경우 테스트
         response = self.client.post(url, headers={"Authorization": f"Bearer {self.token}"})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
