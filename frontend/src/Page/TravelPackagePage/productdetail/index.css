@@ -65,28 +65,32 @@
 .reservation-form {
     position: sticky;
     top: 74px;
-    padding:  20px 40px;
+    padding:  0 40px;
     box-shadow: 0px 1px 3px 0px #333;
     border-radius: 10px;
     text-align: center;
 }
-
-
-  /* 테이블 스타일 */
-.reservation-form table {
-    margin: 10px 0;
+.reservation-form h3{
+    margin: 20px 0;
+}
+.reservation-form-table{
+    width: 100%;
 }
 .reservation-form td,
 .reservation-form th {
-    padding: 4px 0;
+    padding: 5px 0;
     text-align: right;
     border: none;
 }
+/* width 100% 설정후 td들을 왼쪽으로 정렬시켜 좌우로 나눔*/
 .reservation-form td:nth-child(1){
     text-align: left;
 }
+/*폼 안에 년도월*/
 .reservation-form-input{
-    padding: 0 25px;
+    width: 100%;
+    text-align: center;
+    padding: 0 10px;
 }
 .reservation-form select {
     margin: 0;
@@ -105,7 +109,6 @@
     border-radius: 10px;
     color: white;
     background-color: rgb(90, 120, 250);
-    cursor: pointer;
 }
 .reservation-btn{
     width: 100%;
@@ -120,8 +123,10 @@
     background-color: #0056b3;
 }
 .petcount_add{
-    font-size: 1.05rem;
+    font-size: 1.35rem;
     font-weight: 700;
+    margin: 35px 0 0;
+    text-align: right;
 }
 .petsize-info{
     text-align: left;

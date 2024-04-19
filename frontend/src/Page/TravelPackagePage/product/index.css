@@ -39,7 +39,6 @@ select {
   justify-content: center;
 }
 .product {
-  flex-basis: calc(33.33% - 20px);
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -71,4 +70,14 @@ select {
 .product p {
   font-size: 1rem;
   color: #666;
+}
+.favorite-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  color: #007bff;
 }

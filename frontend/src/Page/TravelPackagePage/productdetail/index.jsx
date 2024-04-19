@@ -24,6 +24,7 @@ function ProductDetail(props) {
     const handlePeopleChange = (amount) => {
     setNumberOfPeople((prevCount) => Math.max(1, prevCount + amount));
     };
+    
     const handlePetsChange = (size, amount) => {
         switch (size) {
             case 'small':
@@ -40,25 +41,46 @@ function ProductDetail(props) {
     }
 };
 
+const countTotalPrice = () => {
+    const basePrice = data.products.price;
+    const PersonToTalPrice = (numberOfPeople - 1) * basePrice; 
+    const smallPetsTotalPrice = smallPetsCount * 6000; 
+    const mediumPetsTotalPrice = mediumPetsCount * 10000; 
+    const largePetsTotalPrice = largePetsCount * 15000;
+
+    const totalPrice =
+        basePrice +
+        PersonToTalPrice +
+        smallPetsTotalPrice +
+        mediumPetsTotalPrice +
+        largePetsTotalPrice;
+
+    return totalPrice;
+};
+
     const handleSubmit = (e) => {
     e.preventDefault();
+    const totalPrice = countTotalPrice ();
     console.log('출발일:', departureDate);
     console.log('인원수:', numberOfPeople);
     console.log('소 반려동물 수:', smallPetsCount);
     console.log('중 반려동물 수:', mediumPetsCount);
     console.log('대 반려동물 수:', largePetsCount);
+    console.log('총 예약 가격:', totalPrice.toLocaleString(), '원');
 };
 
     return (
     <div className='productdetail-page'>
-        <div className='productdetail-page_contnet'>
+
+    <div className='productdetail-page_contnet'>
         <div className='productdetail-page-title'>
-        <h2>상품명 : {data.products.name}</h2>
+        <h2>{data.products.name}</h2>
         <img
-            src={data.products.product_img}
-            alt='상품이미지'
-            className='productdetail-page_product-img'
-            />
+        src={data.products.product_img}
+        alt='상품이미지'
+        className='productdetail-page_product-img'
+        />
+        <p>조회수 : {data.products.view_count}</p>
         </div>
         <div className='productdetail-page_contnet_review-content'>
         <h3>해당상품 리뷰</h3>
@@ -72,16 +94,16 @@ function ProductDetail(props) {
             </ul>
         </div>
         </div>
-        </div>
+    </div>
 
     <div className='productdetail-page2'>
         <div className='productdetail-page_contnet_detail'>
-        <p>상세설명 : {data.description_text}</p>
+        <p>상세설명 : {data.products.description_text}</p>
         </div>
         <div className="reservation-form">
-            <h3>가격 : {data.price.toLocaleString()} 원</h3>
+            <h3>상품가격 : {data.products.price.toLocaleString()} 원</h3>
             <form onSubmit={handleSubmit}>
-            <table>
+            <table className='reservation-form-table'>
                 <tbody>
                 <tr>
                     <td>출발일 : </td>
@@ -175,7 +197,7 @@ function ProductDetail(props) {
             </div>
             <div className='petsize-info'>
             <p>
-                # 반려동물의 사이즈?{''}
+                # 반려동물 요금 및 상세정보{''}
                 <span>
                 <button onClick={togglePetSizeInfo}>
                     {showPetSizeInfo ? '간략히' : '자세히'}
@@ -184,9 +206,9 @@ function ProductDetail(props) {
             </p>
             {showPetSizeInfo && (
                 <div>
-                <p>소 : 5kg 미만</p>
-                <p>중 : 5kg 이상 ~ 25kg 미만</p>
-                <p>대 : 25kg 이상</p>
+                <p>소 : (6000원) 5kg 미만 </p>
+                <p>중 : (10000원) 5kg 이상 ~ 25kg 미만 </p>
+                <p>대 : (15000원) 25kg 이상 </p>
                 </div>
             )}
             </div>
@@ -195,13 +217,13 @@ function ProductDetail(props) {
             예약하기
             </button>
         </form>
-
         <p>예약 확정 전에는 요금이 청구되지 않습니다.</p>
-        <p>가격 : {data.price.toLocaleString()} 원</p>
+        <p>모든 상품은 인원수,반려동물의수의 따라 변결될수있습니다.</p>
         <hr />
-        <p>가격 : {data.price.toLocaleString()} 원</p>
+        <p>총 예약 가격 : {countTotalPrice().toLocaleString()} 원</p>
         </div>
     </div>
+    
     </div>
     );
 }
