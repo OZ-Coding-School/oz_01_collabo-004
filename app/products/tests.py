@@ -83,7 +83,7 @@ class ProductSearchTest(APITestCase):
     def test_카테고리_상품_검색(self) -> None:
         # when
         url = reverse("product-search")
-        query_test = {
+        query_test: dict[str, str | int] = {
             "ct": self.category.pk,
             "min_price": "30",
             "max_price": "50",
