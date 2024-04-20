@@ -1,8 +1,14 @@
-# from rest_framework import status
-# from rest_framework.test import APITestCase
-# from django.urls import reverse
-# from .models import Product
-# from .serializers import ProductSerializer
+from django.contrib.auth import get_user_model
+from django.urls import reverse
+from rest_framework import status
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.test import APITestCase
+
+from categories.models import Category, CategoryProductConnector
+
+from .models import Product
+from .serializers import ProductSerializer
 
 # class ProductAPITestCase(APITestCase):
 #     def setUp(self):
@@ -48,3 +54,43 @@
 
 #         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 #         self.assertEqual(Product.objects.count(), 1)
+
+
+class ProductSearchTest(APITestCase):
+    def setUp(self) -> None:
+        self.category = Category.objects.create(name="TestCategory")
+
+        self.product1 = Product.objects.create(name="상품1one", description_text="상품1 설명", price=30)
+        self.product2 = Product.objects.create(name="상품2two", description_text="상품2 설명", price=80)
+        self.product3 = Product.objects.create(name="상품3three", description_text="상품2 설명", price=80)
+
+        CategoryProductConnector.objects.create(product=self.product1, category=self.category)
+        CategoryProductConnector.objects.create(product=self.product2, category=self.category)
+        CategoryProductConnector.objects.create(product=self.product3, category=self.category)
+
+    def test_키워드_상품_검색(self) -> None:
+        url = reverse("product-search")
+        keyword = ["two"]
+        query_test = {
+            "keyword": keyword,
+            "min_price": "30",
+            "max_price": "100",
+        }
+
+        response = self.client.get(url, query_test)
+        if not response.data:
+            self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_카테고리_상품_검색(self) -> None:
+        url = reverse("product-search")
+        query_test = {
+            "ct": "1",
+            "min_price": "30",
+            "max_price": "50",
+        }
+
+        response = self.client.get(url, query_test)
+        if not response.data:
+            self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

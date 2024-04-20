@@ -1,6 +1,7 @@
 import pdb
 from typing import Union
 
+from django.db.models import Q
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny
@@ -8,7 +9,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from categories.models import Category
+from categories.models import Category, CategoryProductConnector
 from categories.serializers import CategorySerializer
 from common.utils import S3ImgUploader
 
@@ -131,12 +132,28 @@ class ProductImageUploadView(APIView):
             return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+# 상품 검색 키워드나 카테고리에 충족하는 검색 기능
 class ProductSearchView(APIView):
     authentication_classes = []
     permission_classes = [AllowAny]
 
-    def get(self, request: Request) -> None:
+    def get(self, request: Request) -> Response:
         keyword = request.query_params.get("keyword", "")
         category_id = request.query_params.get("ct", "")
         min_price = request.query_params.get("min_price", "")
         max_price = request.query_params.get("max_price", "")
+
+        query = Product.objects.filter(price__gte=min_price, price__lte=max_price)
+
+        if keyword:
+            query = query.filter(Q(name__icontains=keyword) | Q(description_text__icontains=keyword))
+
+        if category_id:
+            category = CategoryProductConnector.objects.filter(category_id=category_id)
+            query = query.filter(id__in=category)
+
+        # 중복된 query제거
+        query = query.distinct()
+
+        serializer = ProductSerializer(query, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
