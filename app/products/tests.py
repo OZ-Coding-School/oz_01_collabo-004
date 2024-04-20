@@ -78,19 +78,17 @@ class ProductSearchTest(APITestCase):
         }
 
         response = self.client.get(url, query_test)
-        if not response.data:
-            self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_카테고리_상품_검색(self) -> None:
+        # when
         url = reverse("product-search")
         query_test = {
-            "ct": "1",
+            "ct": self.category.pk,
             "min_price": "30",
             "max_price": "50",
         }
 
         response = self.client.get(url, query_test)
-        if not response.data:
-            self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        # then
         self.assertEqual(response.status_code, status.HTTP_200_OK)
