@@ -149,11 +149,7 @@ class ProductSearchView(APIView):
             query = query.filter(Q(name__icontains=keyword) | Q(description_text__icontains=keyword))
 
         if category_id:
-            category = CategoryProductConnector.objects.filter(category_id=category_id)
-            query = query.filter(id__in=category)
-
-        # 중복된 query제거
-        query = query.distinct()
+            query = query.filter(categoryproductconnector__category_id=category_id)
 
         serializer = ProductSerializer(query, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
