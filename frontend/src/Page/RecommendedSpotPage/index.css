@@ -13,15 +13,10 @@
 }
 
 .recommended-spot-page h2 {
-  margin: 10px;
+  margin: 30px;
   margin-bottom: 50px;
   text-align: center;
   display: block;
-}
-
-.loading {
-  text-align: center;
-  margin-top: 20px;
 }
 
 .recommendation-item {
@@ -29,9 +24,4 @@
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
-}
-
-.profile-section,
-.coupon-section {
-  background-color: rgb(255, 255, 255);
 }

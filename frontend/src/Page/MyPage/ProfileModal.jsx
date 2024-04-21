@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
+import Col from "react-bootstrap/esm/Col";
+import Row from "react-bootstrap/esm/Row";
 import styles from "./ProfileModal.module.css";
 
 function ProfileModal({
@@ -13,9 +15,15 @@ function ProfileModal({
   setPassword,
   confirmPassword,
   setConfirmPassword,
-  handleSave,
   user,
+  userUpdate,
 }) {
+  const [imageSrc, setImageSrc] = useState("../images/wonbin.png");
+
+  const handleImageChange = (e) => {
+    setImageSrc(e.target.value);
+  };
+
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
@@ -29,11 +37,10 @@ function ProfileModal({
   };
 
   const handlePhoneChange = (e) => {
-    setPhone(e.target.value);
-  };
-
-  const handleSaveChanges = () => {
-    handleSave();
+    const formattedPhoneNumber = e.target.value
+      .replace(/[^0-9]/g, "")
+      .replace(/(\d{3})(\d{3,4})(\d{4})/, "$1-$2-$3");
+    setPhone(formattedPhoneNumber);
   };
 
   return (
@@ -47,32 +54,70 @@ function ProfileModal({
 
       <div className={styles.modal_box}>
         <div style={{ fontSize: "25px" }} className={styles.modal_body}>
-          <div>
-            아이디
-            <br />
-            {user.user_id}
-          </div>
-          <br />
-          <div>
-            이름
-            <br /> {user.name}
-          </div>
-          <br />
-          <div className={styles.input_container}>
+          <Row style={{ padding: "0", margin: "0" }}>
+            <Col style={{ padding: "0", margin: "0" }}>
+              <img
+                style={{
+                  objectFit: "cover",
+                  height: "100px",
+                  width: "100px",
+                  border: "3px solid rgb(90 120 250)",
+                  borderRadius: "50%",
+                  marginLeft: "20px",
+                }}
+                src={imageSrc}
+              />
+              <button
+                onClick={handleImageChange}
+                style={{
+                  backgroundColor: "rgb(90 120 250 )",
+                  color: "white",
+                  fontSize: "15px",
+                  textAlign: "center",
+                  display: "flex",
+                  justifyContent: "center",
+                  margin: "20px",
+                  marginLeft: "40px",
+                  width: "60px",
+                  height: "30px",
+                }}
+              >
+                EDIT
+              </button>
+            </Col>
+            <Col>
+              <div>
+                I D .
+                <br />
+                {user.user_id}
+              </div>
+              <br />
+              <div style={{ marginTop: "-25px" }}>
+                NAME .
+                <br /> {user.name}
+              </div>
+            </Col>
+          </Row>
+
+          <div style={{ marginTop: "20px" }} className={styles.input_container}>
             <input
               type="email"
-              value={user.email}
-              onChange={handleEmailChange}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className={styles.input_container}>
-            <input type="tel" value={user.phone} onChange={handlePhoneChange} />
+            <input
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
           </div>
           <div className={styles.input_container}>
             <input
               type="password"
               value={password}
-              onChange={handlePasswordChange}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="변경 할 비밀번호"
             />
           </div>
@@ -80,13 +125,13 @@ function ProfileModal({
             <input
               type="password"
               value={confirmPassword}
-              onChange={handleConfirmPasswordChange}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="비밀번호 확인"
             />
           </div>
         </div>
         <div className={styles.modal_button}>
-          <Button onClick={handleSaveChanges}>Save</Button>
+          <Button onClick={userUpdate}>Save</Button>
           <Button onClick={handleClose}>Close</Button>
         </div>
       </div>

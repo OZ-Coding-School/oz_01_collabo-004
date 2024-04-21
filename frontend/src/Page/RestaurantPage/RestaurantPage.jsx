@@ -18,7 +18,7 @@ const RestaurantPage = ({ spot }) => {
         <hr />
         <img
           style={{
-            width: "700px",
+            width: "600px",
             height: "350px",
           }}
           src={spot.image}

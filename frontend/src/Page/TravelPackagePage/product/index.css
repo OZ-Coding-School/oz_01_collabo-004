@@ -51,7 +51,7 @@ select {
   text-decoration: none;
 }
 .product-img {
-  width: 100%;
+  width: 400px;
   height: 70%;
   display: block;
   margin-bottom: 20px;

@@ -18,7 +18,7 @@ const HotelItem = ({ spot }) => {
         <hr />
         <img
           style={{
-            width: "700px",
+            width: "600px",
             height: "350px",
             alt: "images",
           }}
