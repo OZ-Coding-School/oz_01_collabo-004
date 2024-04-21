@@ -19,7 +19,7 @@ import Restaurant from "./Page/RestaurantPage/RestaurantItem.jsx";
 import Service from "./Page/SevicePage/index.jsx";
 import SignupForm from "./Page/SignUpPage/index.jsx";
 import TravelPackagePage from "./Page/TravelPackagePage/index.jsx";
-import ProductDetail from "./Page/TravelPackagePage/product/productdetail/index.jsx";
+import ProductDetail from "./Page/TravelPackagePage/productdetail/index.jsx";
 import Mainpage from "./Page/mainpage/index.jsx";
 
 const Layout = () => {
