@@ -1,59 +1,81 @@
-from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.request import Request
-from rest_framework.response import Response
 from rest_framework.test import APITestCase
 
 from categories.models import Category, CategoryProductConnector
 
 from .models import Product
-from .serializers import ProductSerializer
+from .views import ProductDetailView
 
-# class ProductAPITestCase(APITestCase):
-#     def setUp(self):
-#         self.products_url = reverse('product-list-create')
-#         self.product1 = Product.objects.create(name='상품1', description='상품1 설명', price=10000)
-#         self.product2 = Product.objects.create(name='상품2', description='상품2 설명', price=20000)
 
-#     def test_get_product_list(self):
-#         response = self.client.get(self.products_url)
-#         products = Product.objects.all()
-#         serializer = ProductSerializer(products, many=True)
+class ProductListViewTest(APITestCase):
+    def setUp(self) -> None:
+        self.product1 = Product.objects.create(name="상품1", description_text="상품1 설명", price=100, status=True)
+        self.product2 = Product.objects.create(name="상품2", description_text="상품2 설명", price=100, status=True)
 
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-#         self.assertEqual(response.data, serializer.data)
+    def test_상품_리스트_가져오기(self) -> None:
+        url = reverse("product-list-create")
 
-#     def test_create_product(self):
-#         data = {'name': '새로운 상품', 'description': '새로운 상품 설명', 'price': 30000}
-#         response = self.client.post(self.products_url, data, format='json')
+        response = self.client.get(url)
 
-#         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-#         self.assertEqual(Product.objects.count(), 3)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 2)
+        self.assertEqual(response.data[0]["name"], self.product1.name)
+        self.assertEqual(response.data[0]["description_text"], self.product1.description_text)
+        self.assertEqual(response.data[0]["price"], self.product1.price)
 
-#     def test_get_product_detail(self):
-#         product_url = reverse('product-detail', args=[self.product1.id])
-#         response = self.client.get(product_url)
-#         serializer = ProductSerializer(self.product1)
+    def test_상품_리스트_생성(self) -> None:
+        url = reverse("product-list-create")
+        data = {"name": "상품3", "description_text": "상품3 설명", "price": 100, "status": True}
 
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-#         self.assertEqual(response.data, serializer.data)
+        response = self.client.post(url, data)
 
-#     def test_update_product(self):
-#         product_url = reverse('product-detail', args=[self.product1.id])
-#         data = {'name': '수정된 상품', 'description': '수정된 상품 설명', 'price': 15000}
-#         response = self.client.put(product_url, data, format='json')
-#         updated_product = Product.objects.get(id=self.product1.id)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Product.objects.count(), 3)
+        self.assertEqual(response.data["name"], data["name"])
+        self.assertEqual(response.data["description_text"], data["description_text"])
+        self.assertEqual(response.data["price"], data["price"])
 
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-#         self.assertEqual(updated_product.name, '수정된 상품')
 
-#     def test_delete_product(self):
-#         product_url = reverse('product-detail', args=[self.product1.id])
-#         response = self.client.delete(product_url)
+class ProductDetailViewTest(APITestCase):
+    def setUp(self) -> None:
+        self.product1 = Product.objects.create(name="상품1", description_text="상품1 설명", price=100, status=True)
 
-#         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-#         self.assertEqual(Product.objects.count(), 1)
+    def test_detail_objcet_상품_가져오기(self) -> None:
+        product_id = self.product1.id
+        product_object = ProductDetailView().get_object(product_id)
+
+        self.assertIsInstance(product_object, Product)
+
+    def test_detail_상품_가져오기(self) -> None:
+        url = reverse("product-detail", kwargs={"product_id": self.product1.id})
+
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["name"], self.product1.name)
+        self.assertEqual(response.data["description_text"], self.product1.description_text)
+        self.assertEqual(response.data["price"], self.product1.price)
+
+    def test_detail_상품_변경(self) -> None:
+        data = {"name": "new 상품1", "description_text": "new 상품1 설명", "price": 50}
+        url = reverse("product-detail", kwargs={"product_id": self.product1.id})
+
+        response = self.client.put(url, data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["name"], data["name"])
+        self.assertEqual(response.data["description_text"], data["description_text"])
+        self.assertEqual(response.data["price"], data["price"])
+
+    def test_detail_상품_삭제(self) -> None:
+        url = reverse("product-detail", kwargs={"product_id": self.product1.id})
+
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(Product.objects.count(), 0)
+        self.assertEqual(Product.objects.filter(status=True).count(), 0)
 
 
 class ProductSearchTest(APITestCase):

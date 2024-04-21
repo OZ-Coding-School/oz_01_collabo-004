@@ -74,7 +74,8 @@ class ProductDetailView(APIView):
     def delete(self, request: Request, product_id: int) -> Response:
         product = self.get_object(product_id)
         if product is not None:
-            product.status = False  # type: ignore
+            # product.status = False  # type: ignore
+            product.delete()  # type: ignore
             return Response(
                 {"message": "상품이 성공적으로 삭제되었습니다."},
                 status=status.HTTP_204_NO_CONTENT,
