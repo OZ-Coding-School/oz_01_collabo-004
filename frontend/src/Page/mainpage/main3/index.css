@@ -15,8 +15,8 @@
   background-image: url("../../../../public//images/main3_coupon2.jpg");
   background-size: cover;
   background-position: center;
-  /background-repeat: no-repeat;
-  /z-index: -1;
+  background-repeat: no-repeat;
+  z-index: -1;
 }
 
 .image_box_02 {
@@ -39,6 +39,9 @@
   left: 8%;
 }
 .image_box_01 p {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  text-shadow: 2px 3px 1px black;
   color: rgb(255, 255, 255, 0.9);
   font-size: 7.5vw;
+  transform: rotate(13deg);
 }

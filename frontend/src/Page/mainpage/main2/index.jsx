@@ -80,7 +80,7 @@ function Main2() {
 
           <div
             className="item"
-            style={{ backgroundImage: "url(./images/캠핑.png)" }}
+            style={{ backgroundImage: "url(./images/pethightking)" }}
           >
             <div className="main2slideshow-content">
               <div className="main2slideshow-content-title">
