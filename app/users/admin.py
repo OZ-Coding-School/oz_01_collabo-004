@@ -17,6 +17,7 @@ class CustomUserAdmin(UserAdmin):
                     "user_id",
                     "password",
                     "name",
+                    "nickname",
                     "email",
                     "phone",
                 )
@@ -38,6 +39,7 @@ class CustomUserAdmin(UserAdmin):
                     "password2",
                     "profile_image",
                     "name",
+                    "nickname",
                     "email",
                     "phone",
                 ),
@@ -50,6 +52,7 @@ class CustomUserAdmin(UserAdmin):
         "id",
         "user_id",
         "name",
+        "nickname",
         "email",
         "phone",
         "is_active",
