@@ -1,4 +1,3 @@
-import pdb
 from typing import Union
 
 from rest_framework import status
@@ -102,7 +101,6 @@ class ProductImageUploadView(APIView):
         """
         이미지 업로드를 시도하면 boto3를 이용해서 s3로 이미지를 업로드하는 메서드
         """
-        pdb.set_trace()
         if "description_img" in request.FILES:
             image_file = request.FILES["description_img"]
             prefix = f"products/{product_id}/description_img/"
