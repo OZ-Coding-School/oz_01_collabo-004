@@ -78,7 +78,7 @@ class ReviewAdmin(admin.ModelAdmin):
                 obj.save()
 
     # actions 수정
-    delete_selected_model.short_description = "Delete selected products"
+    delete_selected_model.short_description = "Delete selected reviews"
     activate_reviews.short_description = "Activate reviews"
     disabled_reviews.short_description = "Disabled reviews"
     reset_view_count.short_description = "Reset view count"
