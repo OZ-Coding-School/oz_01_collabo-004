@@ -103,7 +103,7 @@ class ProductSearchTest(APITestCase):
         self.assertEqual(response_body[0]["description_text"], self.product1.description_text)
         self.assertEqual(response_body[0]["price"], self.product1.price)
         self.assertEqual(response_body[0]["travel_period"], self.product1.travel_period)
-        self.assertEqual(response_body[0]["sale"], self.product1.sale)
+        self.assertEqual(response_body[0]["discount"], self.product1.discount)
         self.assertEqual(response_body[0]["view_count"], self.product1.view_count)
         self.assertEqual(response_body[0]["status"], self.product1.status)
 
@@ -113,7 +113,7 @@ class ProductSearchTest(APITestCase):
         self.assertEqual(response_body[1]["description_text"], self.product2.description_text)
         self.assertEqual(response_body[1]["price"], self.product2.price)
         self.assertEqual(response_body[1]["travel_period"], self.product2.travel_period)
-        self.assertEqual(response_body[1]["sale"], self.product2.sale)
+        self.assertEqual(response_body[1]["discount"], self.product2.discount)
         self.assertEqual(response_body[1]["view_count"], self.product2.view_count)
         self.assertEqual(response_body[1]["status"], self.product2.status)
 
@@ -134,7 +134,7 @@ class ProductSearchTest(APITestCase):
         self.assertEqual(response_body[0]["description_text"], self.product3.description_text)
         self.assertEqual(response_body[0]["price"], self.product3.price)
         self.assertEqual(response_body[0]["travel_period"], self.product3.travel_period)
-        self.assertEqual(response_body[0]["sale"], self.product3.sale)
+        self.assertEqual(response_body[0]["discount"], self.product3.discount)
         self.assertEqual(response_body[0]["view_count"], self.product3.view_count)
         self.assertEqual(response_body[0]["status"], self.product3.status)
 
@@ -144,6 +144,6 @@ class ProductSearchTest(APITestCase):
         self.assertEqual(response_body[1]["description_text"], self.product4.description_text)
         self.assertEqual(response_body[1]["price"], self.product4.price)
         self.assertEqual(response_body[1]["travel_period"], self.product4.travel_period)
-        self.assertEqual(response_body[1]["sale"], self.product4.sale)
+        self.assertEqual(response_body[1]["discount"], self.product4.discount)
         self.assertEqual(response_body[1]["view_count"], self.product4.view_count)
         self.assertEqual(response_body[1]["status"], self.product4.status)
