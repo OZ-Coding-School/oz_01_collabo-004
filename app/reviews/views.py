@@ -3,6 +3,7 @@ from typing import Any
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
+from rest_framework.permissions import AllowAny
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -13,19 +14,20 @@ from config.paginations import ProductReviewPagination
 from .models import ProductReview
 from .serializers import (
     CreateReviewSerializer,
+    MyReviewListSerializer,
     ProductReviewDetailSerializer,
     ProductReviewListSerializer,
 )
 
 
-class ProductReviewListView(APIView):
-    @extend_schema(responses=ProductReviewListSerializer, description="Read products reviews for login user")
+class MyReviewListView(APIView):
+    @extend_schema(responses=MyReviewListSerializer, description="Read products reviews for login user")
     def get(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         try:
             queryset = ProductReview.objects.filter(user_id=request.user.id).order_by("id")  # type: ignore
             paginator = ProductReviewPagination()
             pagenated_queryset = paginator.paginate_queryset(queryset, request)
-            serializer = ProductReviewListSerializer(pagenated_queryset, many=True)
+            serializer = MyReviewListSerializer(pagenated_queryset, many=True)
             return paginator.get_paginated_response(serializer.data)
         except Exception as e:
             return Response({"msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -101,3 +103,19 @@ class ProductReviewImageUploadView(APIView):
             return Response(response["msg"], status=response["status"])
         except Exception as e:
             return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class ProductReviewListView(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
+    @extend_schema(
+        responses=ProductReviewListSerializer,
+        description="상품의 상세 페이지에서 보여줄 리뷰 리스트를 내려주는 get 메서드",
+    )
+    def get(self, request: Request, product_id: int) -> Response:
+        reviews = ProductReview.objects.filter(product_id=product_id)
+        if reviews:
+            serializer = ProductReviewListSerializer(reviews, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({"msg": "Review not found"}, status=status.HTTP_404_NOT_FOUND)
