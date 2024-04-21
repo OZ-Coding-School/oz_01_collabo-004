@@ -18,9 +18,9 @@ from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from common.utils import S3ImgUploader
 from users import serializers
 from users.models import User
-from common.utils import S3ImgUploader
 
 
 class Signup(APIView):
@@ -158,7 +158,7 @@ class UserDetailView(APIView):
         serializer = serializers.UserInfoModifySerializer(request.user, data=request.data, partial=True)
         if serializer.is_valid():
             if serializer.data["profile_image"]:
-                user = User.objects.get(id=request.user.id)
+                user = User.objects.get(id=request.user.id)  # type: ignore
                 prev_image_url = user.profile_image
                 image_uploader = S3ImgUploader()
                 try:
