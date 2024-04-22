@@ -8,7 +8,7 @@
 }
 .productdetail-page_contnet {
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     padding: 20px 30px;
     margin: 0 30px;
     border-radius: 20px;
