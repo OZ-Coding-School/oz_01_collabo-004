@@ -110,6 +110,7 @@ const totalPrice = () => {
             <h5>추가 반려견<span>₩{((smallPetsCount * 6000) + (mediumPetsCount * 10000) + (largePetsCount * 15000)).toLocaleString()}원</span></h5>
             <hr />
             <h5>총 합계(KRW) <span>₩{totalPrice().toLocaleString()}원</span></h5>
+            <p>저희 "DogGO" 를 이용해주셔서 감사합니다.</p>
           </div>
         ) : (
           <p>상품 정보를 불러오는 중입니다...</p>
