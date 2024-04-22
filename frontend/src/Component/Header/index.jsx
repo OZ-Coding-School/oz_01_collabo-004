@@ -7,6 +7,10 @@ import "./index.css";
 function Search() {
   const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
+  const [profileImage, setProfileImage] = useState(
+    localStorage.getItem("profileImage")
+  );
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 0) {
@@ -36,6 +40,7 @@ function Search() {
       );
       localStorage.removeItem("token");
       console.log("로그아웃:", response);
+      localStorage.removeItem("profileImage");
       navigate("/");
       alert("로그아웃 되었습니다.");
     } catch (error) {
@@ -63,10 +68,19 @@ function Search() {
       <Navbar />
       <div className="header-login">
         <ul>
-          {localStorage.getItem("token") ? ( // 토큰이 있으면 로그아웃, 없으면 로그인 링크 표시
-            <Link>
-              <li onClick={handleUser}>로그아웃</li>
-            </Link>
+          {localStorage.getItem("token") ? (
+            <>
+              {profileImage && (
+                <img
+                  src={profileImage}
+                  alt="프로필 이미지"
+                  style={{ width: "30px", height: "30px", borderRadius: "50%" }}
+                />
+              )}
+              <Link>
+                <li onClick={handleUser}>로그아웃</li>
+              </Link>
+            </>
           ) : (
             <Link to="/login">
               <li>로그인</li>

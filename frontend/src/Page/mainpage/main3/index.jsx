@@ -1,12 +1,18 @@
-import React from 'react';
-import './index.css';
+import React from "react";
+import "./index.css";
 
 function Main3() {
   return (
-    <div className='Main3-contanier'>
-      <h1>도고 사이트에대한 홍보글,도고 사이트에대한 이벤트,도고 사이트에대한 쿠폰</h1>
+    <div className="Main3-contanier">
+      <div className="image_box_01">
+        <div className="WC">
+          <p>-₩50,000</p>
+        </div>
+      </div>
+      <div className="image_box_02"></div>
+      {/* <div className="image_box_03"></div> */}
     </div>
-  )
+  );
 }
 
-export default Main3
+export default Main3;

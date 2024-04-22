@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import Col from "react-bootstrap/Col";
 import Nav from "react-bootstrap/Nav";
 import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
+import Testaa from "../../Component/Testaa";
 import Coupon from "./Coupon";
 import Order from "./Order";
 import Profile from "./Profile";
@@ -11,9 +12,11 @@ import WishList from "./WishList";
 import "./index.css";
 
 function MyPage() {
+  const [userId, setUserId] = useState("");
+
   return (
     <Tab.Container id="left-tabs-example" defaultActiveKey="first">
-      <div style={{ marginTop: "20px" }}></div>
+      <div></div>
       <Row>
         <Col sm={3}>
           <Nav variant="pills" className="flex-column">
@@ -32,12 +35,17 @@ function MyPage() {
             <Nav.Item>
               <Nav.Link eventKey="fifth">리 뷰</Nav.Link>
             </Nav.Item>
+            {userId === "startez" ? (
+              <Nav.Item>
+                <Nav.Link eventKey="sixth">테스트</Nav.Link>
+              </Nav.Item>
+            ) : null}
           </Nav>
         </Col>
         <Col sm={9}>
           <Tab.Content>
             <Tab.Pane eventKey="first">
-              <Profile />
+              <Profile setUserId={setUserId} />
             </Tab.Pane>
             <Tab.Pane eventKey="second">
               <WishList />
@@ -50,6 +58,9 @@ function MyPage() {
             </Tab.Pane>
             <Tab.Pane eventKey="fifth">
               <Review />
+            </Tab.Pane>
+            <Tab.Pane eventKey="sixth">
+              <Testaa />
             </Tab.Pane>
           </Tab.Content>
         </Col>

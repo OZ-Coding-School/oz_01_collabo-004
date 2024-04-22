@@ -12,6 +12,7 @@
   height: 90%;
   background-color: #f5f5f5;
 }
+
 .main2slideshow-container .slide .item {
   width: 200px;
   height: 300px;
@@ -60,8 +61,9 @@
   font-family: "BinggraeII-Bold";
   border-radius: 20px;
   display: none;
+  text-shadow: 2px 2px 4px black;
 }
-.main2slideshow-content-title{
+.main2slideshow-content-title {
   font-size: 1.45rem;
   font-family: "BinggraeII-Bold";
   opacity: 0;
