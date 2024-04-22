@@ -180,7 +180,7 @@ class UserDetailView(APIView):
             if prev_image_url:
                 image_uploader = S3ImgUploader()
                 try:
-                    image_uploader.delete_img_file(prev_image_url)
+                    image_uploader.delete_img_file(str(prev_image_url))
                 except Exception as e:
                     return Response({"msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         serializer.save()
