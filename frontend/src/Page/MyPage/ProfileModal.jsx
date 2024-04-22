@@ -7,6 +7,8 @@ import styles from "./ProfileModal.module.css";
 function ProfileModal({
   show,
   handleClose,
+  nickName,
+  setNickName,
   email,
   setEmail,
   phone,
@@ -22,6 +24,10 @@ function ProfileModal({
 
   const handleImageChange = (e) => {
     setImageSrc(e.target.value);
+  };
+
+  const handleNickNameChange = (e) => {
+    setNickName(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
@@ -53,7 +59,7 @@ function ProfileModal({
       </h1>
 
       <div className={styles.modal_box}>
-        <div style={{ fontSize: "25px" }} className={styles.modal_body}>
+        <div style={{ fontSize: "22px" }} className={styles.modal_body}>
           <Row style={{ padding: "0", margin: "0" }}>
             <Col style={{ padding: "0", margin: "0" }}>
               <img
@@ -86,15 +92,22 @@ function ProfileModal({
               </button>
             </Col>
             <Col>
-              <div>
-                I D .
-                <br />
+              <div
+                style={{
+                  marginTop: "-20px",
+                  marginBottom: "20px",
+                }}
+              >
+                I D .<br />
                 {user.user_id}
               </div>
-              <br />
-              <div style={{ marginTop: "-25px" }}>
-                NAME .
-                <br /> {user.name}
+              <div style={{ marginTop: "-15px", marginBottom: "20px" }}>
+                NAME . <br />
+                {user.name}
+              </div>
+              <div style={{ marginTop: "-15px", marginBottom: "20px" }}>
+                NickName .<br />
+                {user.nickName}
               </div>
             </Col>
           </Row>
