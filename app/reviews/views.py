@@ -67,11 +67,12 @@ class ProductReviewDetailView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         if update_image:
-            try:
+            if review.image_url:
                 image_uploader = S3ImgUploader()
-                image_uploader.delete_img_file(str(review.image_url))  # 기존의 리뷰 이미지를 삭제
-            except Exception as e:
-                return Response({"msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                try:
+                    image_uploader.delete_img_file(str(review.image_url))  # 기존의 리뷰 이미지를 삭제
+                except Exception as e:
+                    return Response({"msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         serializer.save()  # 인스턴스가 저장되면서 s3에 새로운 이미지가 업로드됨.
         return Response(serializer.data, status=status.HTTP_200_OK)
 

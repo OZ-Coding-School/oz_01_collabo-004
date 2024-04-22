@@ -174,14 +174,15 @@ class UserDetailView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        if serializer.data["profile_image"]:
+        if update_image:
             user = User.objects.get(id=request.user.id)  # type: ignore
             prev_image_url = user.profile_image
-            image_uploader = S3ImgUploader()
-            try:
-                image_uploader.delete_img_file(prev_image_url)
-            except Exception as e:
-                return Response({"msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            if prev_image_url:
+                image_uploader = S3ImgUploader()
+                try:
+                    image_uploader.delete_img_file(prev_image_url)
+                except Exception as e:
+                    return Response({"msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
