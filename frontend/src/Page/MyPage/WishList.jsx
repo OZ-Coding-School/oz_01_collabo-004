@@ -1,20 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
+import axios from "../../api/axios";
 import "./WishList.css";
 
 function BasicExample() {
-  const [cards, setCards] = useState([
-    {
-      id: 1,
-      title: "리센 오션파크 호텔",
-      description: "속초해수욕장 근방 속초해수욕장 도보1분",
-      imageUrl:
-        "https://yaimg.yanolja.com/v5/2023/08/11/11/1280/64d61a0087a949.08624244.jpg",
-      isBookmarked: false,
-    },
-  ]);
-  const [productDetail, setProductDetail] = useState("");
+  const [cards, setCards] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("/api/v1/wishlist/", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      console.log(response.data);
+      setCards(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.log("Error fetching data:", error);
+      setLoading(false);
+    }
+  };
 
   const handleBookmarkToggle = (id) => {
     setCards(

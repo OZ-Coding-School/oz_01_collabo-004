@@ -138,19 +138,9 @@ class UserCouponIssueView(APIView):
     serializer_class = UserCouponSerializer
 
     def post(self, request: Request, coupon_id: int) -> Response:
-        user_coupon = UserCoupon.objects.filter(  # type: ignore
+        user_coupon, created = UserCoupon.objects.get_or_create(
             coupon_id=coupon_id, user_id=request.user.id, status=True
-        ).exists()
-        if user_coupon:
-            return Response({"msg": "already issued coupon."}, status=status.HTTP_400_BAD_REQUEST)
-        coupon = get_object_or_404(Coupon, id=coupon_id)
-        expired_date = coupon.get_expire_date()
-        serializer = UserCouponSerializer(
-            data={
-                "expired_at": expired_date,
-            }
         )
-        if serializer.is_valid():
-            serializer.save(user=request.user, coupon=coupon)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if not created:
+            return Response({"msg": "already issued coupon."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"msg": "Successfully issued coupon."}, status=status.HTTP_201_CREATED)

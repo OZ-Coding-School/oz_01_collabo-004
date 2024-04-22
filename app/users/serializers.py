@@ -15,7 +15,7 @@ class UserSignUpSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["user_id", "password", "name", "email", "phone"]
+        fields = ["user_id", "password", "name", "nickname", "email", "phone", "profile_image"]
 
     def create(self, validated_data):
         if not validated_data["user_id"]:
@@ -24,6 +24,7 @@ class UserSignUpSerializer(serializers.ModelSerializer):
         user = User(
             user_id=validated_data["user_id"],
             name=validated_data["name"],
+            nickname=validated_data["nickname"],
             email=validated_data["email"],
             phone=validated_data["phone"],
         )
@@ -36,17 +37,15 @@ class UserSignUpSerializer(serializers.ModelSerializer):
 class UserInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["user_id", "name", "email", "phone"]
+        fields = ["user_id", "nickname", "name", "email", "phone", "profile_image"]
 
 
 class UserInfoModifySerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, required=False)
-    email = serializers.EmailField(required=False)
-    phone = serializers.CharField(required=False)
+    password = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
-        fields = ["email", "phone", "password"]
+        fields = ["nickname", "email", "phone", "password", "profile_image"]
 
     def update(self, instance, validated_data):
         if validated_data:

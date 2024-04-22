@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ("description_text", models.TextField(default=None)),
                 ("price", models.IntegerField(default=0)),
                 ("travel_period", models.IntegerField(default=0)),
-                ("sale", models.IntegerField(default=0)),
+                ("discount", models.IntegerField(default=0)),
                 ("view_count", models.IntegerField(default=0)),
                 ("status", models.BooleanField(default=False)),
             ],

@@ -1,6 +1,6 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "../../api/axios";
 import SignupForm from "../SignUpPage";
 import "./index.css";
 
@@ -22,6 +22,7 @@ function LoginPage() {
   const [alertMessage, setAlertMessage] = useState("");
   const [signUp, setSignUp] = useState(false);
   const navigate = useNavigate();
+
   useEffect(() => {
     if (localStorage.getItem("token")) {
       navigate("/");
@@ -33,13 +34,10 @@ function LoginPage() {
     console.log("Submitting", { user_id, password });
 
     try {
-      const response = await axios.post(
-        "http://dog-go.store/api/v1/user/login/",
-        {
-          user_id: user_id,
-          password: password,
-        }
-      );
+      const response = await axios.post("/api/v1/user/login/", {
+        user_id: user_id,
+        password: password,
+      });
       localStorage.setItem("token", response.data.access);
       console.log("로그인 성공:", response);
       handleLoginFailure("로그인에 성공했습니다.");
@@ -49,6 +47,7 @@ function LoginPage() {
       handleLoginFailure("로그인에 실패했습니다.");
     }
   };
+
   function handleLoginFailure(message) {
     setAlertMessage(message);
     setShowAlert(true);

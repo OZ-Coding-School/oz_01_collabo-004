@@ -1,5 +1,3 @@
-// ProfileModal.jsx
-
 import React from "react";
 import Button from "react-bootstrap/Button";
 import styles from "./ProfileModal.module.css";
@@ -46,6 +44,7 @@ function ProfileModal({
       <h1 style={{ textAlign: "center", margin: "30px", marginBottom: "30px" }}>
         회원정보 변경
       </h1>
+
       <div className={styles.modal_box}>
         <div style={{ fontSize: "25px" }} className={styles.modal_body}>
           <div>

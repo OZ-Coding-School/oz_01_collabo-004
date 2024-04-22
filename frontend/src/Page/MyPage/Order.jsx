@@ -1,5 +1,5 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
+import axios from "../../api/axios";
 import "./Order.css";
 
 const Order = () => {
@@ -11,10 +11,13 @@ const Order = () => {
 
   const fetchReservations = async () => {
     try {
-      const response = await axios.get("API_ENDPOINT_HERE");
+      const response = await axios.get("/api/v1/order/", {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+
       setReservations(response.data);
     } catch (error) {
-      console.error("Error fetching reservations:", error);
+      console.log("Error fetching reservations:", error);
     }
   };
 

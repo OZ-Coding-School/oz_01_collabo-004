@@ -7,6 +7,10 @@ from botocore.exceptions import ClientError
 from config import settings
 
 
+def get_random_id() -> str:
+    return uuid.uuid4().hex[:8]
+
+
 def is_image_extension(file_name) -> bool:  # type: ignore
     valid_extensions = [".jpg", ".jpeg", ".png", ".gif"]
     _, ext = os.path.splitext(file_name)
@@ -45,7 +49,7 @@ class S3ImgUploader:
 
     def delete_img_file(self, image_url: str):  # type: ignore
         try:
-            file_name = image_url.split("/")[-1]  # url에서 이미지 파일이름 추출
+            file_name = image_url  # url에서 이미지 파일이름 추출
 
             response = self.s3_client.delete_object(Bucket=self.bucket_name, Key=file_name)  # type: ignore
             if response["ResponseMetadata"]["HTTPStatusCode"] in [200, 204]:

@@ -1,0 +1,35 @@
+@font-face {
+  font-family: "BinggraeII-Bold";
+  src: url("../../../public/font/TiltNeon-Regular-VariableFont_XROTYROT.ttf")
+    format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+.hotel-spot-page h2 {
+  text-align: center;
+  margin: 30px;
+}
+
+.hotel-box-content {
+  display: flex;
+  justify-content: center;
+}
+
+.hotel-box {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px; 
+}
+
+.hotel-box .hotel-item {
+  border: 1px solid #ccc;
+  padding: 20px;
+  text-align: center;
+}
+
+@media (max-width: 1540px) {
+  .hotel-box {
+    grid-template-columns: 1fr;
+  }
+}
