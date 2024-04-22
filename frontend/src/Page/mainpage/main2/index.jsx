@@ -1,7 +1,4 @@
-import {
-  faChevronLeft,
-  faChevronRight,
-} from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faChevronRight, } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect } from "react";
 import "./index.css";
@@ -36,6 +33,7 @@ function Main2() {
   return (
     <div className="main2-contanier">
       <div className="main2slideshow-container">
+
         <div className="slide">
           <div
             className="item"
@@ -43,8 +41,8 @@ function Main2() {
           >
             <div className="main2slideshow-content">
               <div className="main2slideshow-content-title">
-                <h2>"DogGo"와 함께하는 첫번째 여행</h2>
-                <h5>제주 펫 플라워 가든 투어</h5>
+                <h2>제주 펫 플라워 가든 투어</h2>
+                <h5>제주 반려동물과 꽃길만 걷자</h5>
               </div>
               <button>SEE MORE</button>
             </div>
@@ -52,8 +50,7 @@ function Main2() {
 
           <div
             className="item"
-            style={{ backgroundImage: "url(./images/pet_beach_walk.jpeg)" }}
-          >
+            style={{ backgroundImage: "url(./images/pet_beach_walk.jpeg)" }}>
             <div className="main2slideshow-content">
               <div className="main2slideshow-content-title">
                 <h2>제주 펫 비치워크</h2>
@@ -65,10 +62,7 @@ function Main2() {
 
           <div
             className="item"
-            style={{
-              backgroundImage: "url(./images/제주숲속펫테라피워크.png)",
-            }}
-          >
+            style={{ backgroundImage: "url(./images/제주숲속펫테라피워크.png)" }}>
             <div className="main2slideshow-content">
               <div className="main2slideshow-content-title">
                 <h2>제주 숲속 펫테라피 워크</h2>
@@ -80,7 +74,7 @@ function Main2() {
 
           <div
             className="item"
-            style={{ backgroundImage: "url(./images/pethightking)" }}
+            style={{ backgroundImage: "url(./images/pethighking.jpeg)" }}
           >
             <div className="main2slideshow-content">
               <div className="main2slideshow-content-title">

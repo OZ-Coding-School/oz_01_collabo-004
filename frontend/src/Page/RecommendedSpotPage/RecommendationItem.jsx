@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const RecommendationItem = ({ spot }) => {
   return (
@@ -12,9 +13,8 @@ const RecommendationItem = ({ spot }) => {
       <div style={{ margin: "10px" }}>
         <h3>{spot.name}</h3>
         <p>{spot.description}</p>
-        <a target="_blank" style={{ textDecoration: "none" }} href={spot.link}>
+        <Link target="_blank" style={{ textDecoration: "none" }} href={spot.link} />
           🏠Click Me!
-        </a>
         <hr />
         <img
           style={{
@@ -22,6 +22,7 @@ const RecommendationItem = ({ spot }) => {
             height: "350px",
           }}
           src={spot.image}
+          alt="recommendimg"
         />
       </div>
     </div>
