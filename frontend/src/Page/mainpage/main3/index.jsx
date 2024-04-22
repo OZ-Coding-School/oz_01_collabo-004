@@ -6,7 +6,7 @@ function Main3() {
     <div className="Main3-contanier">
       <div className="image_box_01">
         <div className="WC">
-          <p>-₩50,000</p>
+          <p>₩50,000</p>
         </div>
       </div>
       <div className="image_box_02"></div>

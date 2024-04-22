@@ -6,6 +6,8 @@ body {
 
 /* 네비게이션 스타일 */
 .nav-pills .nav-link.active {
+  font-family: "impact";
+
   background-color: rgb(90, 120, 250) !important;
 }
 

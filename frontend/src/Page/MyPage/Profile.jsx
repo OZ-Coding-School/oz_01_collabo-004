@@ -10,12 +10,14 @@ function Profile({ setUserId }) {
   const user = {
     user_id: "",
     name: "",
+    nickname: "",
     email: "",
     phone: "",
   };
 
   const [showModal, setShowModal] = useState(false);
   const [userImages, setUserImages] = useState(user.userImages);
+  const [nickName, setNickName] = useState("");
   const [email, setEmail] = useState(user.email);
   const [phone, setPhone] = useState(user.phone);
   const [password, setPassword] = useState("");
@@ -35,6 +37,7 @@ function Profile({ setUserId }) {
       });
       setUserId(response.data.user_id);
       setUserData(response.data);
+      setNickName(response.data.nickName);
       setEmail(response.data.email);
       setPhone(response.data.phone);
 
@@ -56,6 +59,7 @@ function Profile({ setUserId }) {
       const response = await axios.put(
         "/api/v1/user/info/",
         {
+          nickName: nickName,
           email: email,
           phone: phone,
           password: password,
@@ -109,11 +113,15 @@ function Profile({ setUserId }) {
             />
           </div>
           <p>
+            <strong>이름 :</strong> {userData.name}
+          </p>
+          <p>
             <strong>아이디 :</strong> {userData.user_id}
           </p>
           <p>
-            <strong>이름 :</strong> {userData.name}
+            <strong>닉네임 :</strong> {userData.nickname}
           </p>
+
           <p>
             <strong>Email:</strong> {userData.email}{" "}
           </p>
@@ -146,6 +154,8 @@ function Profile({ setUserId }) {
         confirmPassword={confirmPassword}
         setConfirmPassword={setConfirmPassword}
         user={userData}
+        setNickName={setNickName}
+        nickname={nickName}
         userUpdate={userUpdate}
       />
     </div>
