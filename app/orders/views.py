@@ -8,8 +8,8 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from coupons.models import UserCoupon
 from coupons.services import change_coupon_status
+from orders.utils import cal_option_price, check_pet_count
 from products.models import Product
 
 from .models import Order
@@ -18,18 +18,6 @@ from .serializers import (
     OrderDetailSerializer,
     OrderListSerializer,
 )
-
-
-def check_pet_count(data) -> bool:  # type: ignore
-    pet_count = int(data.get("pet", 0))
-    size_big = int(data.get("pet_size_big", 0))
-    size_medium = int(data.get("pet_size_medium", 0))
-    size_small = int(data.get("pet_size_small", 0))
-
-    # 선택된 사이즈의 합계를 계산
-    sum_selected_size = size_big + size_medium + size_small
-
-    return pet_count == sum_selected_size
 
 
 class OrderListView(APIView):
@@ -75,7 +63,7 @@ class OrderListView(APIView):
         # 할인가는 기본 상품의 할인가
         sale_price = product.discount
 
-        # 만약 쿠폰을 사용했다면 쿠폰의 할인가를 적용
+        # 만약 쿠폰을 사용했다면 쿠폰의 할인가를 추가로 적용
         if "user_coupon_id" in order_data:
             try:
                 # 쿠폰 적용 시도 후 성공하면 할인가격을 가져옴
@@ -83,7 +71,7 @@ class OrderListView(APIView):
             except ValidationError as e:
                 return Response({"msg": e.message}, status=status.HTTP_400_BAD_REQUEST)
 
-        total_price = product.price - sale_price
+        total_price = product.price + cal_option_price(request.data) - sale_price
 
         serializer.save(
             product=product,
@@ -123,26 +111,23 @@ class OrderDetailView(APIView):
 
         update_data = request.data.copy()
 
-        # 주문 수정 데이터에 출발일 변경을 원하면 출발일과 product의 trevel_date를 이용해서 도착일을 계산
-        if "departure_date" in update_data:
-            departure_date = datetime.strptime(update_data["departure_date"], "%Y-%m-%d")
-            return_date = departure_date + timedelta(days=order.product.travel_period)  # type: ignore
-            update_data["return_date"] = return_date.date()
-
-        # request.data에 대한 유효성 검증
+        # update_data에 대한 유효성 검증
         serializer = OrderDetailSerializer(order, data=update_data, partial=True)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+        sale_price = order.sale_price
         # 주문 수정하기에서 쿠폰을 변경할 시 기존에 주문에 적용됐던 쿠폰은 되돌리고, 새로 적용할 쿠폰을 적용함
         if "user_coupon_id" in update_data:
             try:
-                change_coupon_status(order.user_coupon.id, True)  # type: ignore
-                change_coupon_status(update_data["user_coupon_id"], False)
+                prev_sale_price = change_coupon_status(order.user_coupon.id, True)  # type: ignore
+                sale_price -= prev_sale_price  # 이전에 적용된 쿠폰 할인 가격을 되돌림
+                new_sale_price = change_coupon_status(update_data["user_coupon_id"], False)
+                sale_price += new_sale_price  # 새롭게 적용할 쿠폰의 할인 가격을 적용
             except ValueError as e:
                 return Response({"msg": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-        serializer.save()
+        total_price = order.product.price + cal_option_price(request.data) - sale_price  # type: ignore
+        serializer.save(sale_price=sale_price, total_price=total_price)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
