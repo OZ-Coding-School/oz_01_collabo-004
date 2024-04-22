@@ -19,6 +19,7 @@ import Travel from "./Page/RecommendedSpotPage/index.jsx";
 import Restaurant from "./Page/RestaurantPage/RestaurantItem.jsx";
 import Service from "./Page/SevicePage/index.jsx";
 import SignupForm from "./Page/SignUpPage/index.jsx";
+import PaymentPage from "./Page/TravelPackagePage/PaymentPage/index.jsx";
 import TravelPackagePage from "./Page/TravelPackagePage/index.jsx";
 import ProductDetail from "./Page/TravelPackagePage/productdetail/index.jsx";
 
@@ -52,6 +53,7 @@ function App() {
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/service" element={<Service />} />
           <Route path="/test" element={<Testaa />} />
+          <Route path="/paymentpage" element={<PaymentPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import axios from "../../../api/axios";
 import "./index.css";
 
@@ -16,6 +16,30 @@ function ProductDetail(props) {
   const [travelData, setTravelData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   console.log("상품 번호", location.state.id);
+
+  const [ posttravelData, setPosttravelData] = useState({
+    departureDate : "",
+    numberOfPeople : 1,
+    smallPetsCount : 0,
+    meduimPetsCount : 0,
+    largePetsCount : 0,
+    countTotalPrice : "",
+  });
+  const basePrice = travelData.price;
+  const PersonToTalPrice = numberOfPeople * 15000;
+  const smallPetsTotalPrice = smallPetsCount * 6000; 
+  const mediumPetsTotalPrice = mediumPetsCount * 10000; 
+  const largePetsTotalPrice = largePetsCount * 15000;
+
+  let totalPrice = 
+  basePrice +
+  PersonToTalPrice +
+  smallPetsTotalPrice +
+  mediumPetsTotalPrice +
+  largePetsTotalPrice;
+
+  const [testtotalPrice, setesttotalPrice ] = useState(totalPrice);
+
 
   const getTravelDetailData = async () => {
     try {
@@ -50,22 +74,42 @@ function ProductDetail(props) {
 
   const handleDateChange = (e) => {
     setDepartureDate(e.target.value);
+    setPosttravelData({
+        ...posttravelData,
+        departureDate : e.target.value,
+    })
   };
 
   const handlePeopleChange = (amount) => {
     setNumberOfPeople((prevCount) => Math.max(1, prevCount + amount));
+    setPosttravelData({
+        ...posttravelData,
+        numberOfPeople: numberOfPeople + 1,
+    })
   };
 
   const handlePetsChange = (size, amount) => {
     switch (size) {
       case "small":
         setSmallPetsCount((prevCount) => Math.max(0, prevCount + amount));
+        setPosttravelData({
+            ...posttravelData,
+            smallPetsCount: smallPetsCount + 1,
+        })
         break;
       case "medium":
         setMediumPetsCount((prevCount) => Math.max(0, prevCount + amount));
+        setPosttravelData({
+            ...posttravelData,
+            mediumPetsCount: mediumPetsCount + 1,
+        })
         break;
       case "large":
         setLargePetsCount((prevCount) => Math.max(0, prevCount + amount));
+        setPosttravelData({
+            ...posttravelData,
+            largePetsCount: largePetsCount +1 ,
+        })
         break;
       default:
         break;
@@ -80,24 +124,11 @@ function ProductDetail(props) {
     console.log("중 반려동물 수:", mediumPetsCount);
     console.log("대 반려동물 수:", largePetsCount);
   };
-  const countTotalPrice = () => {
-    const basePrice = travelData.price;
-    const PersonToTalPrice = numberOfPeople * 15000;
-    const smallPetsTotalPrice = smallPetsCount * 6000; 
-    const mediumPetsTotalPrice = mediumPetsCount * 10000; 
-    const largePetsTotalPrice = largePetsCount * 15000;
 
-    const totalPrice =
-        basePrice +
-        PersonToTalPrice +
-        smallPetsTotalPrice +
-        mediumPetsTotalPrice +
-        largePetsTotalPrice;
 
-    return totalPrice;
-};
-
+console.log('test',posttravelData);
   if (isLoading) return <div>로딩중...</div>;
+  console.log(typeof testtotalPrice);
   return (
     <div className="productdetail-page">
       <div className="productdetail-page_contnet">
@@ -257,10 +288,23 @@ function ProductDetail(props) {
               )}
             </div>
 
+
+            <Link
+            state={{
+                travelData,
+                posttravelData
+            }}
+            to={{
+            pathname: "/paymentpage",
+            }}
+            >
             <button type="submit" className="reservation-btn">
-              예약하기
+            결제하기
             </button>
+            </Link>
+
           </form>
+
         <p>예약 확정 전에는 요금이 청구되지 않습니다.</p>
         <p>모든 상품은 인원수,반려동물의수의 따라 변결될수있습니다.</p>
         <hr />
@@ -271,7 +315,7 @@ function ProductDetail(props) {
                     largePetsCount * 15000} 원
         </p>
         <hr />
-        <p>총 예약 가격 : {countTotalPrice().toLocaleString()} 원</p>
+        <p>총 예약 가격 : {testtotalPrice} 원</p>
         </div>
       </div>
     </div>
