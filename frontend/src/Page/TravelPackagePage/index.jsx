@@ -33,7 +33,7 @@ function Travelpackage() {
     }
   }
 
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(" ");
 
 
   const handleSearchChange = (event) => {
@@ -42,8 +42,8 @@ function Travelpackage() {
 
 
   const filteredProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  product.name.replace(/ /g, "").includes(searchTerm.replace(/ /g, ""))
+);
 
   return (
       <div className="petshop-page">

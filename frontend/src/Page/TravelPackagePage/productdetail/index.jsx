@@ -80,6 +80,22 @@ function ProductDetail(props) {
     console.log("중 반려동물 수:", mediumPetsCount);
     console.log("대 반려동물 수:", largePetsCount);
   };
+  const countTotalPrice = () => {
+    const basePrice = travelData.price;
+    const PersonToTalPrice = numberOfPeople * 15000;
+    const smallPetsTotalPrice = smallPetsCount * 6000; 
+    const mediumPetsTotalPrice = mediumPetsCount * 10000; 
+    const largePetsTotalPrice = largePetsCount * 15000;
+
+    const totalPrice =
+        basePrice +
+        PersonToTalPrice +
+        smallPetsTotalPrice +
+        mediumPetsTotalPrice +
+        largePetsTotalPrice;
+
+    return totalPrice;
+};
 
   if (isLoading) return <div>로딩중...</div>;
   return (
@@ -128,7 +144,7 @@ function ProductDetail(props) {
           <p>상세설명 : {travelData.description_text}</p>
         </div>
         <div className="reservation-form">
-          <h3>가격 : {Number(travelData.price).toLocaleString()} 원</h3>
+          <h3>패키지 요금 : {Number(travelData.price).toLocaleString()} 원</h3>
           <form onSubmit={handleSubmit}>
             <table>
               <tbody>
@@ -245,10 +261,17 @@ function ProductDetail(props) {
               예약하기
             </button>
           </form>
-          <p>예약 확정 전에는 요금이 청구되지 않습니다.</p>
-          <p>모든 상품은 인원수,반려동물의수의 따라 변결될수있습니다.</p>
-          <hr />
-          <p>총 예약 가격 : {Number(travelData.price).toLocaleString()} 원</p>
+        <p>예약 확정 전에는 요금이 청구되지 않습니다.</p>
+        <p>모든 상품은 인원수,반려동물의수의 따라 변결될수있습니다.</p>
+        <hr />
+        <p>추가요금
+            인원 : {numberOfPeople * 15000}원 ,
+            반려동물 : {smallPetsCount * 6000 + 
+                    mediumPetsCount * 10000 + 
+                    largePetsCount * 15000} 원
+        </p>
+        <hr />
+        <p>총 예약 가격 : {countTotalPrice().toLocaleString()} 원</p>
         </div>
       </div>
     </div>
