@@ -163,8 +163,7 @@ const HotelPage = () => {
 
   return (
     <div className="hotel-page">
-      <h2 style={{ textAlign: "center", margin: "30px" }}>
-        Hotel With Pet</h2>
+      <h2 style={{ textAlign: "center", margin: "30px" }}>Hotel With Pet</h2>
       <div className="hotel-box">
         {hotelSpots.map((spot) => (
           <HotelItem key={spot.id} spot={spot} />
