@@ -2,9 +2,10 @@ import os
 from datetime import datetime, timedelta
 
 import requests
-from django.contrib.auth import login
+from django.contrib.auth import authenticate, login
 from django.core.cache import cache
 from django.core.mail import EmailMessage
+from django.utils import timezone
 from django.utils.crypto import get_random_string
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
@@ -29,7 +30,11 @@ class Signup(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request: Request) -> Response:
-        serializer = serializers.UserSignUpSerializer(data=request.data)
+        user_data = request.data
+        profile_image = request.FILES.get("profile_image")
+        if profile_image:
+            user_data["profile_image"] = profile_image
+        serializer = serializers.UserSignUpSerializer(data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -83,6 +88,11 @@ class VerifyCodeView(APIView):
 
 class JWTLoginView(TokenObtainPairView):
     def post(self, request: Request) -> Response:
+        user = authenticate(request=request, username=request.data["user_id"], password=request.data["password"])
+        if not user:
+            return Response({"msg": "Invalid Credentials"}, status=status.HTTP_400_BAD_REQUEST)
+        user.last_login = timezone.now()
+        user.save()
         response = super().post(request)
         refresh_token = response.data["refresh"]
         # 응답의 바디에 토큰값이 안들어가도록 객체에서 삭제.
@@ -98,6 +108,7 @@ class JWTLoginView(TokenObtainPairView):
             httponly=False,
             expires=datetime.now() + timedelta(days=1),
         )
+
         response.status_code = status.HTTP_200_OK
         return response
 
@@ -155,19 +166,24 @@ class UserDetailView(APIView):
         description="Update user info",
     )
     def put(self, request: Request) -> Response:
+        update_data = request.data
+        update_image = request.FILES.get("profile_image")
+        if update_image:
+            update_data["profile_image"] = update_image
         serializer = serializers.UserInfoModifySerializer(request.user, data=request.data, partial=True)
-        if serializer.is_valid():
-            if serializer.data["profile_image"]:
-                user = User.objects.get(id=request.user.id)  # type: ignore
-                prev_image_url = user.profile_image
-                image_uploader = S3ImgUploader()
-                try:
-                    image_uploader.delete_img_file(prev_image_url)
-                except Exception as e:
-                    return Response({"msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        if serializer.data["profile_image"]:
+            user = User.objects.get(id=request.user.id)  # type: ignore
+            prev_image_url = user.profile_image
+            image_uploader = S3ImgUploader()
+            try:
+                image_uploader.delete_img_file(prev_image_url)
+            except Exception as e:
+                return Response({"msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request: Request) -> Response:
         # 회원탈퇴 요청이 들어오면 상태를 False로 바꿔 탈퇴예정임을 나타내고
