@@ -2,7 +2,7 @@ body {
   padding: 0;
   margin: 0;
 }
-body::-webkit-scrollbar{
+body::-webkit-scrollbar {
   display: none;
 }
 @font-face {
@@ -12,6 +12,10 @@ body::-webkit-scrollbar{
 @font-face {
   font-family: "TiltNeon-Regular-VariableFont_XROT,YROT";
   src: url(../public/font/TiltNeon-Regular-VariableFont_XROTYROT.ttf);
+}
+@font-face {
+  font-family: "impact";
+  src: url(../public/font/impact.ttf);
 }
 .kanit-thin {
   font-family: "Kanit", sans-serif;

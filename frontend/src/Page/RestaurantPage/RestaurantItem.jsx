@@ -162,7 +162,7 @@ const RestaurantItem = () => {
 
   return (
     <div className="restaurant-page">
-      <h2> 반려 동물과 함께 할 레스토랑 </h2>
+      <h2> Restaurant With Pet </h2>
       <div className="restaurant-box">
         {restaurantSpots.map((spot) => (
           <RestaurantPage key={spot.id} spot={spot} />

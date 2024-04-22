@@ -3,18 +3,21 @@ import { useNavigate } from "react-router-dom";
 import axios from "../../api/axios";
 import Coupon from "./Coupon";
 import ProfileModal from "./ProfileModal";
+
 import "./index.css";
 
-function Profile() {
+function Profile({ setUserId }) {
   const user = {
     user_id: "",
     name: "",
+    nickname: "",
     email: "",
     phone: "",
   };
 
   const [showModal, setShowModal] = useState(false);
   const [userImages, setUserImages] = useState(user.userImages);
+  const [nickName, setNickName] = useState("");
   const [email, setEmail] = useState(user.email);
   const [phone, setPhone] = useState(user.phone);
   const [password, setPassword] = useState("");
@@ -23,15 +26,20 @@ function Profile() {
   const [userData, setUserData] = useState({});
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
+  const [isChange, setIsChange] = useState(false);
 
-  const handleSaveChanges = async () => {
+  const handleUserInfo = async () => {
     try {
       const response = await axios.get("/api/v1/user/info/", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
+      setUserId(response.data.user_id);
       setUserData(response.data);
+      setNickName(response.data.nickName);
+      setEmail(response.data.email);
+      setPhone(response.data.phone);
 
       handleCloseModal();
     } catch (error) {
@@ -45,6 +53,33 @@ function Profile() {
       navigate("/login");
     }
   }, []);
+  const userUpdate = async () => {
+    if (password !== confirmPassword) return alert("암호가 일치하지 않습니다.");
+    try {
+      const response = await axios.put(
+        "/api/v1/user/info/",
+        {
+          nickName: nickName,
+          email: email,
+          phone: phone,
+          password: password,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      console.log(response);
+      if (response.status === 200) {
+        alert("회원정보 수정이 완료 되었습니다.");
+        setIsChange(true);
+        setPassword("");
+        setConfirmPassword("");
+        setShowModal(false);
+      }
+    } catch (error) {}
+  };
 
   const handleReceiveCoupon = async () => {
     try {
@@ -56,20 +91,37 @@ function Profile() {
     }
   };
   useEffect(() => {
-    handleSaveChanges();
-  }, []);
+    handleUserInfo();
+  }, [isChange]);
   return (
     <div className="my-page-container">
       <div className="profile-section">
         <h2>My DogGo</h2>
         <hr />
         <div className="profile-info">
+          <div>
+            <img
+              style={{
+                objectFit: "cover",
+                height: "100px",
+                width: "100px",
+                border: "3px solid rgb(90 120 250)",
+                borderRadius: "50%",
+                marginLeft: "20px",
+              }}
+              src="userData.user_img"
+            />
+          </div>
+          <p>
+            <strong>이름 :</strong> {userData.name}
+          </p>
           <p>
             <strong>아이디 :</strong> {userData.user_id}
           </p>
           <p>
-            <strong>이름 :</strong> {userData.name}
+            <strong>닉네임 :</strong> {userData.nickname}
           </p>
+
           <p>
             <strong>Email:</strong> {userData.email}{" "}
           </p>
@@ -101,8 +153,10 @@ function Profile() {
         setPassword={setPassword}
         confirmPassword={confirmPassword}
         setConfirmPassword={setConfirmPassword}
-        handleSave={handleSaveChanges}
         user={userData}
+        setNickName={setNickName}
+        nickname={nickName}
+        userUpdate={userUpdate}
       />
     </div>
   );
