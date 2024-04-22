@@ -39,12 +39,13 @@ class Order(CommonModel):
     departure_date = models.DateField()
     return_date = models.DateField()
 
-    def cal_return_date(self) -> datetime:
-        return self.departure_date + timedelta(days=self.product.travel_period)  # type: ignore
+    def cal_return_date(self) -> Any:
+        departure_datetime = datetime.strptime(str(self.departure_date), "%Y-%m-%d")
+        return_date_datetime = departure_datetime + timedelta(days=self.product.travel_period)  # type: ignore
+        return return_date_datetime.date()
 
     def save(self, *args: Any, **kwargs: Any) -> None:
-        if not self.return_date:
-            self.return_date = self.cal_return_date()
+        self.return_date = self.cal_return_date()
         super().save(*args, **kwargs)
 
 

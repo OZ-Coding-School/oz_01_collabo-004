@@ -1,10 +1,12 @@
 from django.contrib import admin
 
+from config import constants
 from orders.models import Order
 
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
+    readonly_fields = ("sale_price", "total_price", "return_date")
     # 어드민 페이지에서 상세페이지로 볼 정보들
     fieldsets = [
         (
@@ -32,11 +34,7 @@ class OrderAdmin(admin.ModelAdmin):
         ),
         (
             "출발일 지정",
-            {
-                "fields": [
-                    "departure_date",
-                ]
-            },
+            {"fields": ["departure_date", "return_date"]},
         ),
         ("가격 정보", {"fields": ["sale_price", "total_price"]}),
     ]
@@ -48,13 +46,24 @@ class OrderAdmin(admin.ModelAdmin):
         "departure_date",
         "return_date",
         "origin_price",
+        "option_price",
         "sale_price",
         "total_price",
         "status",
+        "created_at",
+        "modified_at",
     ]
 
     search_fields = ("product", "user", "user__user_coupon")
     ordering = ("product", "created_at")
+
+    def option_price(self, obj):
+        big_size_pet_price = obj.pet_size_big * constants.BIG_SIZE_PET_PRICE
+        medium_size_pet_price = obj.pet_size_medium * constants.MEDIUM_SIZE_PET_PRICE
+        small_size_pet_price = obj.pet_size_small * constants.SMALL_SIZE_PET_PRICE
+        people_price = obj.people * constants.PEOPLE_PRICE
+        sum = people_price + big_size_pet_price + medium_size_pet_price + small_size_pet_price
+        return sum
 
     def used_coupon(self, obj):
         if obj.user_coupon is not None:
@@ -72,7 +81,7 @@ class OrderAdmin(admin.ModelAdmin):
         if obj.sale_price is None:
             obj.sale_price = obj.product.discount + obj.user_coupon.coupon.sale_price
         if obj.total_price is None:
-            obj.total_price = obj.product.price - obj.sale_price
+            obj.total_price = obj.product.price + self.option_price(obj) - obj.sale_price
         super().save_model(request, obj, form, change)
 
     def change_view(self, request, object_id, form_url="", extra_context=None):
@@ -82,7 +91,7 @@ class OrderAdmin(admin.ModelAdmin):
 
         new_obj.return_date = new_obj.cal_return_date()
         new_obj.sale_price = new_obj.product.discount + new_obj.user_coupon.coupon.sale_price
-        new_obj.total_price = new_obj.product.price - new_obj.sale_price
+        new_obj.total_price = new_obj.product.price + self.option_price(new_obj) - new_obj.sale_price
         new_obj.save()
 
         return response
