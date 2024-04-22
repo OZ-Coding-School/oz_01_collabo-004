@@ -9,7 +9,7 @@ from products.models import Product
 from .models import ProductReview
 
 
-class ProductReviewListTestCase(APITestCase):
+class MyReviewListTestCase(APITestCase):
     def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
             user_id="testuserid",
@@ -179,3 +179,48 @@ class ProductReviewDetailTestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(ProductReview.objects.filter(status=True).count(), 0)
+
+
+class ProductReviewTestCase(APITestCase):
+    def setUp(self) -> None:
+        self.user = get_user_model().objects.create_user(
+            user_id="testuserid",
+            password="password123",
+            name="testname",
+            nickname="testnickname",
+            email="test@example.com",
+            phone="01012345678",
+        )
+
+        self.product = Product.objects.create(
+            name="testname",
+            description_text="testdescription",
+            price=1000000,
+        )
+
+    def test_상품의_리뷰가_존재하지_않을떄(self) -> None:
+        url = reverse("product-page-reviews", kwargs={"product_id": self.product.id})
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(ProductReview.objects.filter(product_id=self.product.id).count(), 0)
+
+    def test_상품의_리뷰가_존재할_떄(self) -> None:
+        review = ProductReview.objects.create(
+            user_id=self.user.id,
+            product_id=self.product.id,
+            title="testtitle",
+            content="testcontent",
+            status=True,
+        )
+        url = reverse("product-page-reviews", kwargs={"product_id": self.product.id})
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(ProductReview.objects.filter(product_id=self.product.id).count(), 1)
+        self.assertEqual(response.data[0]["id"], review.id)
+        self.assertEqual(response.data[0]["title"], review.title)
+        self.assertEqual(response.data[0]["content"], review.content)
+        self.assertTrue(response.data[0]["status"])
+        self.assertEqual(response.data[0]["writer"], self.user.nickname)
+        self.assertEqual(response.data[0]["profile_image"], self.user.profile_image)

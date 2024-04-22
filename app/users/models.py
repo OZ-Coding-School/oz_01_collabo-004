@@ -44,6 +44,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True, max_length=30)
     phone = models.CharField(max_length=15)
     name = models.CharField(max_length=20)
+    nickname = models.CharField(max_length=20)
     profile_image = models.ImageField(upload_to=upload_to_profile_image, null=True, default=None)
     # 회원 탈퇴 요청시 6개월 이후에 회원정보가 db상에서 삭제되도록 할 예정
     is_active = models.BooleanField(default=True)  # 가입시 true, 탈퇴요청시 false
