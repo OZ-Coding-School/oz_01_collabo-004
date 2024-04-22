@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "../../../api/axios";
 import "./index.css";
 
@@ -8,7 +8,7 @@ function ProductDetail(props) {
   console.log("상품번호", location.state);
   const [departureDate, setDepartureDate] = useState("");
   const [numberOfPeople, setNumberOfPeople] = useState(1);
-  const [smallPetsCount, setSmallPetsCount] = useState(1);
+  const [smallPetsCount, setSmallPetsCount] = useState(0);
   const [mediumPetsCount, setMediumPetsCount] = useState(0);
   const [largePetsCount, setLargePetsCount] = useState(0);
   const [showPetSizeInfo, setShowPetSizeInfo] = useState(false);
@@ -16,15 +16,17 @@ function ProductDetail(props) {
   const [travelData, setTravelData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   console.log("상품 번호", location.state.id);
+  const navigate = useNavigate();
 
   const [ posttravelData, setPosttravelData] = useState({
     departureDate : "",
     numberOfPeople : 1,
     smallPetsCount : 0,
-    meduimPetsCount : 0,
+    mediumPetsCount : 0,
     largePetsCount : 0,
-    countTotalPrice : "",
   });
+
+
   const basePrice = travelData.price;
   const PersonToTalPrice = numberOfPeople * 15000;
   const smallPetsTotalPrice = smallPetsCount * 6000; 
@@ -37,8 +39,6 @@ function ProductDetail(props) {
   smallPetsTotalPrice +
   mediumPetsTotalPrice +
   largePetsTotalPrice;
-
-  const [testtotalPrice, setesttotalPrice ] = useState(totalPrice);
 
 
   const getTravelDetailData = async () => {
@@ -53,12 +53,10 @@ function ProductDetail(props) {
   };
 
   const getReview = async () => {
-    const response = await axios.get("/api/v1/review/", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-    setReviewData(response.data.results);
+    const response = await axios.get(
+        `/api/v1/review/product/${location.state.id}`
+    );
+    setReviewData(response.data);
     console.log("리뷰페이지", response);
     console.log("리뷰페이지", response.data.results);
   };
@@ -71,6 +69,14 @@ function ProductDetail(props) {
   const togglePetSizeInfo = () => {
     setShowPetSizeInfo((prevState) => !prevState);
   };
+
+  const [imageUrl, setImageUrl] = useState("");
+
+useEffect(() => {
+  if (travelData && travelData.product_img) {
+    setImageUrl(travelData.product_img);
+  }
+}, [travelData]);
 
   const handleDateChange = (e) => {
     setDepartureDate(e.target.value);
@@ -125,6 +131,21 @@ function ProductDetail(props) {
     console.log("대 반려동물 수:", largePetsCount);
   };
 
+const paybutton =() => {
+    if(!posttravelData.departureDate) {
+        alert('출발일을 선택해주세요!!')
+        return;
+    }else {
+        navigate('/paymentpage', {
+            state: {
+                travelData,
+                posttravelData,
+                totalPrice,
+                imageUrl,
+            },
+        });
+    }
+}
 
 console.log('test',posttravelData);
   if (isLoading) return <div>로딩중...</div>;
@@ -133,7 +154,7 @@ console.log('test',posttravelData);
     <div className="productdetail-page">
       <div className="productdetail-page_contnet">
         <div className="productdetail-page-title">
-          <h2>상품명 : {travelData.name}</h2>
+          <h2>{travelData.name}</h2>
           <img
             src={travelData.product_img}
             alt="상품이미지"
@@ -145,7 +166,6 @@ console.log('test',posttravelData);
           <div className="productdetail-page_contnet_review">
             <ul>
               {reviewData
-                .filter((review) => review.product === travelData.id)
                 .map((review, index) => (
                   <li key={index}>
                     <p>{review.content}</p>
@@ -289,19 +309,13 @@ console.log('test',posttravelData);
             </div>
 
 
-            <Link
-            state={{
-                travelData,
-                posttravelData
-            }}
-            to={{
-            pathname: "/paymentpage",
-            }}
+            <button 
+            type="submit" 
+            className="reservation-btn"
+            onClick={paybutton}
             >
-            <button type="submit" className="reservation-btn">
             결제하기
             </button>
-            </Link>
 
           </form>
 
@@ -315,7 +329,7 @@ console.log('test',posttravelData);
                     largePetsCount * 15000} 원
         </p>
         <hr />
-        <p>총 예약 가격 : {testtotalPrice} 원</p>
+        <p>총 예약 가격 : {totalPrice} 원</p>
         </div>
       </div>
     </div>
