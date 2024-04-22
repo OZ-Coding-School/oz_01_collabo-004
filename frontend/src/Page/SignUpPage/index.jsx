@@ -64,7 +64,7 @@ function SignupForm({ setSignUp }) {
       }
     } catch (error) {
       alert("회원가입 실패:", error.message);
-      console.error("회원가입 실패:", error.message);
+      console.log("회원가입 실패:", error.message);
       console.log(formData);
     }
   };
