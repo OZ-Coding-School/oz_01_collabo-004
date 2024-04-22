@@ -13,8 +13,12 @@ const RecommendationItem = ({ spot }) => {
       <div style={{ margin: "10px" }}>
         <h3>{spot.name}</h3>
         <p>{spot.description}</p>
-        <Link target="_blank" style={{ textDecoration: "none" }} href={spot.link} />
-          🏠Click Me!
+        <Link
+          target="_blank"
+          style={{ textDecoration: "none" }}
+          href={spot.link}
+        />
+        🏠Click Me!
         <hr />
         <img
           style={{

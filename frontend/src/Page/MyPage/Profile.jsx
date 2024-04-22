@@ -16,7 +16,7 @@ function Profile({ setUserId }) {
   };
 
   const [showModal, setShowModal] = useState(false);
-  const [userImages, setUserImages] = useState(user.userImages);
+  const [userImages, setUserImages] = useState(null);
   const [nickName, setNickName] = useState("");
   const [email, setEmail] = useState(user.email);
   const [phone, setPhone] = useState(user.phone);
@@ -37,10 +37,10 @@ function Profile({ setUserId }) {
       });
       setUserId(response.data.user_id);
       setUserData(response.data);
-      setNickName(response.data.nickName);
+      setNickName(response.data.nickname);
       setEmail(response.data.email);
       setPhone(response.data.phone);
-
+      console.log(response.data);
       handleCloseModal();
     } catch (error) {
       console.error("Error saving changes:", error);
@@ -56,20 +56,21 @@ function Profile({ setUserId }) {
   const userUpdate = async () => {
     if (password !== confirmPassword) return alert("암호가 일치하지 않습니다.");
     try {
-      const response = await axios.put(
-        "/api/v1/user/info/",
-        {
-          nickName: nickName,
-          email: email,
-          phone: phone,
-          password: password,
+      const formData = new FormData();
+      formData.append("nickname", nickName);
+      formData.append("email", email);
+      formData.append("password", password);
+      formData.append("phone", phone);
+      if (userImages) {
+        formData.append("profile_image", userImages);
+      }
+      console.log(userImages);
+      const response = await axios.put("/api/v1/user/info/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      });
       console.log(response);
       if (response.status === 200) {
         alert("회원정보 수정이 완료 되었습니다.");
@@ -78,7 +79,9 @@ function Profile({ setUserId }) {
         setConfirmPassword("");
         setShowModal(false);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleReceiveCoupon = async () => {
@@ -109,7 +112,7 @@ function Profile({ setUserId }) {
                 borderRadius: "50%",
                 marginLeft: "20px",
               }}
-              src="userData.user_img"
+              src={userData.profile_image}
             />
           </div>
           <p>
@@ -147,6 +150,8 @@ function Profile({ setUserId }) {
         handleClose={handleCloseModal}
         email={email}
         setEmail={setEmail}
+        userImages={userImages}
+        setUserImages={setUserImages}
         phone={phone}
         setPhone={setPhone}
         password={password}

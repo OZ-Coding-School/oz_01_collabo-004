@@ -6,8 +6,11 @@ import styles from "./ProfileModal.module.css";
 
 function ProfileModal({
   show,
+  userImages,
+  setUserImages,
+  profile_image,
   handleClose,
-  nickName,
+  nickname,
   setNickName,
   email,
   setEmail,
@@ -20,10 +23,18 @@ function ProfileModal({
   user,
   userUpdate,
 }) {
-  const [imageSrc, setImageSrc] = useState("../images/wonbin.png");
+  const [imageSrc, setImageSrc] = useState(profile_image || "");
 
   const handleImageChange = (e) => {
-    setImageSrc(e.target.value);
+    const file = e.target.files && e.target.files[0];
+    setUserImages(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImageSrc(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleNickNameChange = (e) => {
@@ -49,6 +60,13 @@ function ProfileModal({
     setPhone(formattedPhoneNumber);
   };
 
+  const handleSubmit = () => {
+    if (password !== confirmPassword) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+  };
+
   return (
     <div
       className={styles.profile_modal}
@@ -71,10 +89,16 @@ function ProfileModal({
                   borderRadius: "50%",
                   marginLeft: "20px",
                 }}
-                src={imageSrc}
+                src={
+                  imageSrc
+                    ? imageSrc
+                    : user.profile_image
+                    ? user.profile_image
+                    : "/images/no-photo.png"
+                }
+                alt="프로필 이미지"
               />
-              <button
-                onClick={handleImageChange}
+              <label
                 style={{
                   backgroundColor: "rgb(90 120 250 )",
                   color: "white",
@@ -86,10 +110,20 @@ function ProfileModal({
                   marginLeft: "40px",
                   width: "60px",
                   height: "30px",
+                  border: "none",
+                  cursor: "pointer",
                 }}
               >
                 EDIT
-              </button>
+                <input
+                  type="file"
+                  accept="image/*"
+                  style={{
+                    display: "none",
+                  }}
+                  onChange={handleImageChange}
+                />
+              </label>
             </Col>
             <Col>
               <div
@@ -107,7 +141,12 @@ function ProfileModal({
               </div>
               <div style={{ marginTop: "-15px", marginBottom: "20px" }}>
                 NickName .<br />
-                {user.nickName}
+                {user.nickname}
+                <input
+                  style={{ border: "none", width: "100px" }}
+                  type="text"
+                  onChange={(e) => setNickName(e.target.value)}
+                />
               </div>
             </Col>
           </Row>

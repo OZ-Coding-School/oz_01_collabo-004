@@ -17,6 +17,27 @@ body::-webkit-scrollbar {
   font-family: "impact";
   src: url(../public/font/impact.ttf);
 }
+@font-face {
+  font-family: "Impact Regular";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Impact Regular"), url("/public/font/impact.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Impact Regular";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Impact Regular"), url("/public/font/Impacted.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Impacted Regular";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Impacted Regular"),
+    url("/public/font/unicode.impact.woff") format("woff");
+}
 .kanit-thin {
   font-family: "Kanit", sans-serif;
   font-weight: 100;
