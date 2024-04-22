@@ -48,8 +48,8 @@ class ReviewAdmin(admin.ModelAdmin):
         ModelAdmin.change_view를 오버라이드해서 업데이트 시 기존의 이미지는 삭제하고 새로운 이미지를 S3에 저장
         """
         change_review = self.get_object(request, object_id)
-        if change_review is not None:
-            if change_review.image_url is not None:
+        if change_review:
+            if change_review.image_url:
                 image_uploader = S3ImgUploader()
                 image_uploader.delete_img_file(str(change_review.image_url))
             return super().change_view(request, object_id, form_url=form_url, extra_context=extra_context)

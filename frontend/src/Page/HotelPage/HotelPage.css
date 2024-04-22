@@ -6,30 +6,20 @@
   font-style: normal;
 }
 
-.hotel-spot-page h2 {
+.hotel-page h2 {
   text-align: center;
   margin: 30px;
 }
 
-.hotel-box-content {
-  display: flex;
-  justify-content: center;
-}
-
 .hotel-box {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px; 
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
 }
 
-.hotel-box .hotel-item {
-  border: 1px solid #ccc;
+.hotel-item {
+  margin: 20px 0;
   padding: 20px;
-  text-align: center;
-}
-
-@media (max-width: 1540px) {
-  .hotel-box {
-    grid-template-columns: 1fr;
-  }
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }

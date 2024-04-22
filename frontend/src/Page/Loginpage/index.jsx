@@ -41,6 +41,7 @@ function LoginPage() {
       localStorage.setItem("token", response.data.access);
       console.log("로그인 성공:", response);
       handleLoginFailure("로그인에 성공했습니다.");
+      alert("반갑습니다. DogGo와 행복한 여행 되세요!");
       navigate("/");
     } catch (e) {
       console.log(e);

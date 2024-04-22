@@ -38,7 +38,7 @@ function BasicExample() {
       })
     );
   };
-
+  console.log(cards);
   return (
     <>
       {cards.map((card) => (
@@ -49,14 +49,15 @@ function BasicExample() {
             width: "18rem",
           }}
         >
-          <Card.Img variant="top" src={card.imageUrl} />
+          <Card.Img variant="top" src={card.product.product_img} />
           <Card.Body>
-            <Card.Title>{card.title}</Card.Title>
-            <Card.Text>{card.description}</Card.Text>
+            <Card.Title>{card.product.name}</Card.Title>
+            <Card.Text>{card.product.description_text}</Card.Text>
+
             <Button
               variant={card.isBookmarked ? "success" : "dark"}
               onClick={() => handleBookmarkToggle(card.id)}
-              href={`/product/${card.id}`}
+              href={`/product/${card.product.id}`}
             >
               {card.isBookmarked ? "이동 중..." : "예약하러가기"}
             </Button>

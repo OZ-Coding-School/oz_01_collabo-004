@@ -1,27 +1,25 @@
-.productdetail-page{
+.productdetail-page {
     width: 100%;
 }
-.productdetail-page_product-img{
-    width: 100%;
+.productdetail-page_product-img {
+    width: 450px;
+    height: 450px;
     border-radius: 25px;
 }
-.productdetail-page_detail-img{
-    width: 600px;
-}
-.productdetail-page_contnet{
+.productdetail-page_contnet {
     display: flex;
     justify-content: center;
     padding: 20px 30px;
     margin: 0 30px;
     border-radius: 20px;
     box-shadow: 0px 1px 3px 0px #333;
-    align-items: center;
 }
-.productdetail-page_contnet_review-content h3{
+.productdetail-page_contnet_review-content h3 {
     text-align: center;
 }
 .productdetail-page_contnet_review {
     padding: 10px;
+    width: 500px;
     height: 400px;
     overflow: auto;
 }
@@ -34,7 +32,7 @@
 }
 .productdetail-page_contnet_review li {
     position: relative;
-    width: 80%;
+    width: 100%;
     font-size: 1.15rem;
     font-weight: 700;
     margin-bottom: 25px;
@@ -45,18 +43,18 @@
     font-family: "TiltNeon-Regular-VariableFont_XROT,YROT";
 }
 .productdetail-page_contnet_review li::after {
-    content:"";
+    content: "";
     border-top: 15px solid rgb(90, 120, 250);
     border-left: 15px solid transparent;
     border-right: 0px solid transparent;
     border-bottom: 0px solid transparent;
-    position:absolute;
-    top : 10px;
+    position: absolute;
+    top: 10px;
     left: -15px;
 }
 
 /*메인페이지 2번쩨*/
-.productdetail-page2{
+.productdetail-page2 {
     display: flex;
     justify-content: space-around;
     margin: 80px 60px;
@@ -65,15 +63,15 @@
 .reservation-form {
     position: sticky;
     top: 74px;
-    padding:  0 40px;
+    padding: 0 40px;
     box-shadow: 0px 1px 3px 0px #333;
     border-radius: 10px;
     text-align: center;
 }
-.reservation-form h3{
+.reservation-form h3 {
     margin: 20px 0;
 }
-.reservation-form-table{
+.reservation-form-table {
     width: 100%;
 }
 .reservation-form td,
@@ -83,11 +81,12 @@
     border: none;
 }
 /* width 100% 설정후 td들을 왼쪽으로 정렬시켜 좌우로 나눔*/
-.reservation-form td:nth-child(1){
+.reservation-form td:nth-child(1) {
+    width: 100%;
     text-align: left;
 }
 /*폼 안에 년도월*/
-.reservation-form-input{
+.reservation-form-input {
     width: 100%;
     text-align: center;
     padding: 0 10px;
@@ -100,7 +99,7 @@
     width: 100%;
     border: 1px solid #333;
 }
-.counter-button{
+.counter-button {
     margin: 8px;
     padding: 0 6.5px;
     font-size: 0.75rem;
@@ -110,7 +109,7 @@
     color: white;
     background-color: rgb(90, 120, 250);
 }
-.reservation-btn{
+.reservation-btn {
     width: 100%;
     border-radius: 10px;
     padding: 5px 0;
@@ -122,28 +121,28 @@
 .reservation-form button:hover {
     background-color: #0056b3;
 }
-.petcount_add{
+.petcount_add {
     font-size: 1.35rem;
     font-weight: 700;
     margin: 35px 0 0;
     text-align: right;
 }
-.petsize-info{
+.petsize-info {
     text-align: left;
     font-size: 0.75rem;
     margin: 20px 0;
 }
-.petsize-info div{
+.petsize-info div {
     margin-top: -10px;
 }
-.petsize-info div p{
+.petsize-info div p {
     margin: 0;
 }
-.petsize-info button{
-    background:none;
+.petsize-info button {
+    background: none;
     border: none;
 }
-.petsize-info button:hover{
+.petsize-info button:hover {
     color: blue;
     background: none;
     text-decoration: underline;

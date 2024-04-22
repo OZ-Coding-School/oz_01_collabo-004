@@ -7,9 +7,11 @@ function SignupForm({ setSignUp }) {
   const [formData, setFormData] = useState({
     user_id: "",
     name: "",
+    nickname: "",
     email: "",
     phone: "",
     password: "",
+    confirmPassword: "",
   });
 
   const handleChange = (event) => {
@@ -35,6 +37,7 @@ function SignupForm({ setSignUp }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    console.log(formData);
 
     try {
       const response = await axios.post("/api/v1/user/signup/", formData, {
@@ -48,10 +51,21 @@ function SignupForm({ setSignUp }) {
       if (response.status === 201) {
         alert("DogGo의 가족이 되었습니다. 환영합니다!");
         console.log("회원가입에 성공했습니다.");
+        setFormData({
+          user_id: "",
+          name: "",
+          nickname: "",
+          email: "",
+          phone: "",
+          password: "",
+          confirmPassword: "",
+        });
+        setSignUp(false);
       }
     } catch (error) {
       alert("회원가입 실패:", error.message);
       console.error("회원가입 실패:", error.message);
+      console.log(formData);
     }
   };
 
@@ -87,6 +101,17 @@ function SignupForm({ setSignUp }) {
             id="user_id"
             name="user_id"
             value={formData.user_id}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="input-group">
+          <label htmlFor="nickName">닉네임</label>
+          <input
+            type="text"
+            id="nickName"
+            name="nickname"
+            value={formData.nickname}
             onChange={handleChange}
             required
           />
@@ -130,7 +155,7 @@ function SignupForm({ setSignUp }) {
             type="password"
             id="confirmPassword"
             name="confirmPassword"
-            // value={formData.confirmPassword}
+            value={formData.confirmPassword}
             onChange={handleChange}
             required
           />

@@ -78,15 +78,12 @@ class CustomUserAdmin(UserAdmin):
         ModelAdmin.change_view를 오버라이드해서 업데이트 시 기존의 이미지는 삭제하고 새로운 이미지를 S3에 저장
         """
         prev_user = self.get_object(request, object_id)
-
-        response = super().change_view(request, object_id, form_url=form_url, extra_context=extra_context)
-
-        new_user = self.get_object(request, object_id)
-        if prev_user.profile_image is not None:
-            if prev_user.profile_image != new_user.profile_image:
+        if prev_user:
+            if prev_user.profile_image:
                 image_uploader = S3ImgUploader()
                 image_uploader.delete_img_file(str(prev_user.profile_image))
-        return response
+            return super().change_view(request, object_id, form_url=form_url, extra_context=extra_context)
+        return None
 
     # 기본 actions에 세팅된 delete_selected 제거
     def get_actions(self, request):

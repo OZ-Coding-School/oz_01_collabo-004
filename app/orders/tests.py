@@ -1,5 +1,5 @@
 import pdb
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from django.contrib.auth import get_user_model
 from django.urls import reverse
@@ -42,7 +42,7 @@ class OrderListTestCase(APITestCase):
             "pet_size_medium": 1,
             "pet_size_big": 1,
             "departure_date": "2024-04-21",
-            "return_date": "2024-04-23",
+            # "return_date": "2024-04-23",
         }
         # 쿠폰을 사용하지 않은 정상적인 주문 요청
         response = self.client.post(url, data, headers={"Authorization": f"Bearer {self.token}"})
@@ -154,10 +154,21 @@ class OrderDetailViewTestCase(APITestCase):
             user_id="testuser2", password="password123", name="testname2", email="test2@example.com", phone="0101010012"
         )
         self.product = Product.objects.create(
-            name="testproduct", price=100000, status=True, travel_period=3, description_text="testdescription"
+            name="testproduct",
+            price=100000,
+            status=True,
+            travel_period=3,
+            description_text="testdescription",
+            discount=30000,
         )
         self.coupon = Coupon.objects.create(type="WELCOME", content="회원가입 축하 쿠폰", sale_price=10000, duration=30)
         self.user_coupon = UserCoupon.objects.create(
+            user_id=self.user.pk,
+            coupon_id=self.coupon.pk,
+            expired_at=timezone.now() + timedelta(days=self.coupon.duration),
+        )
+        self.coupon2 = Coupon.objects.create(type="EVENT", content="핫타임 할인 쿠폰", sale_price=20000, duration=15)
+        self.user_coupon2 = UserCoupon.objects.create(
             user_id=self.user.pk,
             coupon_id=self.coupon.pk,
             expired_at=timezone.now() + timedelta(days=self.coupon.duration),
@@ -166,7 +177,7 @@ class OrderDetailViewTestCase(APITestCase):
             product_id=self.product.pk,
             user_id=self.user.pk,
             sale_price=self.product.discount,
-            total_price=self.product.price,
+            total_price=self.product.price - self.product.discount,
             people=2,
             pet=3,
             pet_size_small=1,
@@ -180,7 +191,7 @@ class OrderDetailViewTestCase(APITestCase):
             product_id=self.product.pk,
             user_id=self.user.pk,
             sale_price=self.product.discount,
-            total_price=self.product.price,
+            total_price=self.product.price - self.product.discount,
             people=2,
             pet=3,
             pet_size_small=1,
@@ -194,7 +205,7 @@ class OrderDetailViewTestCase(APITestCase):
             product_id=self.product.pk,
             user_id=self.user2.pk,
             sale_price=self.product.discount,
-            total_price=self.product.price,
+            total_price=self.product.price - self.product.discount,
             people=2,
             pet=3,
             pet_size_small=1,
@@ -213,14 +224,15 @@ class OrderDetailViewTestCase(APITestCase):
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response.data["product"]["id"], self.product.pk)
-        self.assertEqual(response.data["total_price"], self.product.price)
-        self.assertEqual(response.data["people"], 2)
-        self.assertEqual(response.data["pet"], 3)
-        self.assertEqual(response.data["pet_size_small"], 1)
-        self.assertEqual(response.data["pet_size_medium"], 1)
-        self.assertEqual(response.data["pet_size_big"], 1)
-        self.assertEqual(response.data["departure_date"], "2024-04-21")
-        self.assertEqual(response.data["return_date"], "2024-04-23")
+        self.assertEqual(response.data["total_price"], self.product.price - self.product.discount)
+        self.assertEqual(response.data["people"], self.order.people)
+        self.assertEqual(response.data["pet"], self.order.pet)
+        self.assertEqual(response.data["pet_size_small"], self.order.pet_size_small)
+        self.assertEqual(response.data["pet_size_medium"], self.order.pet_size_medium)
+        self.assertEqual(response.data["pet_size_big"], self.order.pet_size_big)
+        self.assertEqual(response.data["departure_date"], self.order.departure_date)
+        response_return_date = datetime.strptime(response.data["return_date"], "%Y-%m-%d").date()
+        self.assertEqual(response_return_date, self.order.return_date)
 
         # 존재하지 않는 order_id를 조회하려고 시도할 때
         url = reverse("order-detail", kwargs={"order_id": "5e30ea2a-1e85-40e1-a9c7-19e5a6db9c94"})

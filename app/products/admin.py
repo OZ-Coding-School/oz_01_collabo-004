@@ -43,11 +43,11 @@ class ProductAdmin(admin.ModelAdmin):
         ModelAdmin.change_view를 오버라이드해서 업데이트 시 기존의 이미지는 삭제하고 새로운 이미지를 S3에 저장
         """
         update_product = self.get_object(request, object_id)
-        if update_product is not None:
-            if update_product.product_img is not None:
+        if update_product:
+            if update_product.product_img:
                 image_uploader = S3ImgUploader()
                 image_uploader.delete_img_file(str(update_product.product_img))
-            if update_product.description_img is not None:
+            if update_product.description_img:
                 image_uploader = S3ImgUploader()
                 image_uploader.delete_img_file(str(update_product.product_img))
             return super().change_view(request, object_id, form_url=form_url, extra_context=extra_context)

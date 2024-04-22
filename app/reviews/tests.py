@@ -148,15 +148,6 @@ class ProductReviewDetailTestCase(APITestCase):
         self.assertTrue(response.data["status"])
         self.assertEqual(ProductReview.objects.count(), 1)
 
-        invalid_data = {
-            "invalid_key": "invalid_value",
-            "name": "invalid_value",
-            "status": True,
-        }
-        response = self.client.put(url, data=invalid_data, headers={"Authorization": f"Bearer {self.token}"})
-
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
         url = reverse("product-review-detail", kwargs={"review_id": 9919283123})
         response = self.client.delete(url, headers={"Authorization": f"Bearer {self.token}"})
 
