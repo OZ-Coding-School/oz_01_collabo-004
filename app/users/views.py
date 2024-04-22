@@ -18,6 +18,7 @@ from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from common.utils import S3ImgUploader
 from users import serializers
 from users.models import User
 
@@ -67,6 +68,7 @@ class SendVerificationCodeView(APIView):
 
 
 class VerifyCodeView(APIView):
+    authentication_classes = []
     permission_classes = [AllowAny]
 
     @extend_schema(
@@ -153,8 +155,16 @@ class UserDetailView(APIView):
         description="Update user info",
     )
     def put(self, request: Request) -> Response:
-        serializer = serializers.UserInfoModifySerializer(request.user, data=request.data)
+        serializer = serializers.UserInfoModifySerializer(request.user, data=request.data, partial=True)
         if serializer.is_valid():
+            if serializer.data["profile_image"]:
+                user = User.objects.get(id=request.user.id)  # type: ignore
+                prev_image_url = user.profile_image
+                image_uploader = S3ImgUploader()
+                try:
+                    image_uploader.delete_img_file(prev_image_url)
+                except Exception as e:
+                    return Response({"msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
