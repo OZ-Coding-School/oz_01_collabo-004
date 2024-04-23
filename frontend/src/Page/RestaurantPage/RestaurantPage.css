@@ -1,0 +1,25 @@
+@font-face {
+  font-family: "BinggraeII-Bold";
+  src: url("../../../public/font/TiltNeon-Regular-VariableFont_XROTYROT.ttf")
+    format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+.restaurant-page h2 {
+  text-align: center;
+  margin: 30px;
+}
+
+.restaurant-box {
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.restaurant-item {
+  margin: 20px 0;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
