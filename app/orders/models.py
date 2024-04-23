@@ -32,7 +32,6 @@ class Order(CommonModel):
 
     # 주문 옵션
     people = models.IntegerField()
-    pet = models.IntegerField()
     pet_size_big = models.IntegerField(default=0)
     pet_size_medium = models.IntegerField(default=0)
     pet_size_small = models.IntegerField(default=0)

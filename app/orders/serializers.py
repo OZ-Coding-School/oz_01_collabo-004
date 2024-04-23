@@ -10,7 +10,7 @@ from .models import Order, Payment
 class OrderListSerializer(serializers.ModelSerializer):  # type: ignore
     product_info = ProductInfoSerializer(source="product", read_only=True)
     product = serializers.IntegerField(write_only=True)
-    user_coupon_id = serializers.IntegerField(write_only=True)
+    user_coupon_id = serializers.IntegerField(write_only=True, required=False)
     coupon = UserCouponSerializer(source="user_coupon", read_only=True)
 
     class Meta:
@@ -22,12 +22,13 @@ class OrderListSerializer(serializers.ModelSerializer):  # type: ignore
 class OrderDetailSerializer(serializers.ModelSerializer):  # type: ignore
     product = ProductInfoSerializer(read_only=True)
     user_coupon = UserCouponSerializer(read_only=True)
+    user_coupon_id = serializers.IntegerField(write_only=True)
     # payment_info = PaymentInfoSerialzier(read_only=True)
 
     class Meta:
         model = Order
         exclude = ("user",)
-        read_only_fields = ["user", "order_id", "sale_price", "total_price", "status"]
+        read_only_fields = ["order_id", "sale_price", "total_price", "status"]
         depth = 1
 
 
