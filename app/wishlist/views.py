@@ -43,9 +43,7 @@ class WishlistView(APIView):
                 user_id=request.user.id, product_id=serializer.validated_data["product"]
             ).first()
             if check_wishlist:
-                if check_wishlist.status:
-                    return Response({"msg": "already added"}, status=status.HTTP_200_OK)
-                check_wishlist.status = True
+                check_wishlist.status = not check_wishlist.status
                 check_wishlist.save()
                 serializer = CreateWishlistSerializer(check_wishlist)
                 return Response(serializer.data, status=status.HTTP_200_OK)
@@ -64,7 +62,7 @@ class WishlistDetailView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     # 위시리스트 삭제하기
-    def delete(self, request: Request, wishlist_id: int) -> Response:
+    def put(self, request: Request, wishlist_id: int) -> Response:
         wishlist = get_object_or_404(Wishlist, id=wishlist_id, user_id=request.user.id)
         if not wishlist.status:
             return Response({"msg": "already deleted"}, status=status.HTTP_200_OK)
