@@ -21,19 +21,19 @@ function MyPage() {
         <Col sm={3}>
           <Nav variant="pills" className="flex-column">
             <Nav.Item>
-              <Nav.Link eventKey="first">내 정보</Nav.Link>
+              <Nav.Link eventKey="first">MY INFO</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="second">찜 목록</Nav.Link>
+              <Nav.Link eventKey="second">WISH LIST</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="third">예약 내역</Nav.Link>
+              <Nav.Link eventKey="third">BOOKING</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="fourth">쿠 폰</Nav.Link>
+              <Nav.Link eventKey="fourth">COUPON</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="fifth">리 뷰</Nav.Link>
+              <Nav.Link eventKey="fifth">REVIEW</Nav.Link>
             </Nav.Item>
             {userId === "startez" ? (
               <Nav.Item>
@@ -42,7 +42,7 @@ function MyPage() {
             ) : null}
           </Nav>
         </Col>
-        <Col sm={9}>
+        <Col sm={6}>
           <Tab.Content>
             <Tab.Pane eventKey="first">
               <Profile setUserId={setUserId} />

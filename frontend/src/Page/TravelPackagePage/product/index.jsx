@@ -21,7 +21,7 @@ function Product({ products }) {
         <h3>{products.name}</h3>
         <p>{products.description_text}</p>
         <p>가격: {products.price.toLocaleString()}원</p>
-        <p>죄회수 : {products.view_count}</p>
+        <p>조회수 : {products.view_count}</p>
       </Link>
     </div>
   );
