@@ -35,7 +35,7 @@ function MyPage() {
             <Nav.Item>
               <Nav.Link eventKey="fifth">REVIEW</Nav.Link>
             </Nav.Item>
-            {userId === "startez" ? (
+            {userId === "deokgeneral12" ? (
               <Nav.Item>
                 <Nav.Link eventKey="sixth">테스트</Nav.Link>
               </Nav.Item>

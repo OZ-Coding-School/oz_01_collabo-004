@@ -6,7 +6,7 @@ import "./index.css";
 function ProductDetail(props) {
   const location = useLocation();
   console.log("상품번호", location.state);
-  const [departureDate, setDepartureDate] = useState("");
+  const [departureDate, setDepartureDate] = useState();
   const [numberOfPeople, setNumberOfPeople] = useState(1);
   const [smallPetsCount, setSmallPetsCount] = useState(0);
   const [mediumPetsCount, setMediumPetsCount] = useState(0);
