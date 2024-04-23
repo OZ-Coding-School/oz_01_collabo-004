@@ -119,7 +119,7 @@ class OrderDetailView(APIView):
         if update_data.get("user_coupon_id"):
             try:
                 if order.user_coupon:
-                    prev_sale_price = change_coupon_status(order.user_coupon.id, True)  # type: ignore
+                    prev_sale_price = change_coupon_status(order.user_coupon.id, True)
                     sale_price -= prev_sale_price  # 이전에 적용된 쿠폰 할인 가격을 되돌림
                 new_sale_price = change_coupon_status(update_data["user_coupon_id"], False)
                 sale_price += new_sale_price  # 새롭게 적용할 쿠폰의 할인 가격을 적용

@@ -1,4 +1,3 @@
-import pdb
 from datetime import datetime, timedelta
 
 from django.contrib.auth import get_user_model
@@ -271,14 +270,12 @@ class OrderDetailViewTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["msg"], "already paid order.")
 
-    def test_적용한_쿠폰이_수정되었을_떄(self):
-        data = {
-            "user_coupon_id": self.user_coupon.id
-        }
+    def test_적용한_쿠폰이_수정되었을_떄(self) -> None:
+        data = {"user_coupon_id": self.user_coupon.id}
         # 유저가 주문한 주문내역의 쿠폰 수정
         url = reverse("order-detail", kwargs={"order_id": self.order.order_id})
         response = self.client.put(url, data, headers={"Authorization": f"Bearer {self.token}"})
-        pdb.set_trace()
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["user_coupon"]["id"], self.user_coupon.id)
         self.assertEqual(response.data["user_coupon"]["coupon_info"]["sale_price"], self.user_coupon.coupon.sale_price)
