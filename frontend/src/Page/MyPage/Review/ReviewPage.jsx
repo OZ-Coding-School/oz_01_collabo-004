@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "../../../api/axios";
 import Review from "../Review/Review";
 import NewReviewForm from "./NewReviewForm";
+import "./Review.css";
 
 function ReviewPage() {
   const [showModal, setShowModal] = useState(false);
@@ -44,9 +45,8 @@ function ReviewPage() {
       <h2 className="review-page-title">Review List</h2>
       <div className="review-list">
         {reviews.map((review) => (
-          <div key={review.id}>
+          <div key={review?.id}>
             <Review review={review} />
-
             <button onClick={() => handleShowModal(review)}> EDIT </button>
           </div>
         ))}

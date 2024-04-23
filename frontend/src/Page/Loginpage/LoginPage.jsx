@@ -22,6 +22,8 @@ function LoginPage() {
   const [alertMessage, setAlertMessage] = useState("");
   const [signUp, setSignUp] = useState(false);
   const navigate = useNavigate();
+  const code = new URL(window.location.href).searchParams.get("code");
+  console.log("kakao 토큰 : ", code);
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -54,13 +56,47 @@ function LoginPage() {
     setShowAlert(true);
   }
 
-  const kakaoParams = {
-    client_id: "dbf3d260e4ea71ea45acb4f0c53bd224",
-    redirect_uri: "http://127.0.0.1:3000/user/social/kakao/login",
-    response_type: "code",
+  const kakaoLogin = async () => {
+    try {
+      const REST_API_KEY = "dbf3d260e4ea71ea45acb4f0c53bd224";
+      const REDIRECT_URI = "http://localhost:3000/login";
+      const url = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}`;
+      window.location.href = url;
+      const code = new URL(window.location.href).searchParams.get("code");
+      console.log(code);
+    } catch (error) {
+      console.log(error);
+    }
   };
-  const kParams = new URLSearchParams(kakaoParams).toString();
-  console.log(signUp);
+
+  const kakaoLogin1 = async () => {
+    try {
+      const response = await axios.post(
+        "http://dog-go.store/api/v1/user/",
+        {
+          code: code,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      console.log(response);
+      if (response.status === 200) {
+        localStorage.setItem("token", response.data.access);
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    if (code) {
+      kakaoLogin1();
+    }
+  }, [code]);
 
   return (
     <>
@@ -113,8 +149,8 @@ function LoginPage() {
         <div id="error-message" className="error-message"></div>{" "}
         <div className="social-button">
           <a
+            onClick={kakaoLogin}
             className="kakao-button"
-            href={`https://kauuth.kakao.com/oauth/authorize?${kParams}`}
             style={{
               backgroundColor: "#fff",
             }}

@@ -4,7 +4,7 @@ import axios from "../../api/axios";
 import Coupon from "./Coupon";
 import ProfileModal from "./ProfileModal";
 
-import "./index.css";
+import "./MyPage.css";
 
 function Profile({ setUserId }) {
   const user = {

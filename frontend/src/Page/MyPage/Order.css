@@ -1,6 +1,68 @@
 .title {
   display: flex;
+  margin: 20px 10px 30px 50px;
 }
+
 .title h2:nth-child(2) {
   color: rgb(90, 120, 250);
+}
+
+.order-list {
+  margin-left: 100px;
+}
+
+.order-header {
+  text-align: center;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid black;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.order-item {
+}
+
+/* Order.css */
+.order ul {
+  list-style: none;
+  padding: 0;
+  display: flex; /* Flexbox 사용 */
+  flex-wrap: wrap; /* 내용이 넘치면 줄바꿈 */
+  justify-content: space-between; /* 요소들 사이의 간격을 최대한 넓게 설정 */
+}
+
+.order li {
+  flex: 0 0 calc(25% - 20px); /* 네 개의 아이템이 가로로 균일하게 배치되도록 설정 */
+  padding: 10px;
+  margin-bottom: 20px; /* 아이템 사이의 간격 조정 */
+  border: 1px solid #ddd;
+}
+
+.filter-controls {
+  display: flex;
+  align-items: center;
+  margin-left: 100px; /* 여백 조정 */
+  margin-bottom: 20px; /* 아래 여백 추가 */
+}
+
+.search-input-container {
+  position: relative;
+}
+
+.search-input-container input {
+  padding: 10px; /* 패딩 조정 */
+  width: 200px; /* 너비 조정 */
+  border-radius: 5px; /* 테두리 모서리 둥글게 */
+  border: 1px solid #ccc; /* 테두리 스타일 조정 */
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
 }

@@ -7,27 +7,28 @@ import {
   Routes,
   useLocation,
 } from "react-router-dom";
-import Headerbar from "./Component/Header/index.jsx";
+import Footer from "./Component/Footer/Footer.jsx";
+import HeaderBar from "./Component/Header/Header.jsx";
 import ScrollTop from "./Component/ScrollTop.jsx";
 import Testaa from "./Component/Testaa.jsx";
-import Footer from "./Component/footer/index.jsx";
 import Hotel from "./Page/HotelPage/HotelPage.jsx";
-import Login from "./Page/LoginPage/index.jsx";
-import Mainpage from "./Page/Mainpage/index.jsx";
-import MyPage from "./Page/MyPage/index.jsx";
-import Travel from "./Page/RecommendedSpotPage/index.jsx";
+import Auth from "./Page/LoginPage/Auth.jsx";
+import Login from "./Page/LoginPage/LoginPage.jsx";
+import MainPage from "./Page/MainPage/MainPage.jsx";
+import MyPage from "./Page/MyPage/MyPage.jsx";
+import Travel from "./Page/RecommendedSpotPage/RecommendedSpotPage.jsx";
 import Restaurant from "./Page/RestaurantPage/RestaurantItem.jsx";
-import Service from "./Page/SevicePage/index.jsx";
-import SignupForm from "./Page/SignUpPage/index.jsx";
-import PaymentPage from "./Page/TravelPackagePage/PaymentPage/index.jsx";
-import TravelPackagePage from "./Page/TravelPackagePage/index.jsx";
-import ProductDetail from "./Page/TravelPackagePage/productdetail/index.jsx";
+import Service from "./Page/SevicePage/SevicePage.jsx";
+import SignupForm from "./Page/SignUpPage/SignUpPage.jsx";
+import PaymentPage from "./Page/TravelPackagePage/PaymentPage/PaymentPage.jsx";
+import ProductDetail from "./Page/TravelPackagePage/ProductDetail/ProductDetail.jsx";
+import TravelPackagePage from "./Page/TravelPackagePage/TravelPackagePage.jsx";
 
 const Layout = () => {
   const location = useLocation();
   return (
     <div>
-      <Headerbar />
+      <HeaderBar />
       <div style={{ height: location.pathname === "/" ? "0" : "70px" }}></div>
       <Outlet />
       <Footer />
@@ -39,10 +40,10 @@ function App() {
   return (
     <BrowserRouter>
       <ScrollTop />
-      <Headerbar />
+      <HeaderBar />
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/" element={<Mainpage />} />
+          <Route path="/" element={<MainPage />} />
           <Route path="/travel" element={<TravelPackagePage />} />
           <Route path="/travel/:id" element={<ProductDetail />} />
           <Route path="/hotel" element={<Hotel />} />
@@ -54,6 +55,7 @@ function App() {
           <Route path="/service" element={<Service />} />
           <Route path="/test" element={<Testaa />} />
           <Route path="/paymentpage" element={<PaymentPage />} />
+          <Route path="/auth" element={<Auth />} />
         </Route>
       </Routes>
     </BrowserRouter>
