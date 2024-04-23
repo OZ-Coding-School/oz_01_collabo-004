@@ -14,7 +14,7 @@ const Order = () => {
       const response = await axios.get("/api/v1/order/", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
-      console.log(response.data);
+      console.log("부킹 데이터", response.data);
       setReservations(response.data);
     } catch (error) {
       console.log("Error fetching reservations:", error);
