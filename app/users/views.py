@@ -1,4 +1,3 @@
-import os
 from datetime import datetime, timedelta
 
 import requests
@@ -254,6 +253,8 @@ class UserDetailView(APIView):
 
 
 class KakaoLoginView(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = []
     def post(self, request: Request) -> Response:
         # code = request.data.get("code")  # 프론트에서 보내준 코드
         # # 카카오 oauth 토큰 발급 url로 code가 담긴 post 요청을 보내 응답을 받는다.
