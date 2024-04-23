@@ -25,10 +25,14 @@ from users.models import User
 
 
 class Signup(APIView):
-    serializer_class = serializers.UserSignUpSerializer
     authentication_classes = []
     permission_classes = [AllowAny]
 
+    @extend_schema(
+        request=serializers.UserSignUpSerializer,
+        responses=serializers.UserSignUpSerializer,
+        description="회원 가입시 입력한 데이터를 검증하고 검증이 되면 유저에 대한 정보를 데이터 베이스에 저장함."
+    )
     def post(self, request: Request) -> Response:
         user_data = request.data
         profile_image = request.FILES.get("profile_image")
@@ -47,14 +51,13 @@ class SendVerificationCodeView(APIView):
 
     @extend_schema(
         request=serializers.EmailSerializer,
+        description="유저가 회원가입시 이메일을 입력하면 인증을 진행해야하는데, 입력한 이메일을 검증 후에 인증에 쓰일 코드를 이메일로 보내줌."
     )
     def post(self, request: Request) -> Response:
-        email = request.data.get("email", "")
-        if not email:
-            return Response({"msg": "이메일을 입력해주세요."}, status=status.HTTP_400_BAD_REQUEST)
-        elif User.objects.filter(email=email).exists():
-            return Response({"msg": "이미 가입된 이메일입니다."}, status=status.HTTP_400_BAD_REQUEST)
-
+        serializer = serializers.EmailSerializer(data=request)
+        if not serializer.is_valid():
+            Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        email = serializer.validated_data.get("email")
         verification_code = get_random_string(length=6)
         message = f"""
             안녕하세요. DogGo 회원가입 시 이메일 인증 코드로 입력해야 할 인증 코드는 아래와 같습니다.
@@ -72,12 +75,43 @@ class SendVerificationCodeView(APIView):
         return Response({"msg": "verification code has been sent to email."}, status=status.HTTP_200_OK)
 
 
+class ForgotPasswordView(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
+    @extend_schema(
+        request=serializers.ForgotPasswordSerializer,
+        description="비밀번호 찾기 시 입력한 아이디와 이메일을 검증하고 이메일로 인증코드를 보내도록 함."
+    )
+    def post(self, request):
+        serializer = serializers.ForgotPasswordSerializer(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data.get('email')
+            user_id = serializer.validated_data.get('user_id')
+            verification_code = get_random_string(length=6)
+            message = f"""
+                        안녕하세요. DogGo의 계정 {user_id}의 비밀번호 찾기 시 인증 코드로 입력해야 할 인증 코드는 아래와 같습니다.
+                         {verification_code}
+                        인증 코드 란에 입력 후 인증하기 버튼을 눌러 주신 후 인증이 완료되면 새로운 비밀번호를 입력하고 완료해주세요.
+                        감사합니다.
+                        """
+            email_message = EmailMessage(
+                subject="Verification Code For DogGo Account ForgotPassword",
+                body=message,
+                to=[email],
+            )
+            email_message.send()  # 이메일 전송
+            cache.set(f"{user_id}-{email}-verify_code", verification_code, timeout=180)
+            return Response({"msg": "verification code has been sent to email."}, status=status.HTTP_200_OK)
+
+
 class VerifyCodeView(APIView):
     authentication_classes = []
     permission_classes = [AllowAny]
 
     @extend_schema(
         request=serializers.VerificationCodeSerializer,
+        description="회원가입 또는 비밀번호 찾기에서 이메일 인증 시 이메일과 인증 코드를 확인하여 인증여부를 응답으로 보내줌."
     )
     def post(self, request: Request) -> Response:
         serializer = serializers.VerificationCodeSerializer(data=request.data)
@@ -88,6 +122,9 @@ class VerifyCodeView(APIView):
 
 class JWTLoginView(TokenObtainPairView):
     def post(self, request: Request) -> Response:
+        """
+        유저가 입력한 아이디와 비밀번호를 검증하고 유저정보를 인식하는데 쓰일 토큰을 발급해줌.
+        """
         user = authenticate(request=request, username=request.data["user_id"], password=request.data["password"])
         if not user:
             return Response({"msg": "Invalid Credentials"}, status=status.HTTP_400_BAD_REQUEST)
@@ -115,6 +152,9 @@ class JWTLoginView(TokenObtainPairView):
 
 class JWTLogoutView(APIView):
     def post(self, request: Request) -> Response:
+        """
+        토큰을 보유한 유저의 로그아웃을 진행함.
+        """
         try:
             # 응답으로 로그인한 사용자의 쿠키에서 토큰을 제거하는 설정
             response = Response(status=status.HTTP_200_OK)
@@ -130,6 +170,9 @@ class JWTRefreshView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request: Request) -> Response:
+        """
+        엑세스 토큰이 만료되고 리프레쉬 토큰이 유효한 유저에게 액세스 토큰을 다시 발급해줌.
+        """
         refresh_token = request.COOKIES.get("AUT_REF")
 
         if refresh_token is None:
@@ -151,8 +194,12 @@ class JWTRefreshView(APIView):
 class UserDetailView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-    serializer_class = serializers.UserInfoSerializer
 
+    @extend_schema(
+        request=serializers.UserInfoSerializer,
+        responses=serializers.UserInfoSerializer,
+        description="유저의 내정보 가져오기 기능"
+    )
     def get(self, request: Request) -> Response:
         user = User.objects.get(id=request.user.id)  # type: ignore
         if user:
@@ -163,7 +210,7 @@ class UserDetailView(APIView):
     @extend_schema(
         request=serializers.UserInfoModifySerializer,
         responses=serializers.UserInfoModifySerializer,
-        description="Update user info",
+        description="유저가 입력한 정보를 바탕으로 유저의 정보를 업데이트 해줌",
     )
     def put(self, request: Request) -> Response:
         update_data = request.data
@@ -186,6 +233,9 @@ class UserDetailView(APIView):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @extend_schema(
+        description="회원탈퇴 요청을 처리하는 뷰, 데이터를 바로지우지않고 상태를 변경함."
+    )
     def delete(self, request: Request) -> Response:
         # 회원탈퇴 요청이 들어오면 상태를 False로 바꿔 탈퇴예정임을 나타내고
         # del_req_time 을 요청이 들어온 현재시간으로 세팅한다.
