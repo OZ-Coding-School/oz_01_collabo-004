@@ -294,8 +294,8 @@ class KakaoLoginView(APIView):
             user = User.objects.get(email=kakao_account.get("email"))
             login(request, user)
             refresh_token = RefreshToken.for_user(user)
-            response = Response({"access": str(refresh_token.access_token)}, status=status.HTTP_200_OK)
-            response.set_cookie(
+            response = Response({"access": str(refresh_token.access_token)}, status=status.HTTP_200_OK)  # type: ignore
+            response.set_cookie(  # type: ignore
                 "AUT_REF",
                 str(refresh_token),
                 samesite=None,
@@ -303,7 +303,7 @@ class KakaoLoginView(APIView):
                 httponly=False,
                 expires=datetime.now() + timedelta(days=1),
             )
-            return response
+            return response  # type: ignore
         except User.DoesNotExist:
             user = User.objects.create(
                 email=kakao_account.get("email"),
@@ -311,8 +311,8 @@ class KakaoLoginView(APIView):
                 profile_image=profile.get("profile_image_url"),
             )
             refresh_token = RefreshToken.for_user(user)
-            response = Response({"access": str(refresh_token.access_token)}, status=status.HTTP_200_OK)
-            response.set_cookie(
+            response = Response({"access": str(refresh_token.access_token)}, status=status.HTTP_200_OK)  # type: ignore
+            response.set_cookie(  # type: ignore
                 "AUT_REF",
                 str(refresh_token),
                 samesite=None,
@@ -320,6 +320,6 @@ class KakaoLoginView(APIView):
                 httponly=False,
                 expires=datetime.now() + timedelta(days=1),
             )
-            return response
+            return response  # type: ignore
         except Exception:
             return Response(status=status.HTTP_400_BAD_REQUEST)
