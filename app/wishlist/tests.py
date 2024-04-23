@@ -46,7 +46,8 @@ class WishlistTestCase(APITestCase):
         response = self.client.post(url, data, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual("already added", response.data["msg"])
+        self.assertFalse(response.data["status"])
+        self.assertEqual(response.data["product"], self.product1.id)
 
         # 이미 위시리스트에 넣었다가 취소하고 다시 위시리스트에 추가하는 경우 테스트
         wishlist = Wishlist.objects.get(user_id=self.user.id, product_id=self.product1.id)
@@ -111,20 +112,20 @@ class WishlistDetailTestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_delete_product_detail(self) -> None:
+    def test_put_wishlist_detail(self) -> None:
         url = reverse("wishlist_detail", kwargs={"wishlist_id": self.wishlist.id})
-        response = self.client.delete(url, headers={"Authorization": f"Bearer {self.token}"})
+        response = self.client.put(url, headers={"Authorization": f"Bearer {self.token}"})
         deleted_wishlist = Wishlist.objects.get(user_id=self.user.id, product_id=self.product.id)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertFalse(deleted_wishlist.status)
 
-        response = self.client.delete(url, headers={"Authorization": f"Bearer {self.token}"})
+        response = self.client.put(url, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["msg"], "already deleted")
 
         url = reverse("wishlist_detail", kwargs={"wishlist_id": 919919191911})
-        response = self.client.get(url, headers={"Authorization": f"Bearer {self.token}"})
+        response = self.client.put(url, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
