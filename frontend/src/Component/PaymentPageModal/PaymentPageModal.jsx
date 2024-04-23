@@ -1,7 +1,7 @@
 import React from "react";
 import "./PaymentPageModal.css";
 
-function Paymentpagemodal({ isOpen, onClose, children }) {
+function PaymentPageModal({ isOpen, onClose, children }) {
   if (!isOpen) return null;
 
   return (
@@ -23,4 +23,4 @@ function Paymentpagemodal({ isOpen, onClose, children }) {
   );
 }
 
-export default Paymentpagemodal;
+export default PaymentPageModal;

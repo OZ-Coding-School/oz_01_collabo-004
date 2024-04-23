@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
+import { useNavigate } from "react-router-dom";
 import axios from "../../api/axios";
 import "./WishList.css";
 
-function BasicExample() {
+function WishList() {
   const [cards, setCards] = useState([]);
-  const [loading, setLoading] = useState(true);
-
+  const navigate = useNavigate();
   useEffect(() => {
     fetchData();
   }, []);
@@ -19,47 +19,39 @@ function BasicExample() {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      console.log(response.data);
       setCards(response.data);
-      setLoading(false);
     } catch (error) {
       console.log("Error fetching data:", error);
-      setLoading(false);
     }
   };
 
-  const handleBookmarkToggle = (id) => {
-    setCards(
-      cards.map((card) => {
-        if (card.id === id) {
-          return { ...card, isBookmarked: !card.isBookmarked };
-        }
-        return card;
-      })
-    );
+  const handleClickPackage = (productId) => {
+    navigate(`/travel/${productId.name.replace(/ /g, "")}`, {
+      state: {
+        id: productId.id,
+      },
+    });
   };
-  console.log(cards);
   return (
     <>
       {cards.map((card) => (
         <Card
-          key={card.id}
+          key={card?.id}
           style={{
             margin: "120px",
             width: "18rem",
           }}
         >
-          <Card.Img variant="top" src={card.product.product_img} />
+          <Card.Img variant="top" src={card.product?.product_img} />
           <Card.Body>
-            <Card.Title>{card.product.name}</Card.Title>
-            <Card.Text>{card.product.description_text}</Card.Text>
+            <Card.Title>{card.product?.name}</Card.Title>
+            <Card.Text>{card.product?.description_text}</Card.Text>
 
             <Button
               variant={card.isBookmarked ? "success" : "dark"}
-              onClick={() => handleBookmarkToggle(card.id)}
-              href={`/product/${card.product.id}`}
+              onClick={() => handleClickPackage(card.product)}
             >
-              {card.isBookmarked ? "이동 중..." : "예약하러가기"}
+              여행하러갈까?
             </Button>
           </Card.Body>
         </Card>
@@ -68,4 +60,4 @@ function BasicExample() {
   );
 }
 
-export default BasicExample;
+export default WishList;
