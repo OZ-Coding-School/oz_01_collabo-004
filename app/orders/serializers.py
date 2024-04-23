@@ -15,7 +15,7 @@ class OrderListSerializer(serializers.ModelSerializer):  # type: ignore
 
     class Meta:
         model = Order
-        exclude = ("user",)
+        exclude = ("user", "user_coupon")
         read_only_fields = ["order_id", "status", "sale_price", "total_price", "return_date"]
 
 
