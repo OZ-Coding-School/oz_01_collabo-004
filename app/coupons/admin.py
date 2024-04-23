@@ -1,4 +1,7 @@
+from datetime import timedelta
+
 from django.contrib import admin
+from django.utils import timezone
 
 from .models import Coupon, UserCoupon
 
@@ -68,7 +71,7 @@ class UserCouponAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         if obj.expired_at is None:
-            obj.expired_at = obj.set_expired_at()
+            obj.expired_at = timezone.now() + timedelta(days=obj.coupon.duration)
         return super().save_model(request, obj, form, change)
 
     def change_view(self, request, object_id, form_url="", extra_context=None):
