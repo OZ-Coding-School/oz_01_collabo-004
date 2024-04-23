@@ -1,0 +1,72 @@
+body {
+  font-family: "TiltNeon-Regular-VariableFont_XROT,YROT";
+}
+
+.modal {
+  background-color: rgb(249, 252, 255);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  width: 600px;
+  height: 700px;
+  z-index: 999;
+  animation: fadeIn 400ms;
+  border-radius: 10%;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    scale: 0.3;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+.sign-tittle {
+  display: flex;
+  justify-content: center;
+}
+
+.signup-form {
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.signup-form h2 {
+  text-align: center;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+/* 
+.input-group input {
+  width: 100%;
+  padding: 0px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+} */
+
+.signup-form button {
+  height: 40px;
+  margin-top: 10px;
+  position: relative;
+  align-items: center;
+  width: 100%;
+  background-color: rgb(90, 120, 250);
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.signup-form button:hover {
+  background-color: #0056b3;
+}

@@ -1,0 +1,48 @@
+.header-content {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0));
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.5s ease;
+  align-items: baseline;
+  z-index: 999;
+}
+.header-content:hover{
+  background-color: rgba(226, 226, 226, 0.9);
+}
+.header-content.scrolled {
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
+}
+
+.logo {
+  width: 110px;
+}
+
+.header-login ul {
+  display: flex;
+  align-items: center;
+  list-style-type: none;
+}
+
+.header-login ul li {
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.header-login ul a {
+  text-decoration: none;
+  color: black;
+  padding: 0 10px;
+}
+
+.header-login ul a:nth-child(2) {
+  border-left: 1.5px solid black;
+  padding-left: 10px;
+}
+
+.header-login ul a:hover {
+  color: rgb(90, 120, 250);
+}
