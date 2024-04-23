@@ -97,6 +97,7 @@ class EmailSerializer(serializers.Serializer):
             raise serializers.ValidationError("이미 가입된 이메일입니다.")
         return data
 
+
 class ForgotPasswordSerializer(serializers.Serializer):
     email = serializers.EmailField(max_length=30)
     user_id = serializers.CharField(max_length=15)
