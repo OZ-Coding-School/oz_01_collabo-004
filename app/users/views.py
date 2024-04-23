@@ -255,47 +255,71 @@ class UserDetailView(APIView):
 
 class KakaoLoginView(APIView):
     def post(self, request: Request) -> Response:
-        code = request.data.get("code")  # 프론트에서 보내준 코드
-        # 카카오 oauth 토큰 발급 url로 code가 담긴 post 요청을 보내 응답을 받는다.
-        token_response = requests.post(
-            "https://kauth.kakao.com/oauth/token",
-            headers={"Content-Type": "application/x-www-form-urlencoded"},
-            data={
-                "grant_type": "authorization_code",
-                "code": code,
-                "redirect_uri": "http://127.0.0.1:8000/kakao/callback",
-                "client_id": os.environ.get("CLIENT_ID"),
-            },
-        )
-        # 응답으로부터 액세스 토큰을 가져온다.
-        access_token = token_response.json().get("access_token")
-
-        user_data = requests.get(
+        # code = request.data.get("code")  # 프론트에서 보내준 코드
+        # # 카카오 oauth 토큰 발급 url로 code가 담긴 post 요청을 보내 응답을 받는다.
+        # token_response = requests.post(
+        #     "https://kauth.kakao.com/oauth/token",
+        #     headers={"Content-Type": "application/x-www-form-urlencoded"},
+        #     data={
+        #         "grant_type": "authorization_code",
+        #         "code": code,
+        #         "redirect_uri": "http://dog-go.store:8000/kakao/callback",
+        #         "client_id": os.environ.get("CLIENT_ID"),
+        #     },
+        # )
+        # # 응답으로부터 액세스 토큰을 가져온다.
+        # access_token = token_response.json().get("access_token")
+        access_token = request.data.get("access_token")
+        response = requests.get(
             "https://kapi.kakao.com/v2/user/me",
             headers={
                 "Authorization": f"Bearer {access_token}",
                 "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
             },
         )
+
+        if response.status_code != status.HTTP_200_OK:
+            return Response(
+                {"msg": "카카오 서버로 부터 프로필 데이터를 받아오는데 실패하였습니다."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
         """
         1. 문제: 에러가 발생시 json데이터가 안올 수 있는데, 무조건 json()을 호출하면 시리얼라이저 에러가 발생할 가능성이 높다.
         2. 해결방법: 응답 받고 status_code를 확인한 후에 json() 호출, 500 or 400코드가 발생시 raise exception으로 탈출?
         """
-        user_data_json = user_data.json()
+        user_data_json = response.json()
         kakao_account = user_data_json["kakao_account"]
         profile = kakao_account.get("profile")
         try:
             user = User.objects.get(email=kakao_account.get("email"))
             login(request, user)
-            return Response(status=status.HTTP_200_OK)
+            refresh_token = RefreshToken.for_user(user)
+            response = Response({"access": str(refresh_token.access_token)}, status=status.HTTP_200_OK)
+            response.set_cookie(
+                "AUT_REF",
+                str(refresh_token),
+                samesite=None,
+                secure=False,
+                httponly=False,
+                expires=datetime.now() + timedelta(days=1),
+            )
+            return response
         except User.DoesNotExist:
             user = User.objects.create(
                 email=kakao_account.get("email"),
                 name=profile.get("nickname"),
-                # avatar=profile.get("profile_image_url"),
+                profile_image=profile.get("profile_image_url"),
             )
-            user.set_unusable_password()
-            login(request, user)
-            return Response(status=status.HTTP_200_OK)
+            refresh_token = RefreshToken.for_user(user)
+            response = Response({"access": str(refresh_token.access_token)}, status=status.HTTP_200_OK)
+            response.set_cookie(
+                "AUT_REF",
+                str(refresh_token),
+                samesite=None,
+                secure=False,
+                httponly=False,
+                expires=datetime.now() + timedelta(days=1),
+            )
+            return response
         except Exception:
             return Response(status=status.HTTP_400_BAD_REQUEST)
