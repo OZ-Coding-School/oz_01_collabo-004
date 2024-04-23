@@ -25,7 +25,6 @@ class OrderAdmin(admin.ModelAdmin):
             {
                 "fields": [
                     "people",
-                    "pet",
                     "pet_size_small",
                     "pet_size_medium",
                     "pet_size_big",
