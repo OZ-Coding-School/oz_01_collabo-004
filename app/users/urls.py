@@ -13,4 +13,5 @@ urlpatterns = [
     path("email-verify/send/", views.SendVerificationCodeView.as_view(), name="send_verify_code"),
     path("email-verify/forgot-password/", views.ForgotPasswordView.as_view(), name="forgot_password"),
     path("email-verify/", views.VerifyCodeView.as_view(), name="email_verify"),
+    path("auth/kakao_login/", views.KakaoLoginView.as_view(), name="kakao_login"),
 ]
