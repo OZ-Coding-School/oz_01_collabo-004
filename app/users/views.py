@@ -56,7 +56,7 @@ class SendVerificationCodeView(APIView):
     def post(self, request: Request) -> Response:
         serializer = serializers.EmailSerializer(data=request)
         if not serializer.is_valid():
-            Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         email = serializer.validated_data.get("email")
         verification_code = get_random_string(length=6)
         message = f"""
