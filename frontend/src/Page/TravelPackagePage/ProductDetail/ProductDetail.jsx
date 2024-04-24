@@ -17,6 +17,10 @@ function ProductDetail(props) {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
+  const handleBack = () => {
+    navigate(-1); //뒤로가기
+  };
+
   const [posttravelData, setPosttravelData] = useState({
     departureDate: "",
     numberOfPeople: 1,
@@ -155,7 +159,15 @@ function ProductDetail(props) {
     <div className="productdetail-page">
       <div className="productdetail-page_contnet">
         <div className="productdetail-page-title">
-          <h2>{travelData.name}</h2>
+          <h2>
+            <span
+              className="material-symbols-outlined"
+              onClick={handleBack}
+            >
+              undo
+            </span>
+            {travelData.name}
+          </h2>
           <img
             src={travelData.product_img}
             alt="상품이미지"
@@ -171,20 +183,6 @@ function ProductDetail(props) {
                   <p>{review.content}</p>
                 </li>
               ))}
-              {/* <li>Woo play like woo 밤새 파티를 열어볼까 봐요</li>
-              <li>둠바둠바둠바둠바둠바둠바웨둠바둠바둠바둠바둠바둠바웨</li>
-              <li>
-                앵두 같은 입술이 달린달린 달린 달린어여쁜 그대 얼굴이내 두 눈을
-                집어삼켜 버리곤
-              </li>
-              <li>
-                Woo swallow woo책임져 아주 혼내줘야겠어요눈 깜빡하면 사라질
-                듯이실감이 안 나는 걸That's right
-              </li>
-              <li>
-                You are my baby 이젠 내 사랑 My darling 평생 내 옆자리에서
-                웃어요 행복한 기분이 샘솟아 눈물이 다 나올 때까지
-              </li> */}
             </ul>
           </div>
         </div>
@@ -192,7 +190,15 @@ function ProductDetail(props) {
 
       <div className="productdetail-page2">
         <div className="productdetail-page_contnet_detail">
-          <p>상세설명 : {travelData.description_text}</p>
+          <h4>
+            {travelData.description_text}
+          </h4>
+          <hr />
+          <img
+            src={travelData.description_img}
+            alt="상세설명이미지"
+            className="description-img"
+          />
         </div>
         <div className="reservation-form">
           <h3>패키지 요금 : {Number(travelData.price).toLocaleString()} 원</h3>
@@ -316,17 +322,10 @@ function ProductDetail(props) {
               결제하기
             </button>
           </form>
-
+          <div className="reservation-form-info">
           <p>예약 확정 전에는 요금이 청구되지 않습니다.</p>
           <p>모든 상품은 인원수,반려동물의수의 따라 변결될수있습니다.</p>
-          <hr />
-          <p>
-            추가요금 인원 : {numberOfPeople * 15000}원 , 반려동물 :{" "}
-            {smallPetsCount * 6000 +
-              mediumPetsCount * 10000 +
-              largePetsCount * 15000}{" "}
-            원
-          </p>
+          </div>
           <hr />
           <p>총 예약 가격 : {totalPrice} 원</p>
         </div>

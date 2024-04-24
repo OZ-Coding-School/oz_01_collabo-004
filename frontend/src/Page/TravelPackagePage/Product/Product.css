@@ -1,14 +1,12 @@
-.product p:nth-child(5) {
-  display: none;
-}
 .petshop-page {
-  width: 85%;
+  width: 90%;
   margin: 0 auto;
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
 .petshop-page-title {
   text-align: center;
 }
@@ -18,6 +16,7 @@
   color: #333;
   margin-bottom: 20px;
 }
+
 .petshop-page-title p {
   font-size: 1.5rem;
   line-height: 1.5;
@@ -33,11 +32,13 @@ select {
   border: 1px solid #ddd;
   border-radius: 4px;
 }
+
 .product-list {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 }
+
 .product {
   background-color: #fff;
   border: 1px solid #ddd;
@@ -47,30 +48,30 @@ select {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease-in-out;
 }
+
 .product a {
   text-decoration: none;
 }
+
 .product-img {
-  width: 300px;
-  height: 350px;
+  width: 350px;
+  height: 380px;
   display: block;
   margin-bottom: 20px;
   border-radius: 20px;
-  transition: transform 0.3s ease-in-out;
 }
-.product:hover {
-  cursor: pointer;
-  transform: scale(1.03);
-}
+
 .product h3 {
   font-size: 1.2rem;
   color: #333;
   margin-bottom: 10px;
 }
+
 .product p {
   font-size: 1rem;
   color: #666;
 }
+
 .favorite-btn {
   display: flex;
   align-items: center;
@@ -80,4 +81,23 @@ select {
   cursor: pointer;
   font-size: 20px;
   color: #007bff;
+}
+
+.wishlist-btn {
+  text-align: right;
+}
+
+.wishlist-btn span {
+  font-size: 1.95rem;
+}
+
+.wishlist-btn button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.wishlist-btn-clicked span {
+  color: red;
+  border-radius: 20px;
 }

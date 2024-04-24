@@ -3,7 +3,6 @@
     justify-content: space-evenly;
     flex-direction: row-reverse;
     height: 100vh;
-    margin-top: 60px;
 }
 
 .paymentpage-img {
@@ -11,7 +10,8 @@
     height: 150px;
     border-radius: 20px;
 }
-.paymentpage-des div{
+
+.paymentpage-des div {
     position: sticky;
     top: 80px;
     box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
@@ -20,32 +20,37 @@
     margin-left: 40px;
     width: 420px;
 }
-.paymentpage-des h5{
+
+.paymentpage-des h5 {
     display: flex;
     justify-content: space-between;
 }
-.paymentpage-des p{
+
+.paymentpage-des p {
     text-align: center;
     padding: 0;
     margin: 40px 0 -20px;
     font-size: 0.85rem;
     color: gray;
 }
-.paymentpage-totalprice-link{
+
+.paymentpage-totalprice-link {
     font-size: 0.95rem;
     margin-left: 5px;
 }
 
-.paymentpage-check{
+.paymentpage-check {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
 }
+
 .paymentpage-check_control {
     display: flex;
     align-items: center;
 }
+
 .paymentpage-check_control button {
     font-size: 1.15rem;
     font-weight: 700;
@@ -56,43 +61,54 @@
     color: white;
     border: none;
 }
-.paymentpage-check-storage{
+
+.paymentpage-check-storage {
     text-align: right;
 }
-.paymentpage-check-storage button{
+
+.paymentpage-check-storage button {
     background-color: rgb(90, 120, 250);
     border: none;
     border-radius: 10px;
     color: white;
     padding: 10px 30px;
 }
+
 .paymentpage-check_control span {
     margin: 0 10px;
     font-weight: bold;
     font-size: 16px;
 }
+
 .paymentpage-form h2,
-.paymentpage-form h3{
+.paymentpage-form h3 {
     padding: 20px 0;
 }
-.paymentpage-form{
+.paymentpage-form {
     width: 500px;
 }
-.paymentpage-form label{
+.paymentpage-form-info p{
+    margin: 0;
+}
+.paymentpage-form label {
     font-size: 1.35rem;
     font-weight: 700;
 }
-.paymentpage-totalprice p{
+
+.paymentpage-totalprice p {
     margin: 0;
-    padding-bottom: 30px;
+    padding-bottom: 10px;
 }
-.paymentpage-totalprice p:nth-child(1){
+
+
+.paymentpage-totalprice p:nth-child(1) {
     font-size: 1.35rem;
     font-weight: 700;
     padding: 50px 0 0;
 }
+
 .paymentpage-totalprice button,
-#departureDate{
+#departureDate {
     margin-left: 290px;
     color: rgb(90, 120, 250);
     font-size: 1.25rem;
@@ -100,30 +116,42 @@
     border: none;
     background: none;
 }
-#departureDate{
+
+#departureDate {
     border: 1px solid rgb(90, 120, 250);
     padding: 5px 30px;
 }
-.paymentpage-totalprice button:hover{
+
+.paymentpage-totalprice button:hover {
     text-decoration: underline;
 }
-.paymentpage-form-totalpaybtn{
+
+.paymentpage-form-totalpaybtn:nth-child(2) {
     padding: 20px 0;
 }
-.paymentpage-form-totalpaybtn button{
+
+.paymentpage-form-totalpaybtn {
+    text-align: right;
+}
+
+.paymentpage-form-totalpaybtn button {
     font-size: 1.25rem;
-    width: 100%;
     background-color: rgb(90, 120, 250);
     color: white;
     border: none;
+    width: 150px;
     border-radius: 10px;
     padding: 10px 25px;
+    margin: 10px;
+    margin-top: 20px;
     box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
 }
-.paymentpage-form-totalpaybtn button:hover{
+
+.paymentpage-form-totalpaybtn button:hover {
     background-color: rgb(90, 120, 250, 0.8);
 }
-/*hr 테그*/
+
+/*hr �뚭렇*/
 .hr-sect {
     display: flex;
     flex-basis: 100%;
@@ -131,6 +159,7 @@
     font-size: 1.15rem;
     margin: 20px 0px;
 }
+
 .hr-sect::after {
     content: "";
     flex-grow: 1;
@@ -140,7 +169,8 @@
     line-height: 0px;
     margin-left: 10px;
 }
-.hr-sect::before{
+
+.hr-sect::before {
     content: "";
     flex-grow: 1;
     background: rgba(0, 0, 0, 0.25);
