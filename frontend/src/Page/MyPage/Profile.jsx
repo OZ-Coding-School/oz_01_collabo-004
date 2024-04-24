@@ -86,7 +86,7 @@ function Profile({ setUserId }) {
 
   const handleReceiveCoupon = async () => {
     try {
-      const response = await axios.get("http://dog-go.store/api/v1/coupon/");
+      const response = await axios.get("/api/v1/coupon/");
       setUserData(response.data);
       console.log("User Coupon:", response.data);
     } catch (error) {

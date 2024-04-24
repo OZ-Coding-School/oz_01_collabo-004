@@ -5,9 +5,8 @@ import NewReviewForm from "./NewReviewForm";
 import "./Review.css";
 
 function ReviewPage() {
-  const [showModal, setShowModal] = useState(false);
   const [reviews, setReviews] = useState([]);
-  const [review, setReview] = useState({});
+  const [editReviewId, setEditReviewId] = useState(null);
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -27,17 +26,12 @@ function ReviewPage() {
     fetchReviews();
   }, []);
 
-  const handleShowModal = (review) => {
-    setShowModal(true);
-    setReview(review);
+  const handleShowModal = (reviewId) => {
+    setEditReviewId(reviewId);
   };
 
-  const reviewForm = async (id) => {
-    const response = await axios.put(`/api/v1/review/${id}/`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
+  const handleCloseModal = () => {
+    setEditReviewId(null);
   };
 
   return (
@@ -47,13 +41,13 @@ function ReviewPage() {
         {reviews.map((review) => (
           <div key={review?.id}>
             <Review review={review} />
-            <button onClick={() => handleShowModal(review)}> EDIT </button>
+            <button onClick={() => handleShowModal(review.id)}> EDIT </button>
+            {editReviewId === review.id && (
+              <NewReviewForm review={review} setShowModal={handleCloseModal} />
+            )}
           </div>
         ))}
       </div>
-      {showModal ? (
-        <NewReviewForm review={review} setShowModal={setShowModal} />
-      ) : null}
     </div>
   );
 }
