@@ -159,13 +159,13 @@ class JWTLogoutView(APIView):
         CLIENT_ID = os.environ.get("CLIENT_ID")
         REDIRECT_URI = os.environ.get("REDIRECT_URI")
         try:
-            # 응답으로 로그인한 사용자의 쿠키에서 토큰을 제거하는 설정
             logout_response = requests.get(
-                f'https://kauth.kakao.com/oauth/logout?client_id=${CLIENT_ID}&logout_redirect_uri=${REDIRECT_URI}'
+                f"https://kauth.kakao.com/oauth/logout?client_id=${CLIENT_ID}&logout_redirect_uri=${REDIRECT_URI}"
             )
             if logout_response.status_code != status.HTTP_302_FOUND:
                 return Response({"msg": "카카오 로그아웃 요청 실패"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             response = Response(status=status.HTTP_200_OK)
+            # 응답으로 로그인한 사용자의 쿠키에서 토큰을 제거하는 설정
             response.delete_cookie("AUT_REF")
             return response
         except Exception as e:
@@ -305,10 +305,7 @@ class KakaoLoginView(APIView):
         user_data_json = response.json()
         kakao_account = user_data_json["kakao_account"]
         profile = kakao_account.get("profile")
-        requests.post(
-            "https://kapi.kakao.com/v1/user/logout",
-            headers={"Authorization": f"Bearer {access_token}"}
-        )
+        requests.post("https://kapi.kakao.com/v1/user/logout", headers={"Authorization": f"Bearer {access_token}"})
         try:
             user = User.objects.get(email=kakao_account.get("email"))
             refresh_token = RefreshToken.for_user(user)
