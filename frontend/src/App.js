@@ -12,8 +12,9 @@ import HeaderBar from "./Component/Header/Header.jsx";
 import ScrollTop from "./Component/ScrollTop.jsx";
 import Testaa from "./Component/Testaa.jsx";
 import Hotel from "./Page/HotelPage/HotelPage.jsx";
-import Auth from "./Page/Loginpage/Auth.jsx";
+
 import Login from "./Page/Loginpage/LoginPage.jsx";
+import LogoutPage from "./Page/Loginpage/LogoutPage.jsx";
 import MainPage from "./Page/MainPage/MainPage.jsx";
 import MyPage from "./Page/MyPage/MyPage.jsx";
 import Travel from "./Page/RecommendedSpotPage/RecommendedSpotPage.jsx";
@@ -55,7 +56,7 @@ function App() {
           <Route path="/service" element={<Service />} />
           <Route path="/test" element={<Testaa />} />
           <Route path="/paymentpage" element={<PaymentPage />} />
-          <Route path="/auth" element={<Auth />} />
+          <Route path="/logout" element={<LogoutPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
