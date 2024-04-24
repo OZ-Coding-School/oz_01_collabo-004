@@ -158,7 +158,7 @@ class JWTLogoutView(APIView):
         """
         if request.data.get("login_type") == "kakao":
             CLIENT_ID = os.environ.get("CLIENT_ID")
-            REDIRECT_URI = os.environ.get("REDIRECT_URI") + "/logout"
+            REDIRECT_URI = str(os.environ.get("REDIRECT_URI")) + "/logout"
             logout_response = requests.get(
                 f"https://kauth.kakao.com/oauth/logout?client_id=${CLIENT_ID}&logout_redirect_uri=${REDIRECT_URI}"
             )
