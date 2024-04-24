@@ -1,9 +1,8 @@
 import os
-import uuid
 from datetime import datetime, timedelta
 
 import requests
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate
 from django.core.cache import cache
 from django.core.mail import EmailMessage
 from django.utils import timezone
@@ -259,7 +258,7 @@ class UserDetailView(APIView):
         try:
             user = request.user
             user.is_active = False
-            user.del_req_time = datetime.now()  # type: ignore
+            user.del_req_time = timezone.now()  # type: ignore
             user.save()
 
             # 로그아웃
@@ -320,7 +319,13 @@ class KakaoLoginView(APIView):
         try:
             user = User.objects.get(email=kakao_account.get("email"))
             refresh_token = RefreshToken.for_user(user)
-            response = Response({"access": str(refresh_token.access_token)}, status=status.HTTP_200_OK)  # type: ignore
+            response = Response(
+                {
+                    "access": str(refresh_token.access_token),  # type: ignore
+                    "user_data": serializers.UserSerializer(user).data,
+                },
+                status=status.HTTP_200_OK,
+            )
             response.set_cookie(  # type: ignore
                 "AUT_REF",
                 str(refresh_token),
@@ -339,7 +344,13 @@ class KakaoLoginView(APIView):
             )
             user.set_unusable_password()
             refresh_token = RefreshToken.for_user(user)
-            response = Response({"access": str(refresh_token.access_token)}, status=status.HTTP_200_OK)  # type: ignore
+            response = Response(
+                {
+                    "access": str(refresh_token.access_token),  # type: ignore
+                    "user_data": serializers.UserSerializer(user).data,
+                },
+                status=status.HTTP_200_OK,
+            )
             response.set_cookie(  # type: ignore
                 "AUT_REF",
                 str(refresh_token),
