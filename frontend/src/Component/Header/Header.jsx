@@ -55,7 +55,6 @@ function Search() {
   };
 
   window.addEventListener("scroll", handleScroll);
-  console.log(localStorage.getItem("kakao"));
   return (
     <div className={`header-content ${scrolled ? "scrolled" : ""}`}>
       <div className="header-logo">

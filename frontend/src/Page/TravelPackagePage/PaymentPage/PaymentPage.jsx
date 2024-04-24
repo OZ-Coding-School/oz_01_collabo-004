@@ -93,6 +93,7 @@ const handlePayment = async (e) => {
   return (
 
     <div className="paymentpage-container">
+
       <div className="paymentpage-des">
         {travelData ? (
           <div>

@@ -75,7 +75,9 @@
     font-weight: bold;
     font-size: 16px;
 }
-
+.paymentpage-from-contanier{
+    width: 500px;
+}
 .paymentpage-form h2,
 .paymentpage-form h3 {
     padding: 20px 0;
@@ -93,6 +95,13 @@
 .paymentpage-input-btn{
     text-align: right;
 }
+.paymentpage-input-btn button{
+    color: rgb(90, 120, 250);
+    font-size: 1.25rem;
+    font-weight: 700;
+    background: none;
+    border: none;
+}
 .paymentpage-totalprice p {
     margin: 0;
     padding-bottom: 10px;
@@ -104,7 +113,6 @@
     padding: 20px 0 0;
 }
 
-.paymentpage-totalprice button,
 #departureDate {
     margin-left: 290px;
     color: rgb(90, 120, 250);

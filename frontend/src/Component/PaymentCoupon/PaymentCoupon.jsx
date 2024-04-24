@@ -42,18 +42,25 @@ const CouponInfoComponent = ({ token }) => {
       <p>쿠폰정보</p>
       <div className='payment-coupon-container-btn'>
       <button type='button' onClick={toggleCouponInfo}>
-      {showCoupon ? '쿠폰 숨기기' : '쿠폰 보기'}
+      {showCoupon ? '쿠폰 숨기기' : '쿠폰보기'}
       </button>
       </div>
       {showCoupon && (
         <div className='payment-coupon-info'>
-          {couponInfo.map((item, index) => (
-            <div key={index}>
-              <p>쿠폰 코드: {item.coupon_info.content}</p>
-              <p>할인율: {item.coupon_info.sale_price}</p>
-              <p>유효 기간: {item.coupon_info.duration}</p>
+          <div className='paymentCoupons'>
+            {couponInfo.map((item, index) => (
+              <div key={index}
+              className='paymentCoupon'
+              >
+              <p>{item.coupon_info.content}</p>
+              <p>할인금액 : ₩ {item.coupon_info.sale_price}원</p>
+              <p></p>
+              <p>유효 기간</p>
+              <p>{item.expired_at}</p>
+              <button type='button'>적용하기</button>
             </div>
-          ))}
+            ))}
+          </div>
         </div>
       )}
     </div>

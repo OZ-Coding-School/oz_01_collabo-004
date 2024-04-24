@@ -16,3 +16,30 @@
     box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.7);
     padding: 20px;
 }
+.paymentCoupons{
+    display: flex;
+}
+.paymentCoupons button{
+    background: none;
+    border-left: none;
+    border-right: none;
+    background-color: rgb(90, 120, 250);
+    color: white;
+    font-family: 700;
+    width: 100%;
+}
+.paymentCoupons button:hover{
+
+}
+.paymentCoupon{
+    border: 4px solid rgb(90, 120, 250);
+    border-radius: 20px;
+    padding-bottom: 20px;
+    margin: 10px;
+}
+.paymentCoupon p:nth-child(3){
+    padding: 0;
+}
+.paymentCoupon p:nth-child(3) {
+
+}

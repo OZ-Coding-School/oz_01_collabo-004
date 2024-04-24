@@ -59,13 +59,13 @@
 /*메인페이지 2번쩨*/
 .productdetail-page2 {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
     margin: 80px 60px;
     align-items: flex-start;
 }
 .reservation-form {
     position: sticky;
-    top: 74px;
+    top: 75px;
     padding: 0 40px;
     box-shadow: 0px 1px 3px 0px #333;
     border-radius: 10px;
