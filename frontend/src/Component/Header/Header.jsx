@@ -1,6 +1,6 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "../../api/axios";
 import Navbar from "../Navbar/Navbar";
 import "./Header.css";
 
@@ -26,9 +26,11 @@ function Search() {
 
   const handleUser = async () => {
     try {
-      const response = await axios.post(
+      await axios.post(
         "http://dog-go.store/api/v1/user/logout/",
-        {},
+        {
+          login_type: localStorage.getItem("kakao") ? "kakao" : "",
+        },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -36,7 +38,7 @@ function Search() {
         }
       );
       localStorage.removeItem("token");
-
+      localStorage.removeItem("kakao");
       navigate("/");
       alert("로그아웃 되었습니다.");
     } catch (error) {
@@ -53,7 +55,7 @@ function Search() {
   };
 
   window.addEventListener("scroll", handleScroll);
-
+  console.log(localStorage.getItem("kakao"));
   return (
     <div className={`header-content ${scrolled ? "scrolled" : ""}`}>
       <div className="header-logo">

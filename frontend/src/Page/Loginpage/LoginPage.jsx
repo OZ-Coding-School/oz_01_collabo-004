@@ -23,7 +23,6 @@ function LoginPage() {
   const [signUp, setSignUp] = useState(false);
   const navigate = useNavigate();
   const code = new URL(window.location.href).searchParams.get("code");
-  console.log("kakao 토큰 : ", code);
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -60,9 +59,9 @@ function LoginPage() {
     try {
       const REST_API_KEY = "dbf3d260e4ea71ea45acb4f0c53bd224";
       const REDIRECT_URI = "http://localhost:3000/login";
-      const url = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}`;
+      const url = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&prompt=login`;
       window.location.href = url;
-      const code = new URL(window.location.href).searchParams.get("code");
+
       console.log(code);
     } catch (error) {
       console.log(error);
@@ -70,16 +69,14 @@ function LoginPage() {
   };
 
   const kakaoLogin1 = async () => {
+    console.log("인가코드", code);
     try {
       const response = await axios.post(
-        "http://dog-go.store/api/v1/user/",
+        "http://dog-go.store/api/v1/user/auth/kakao_login/",
         {
           code: code,
         },
         {
-          headers: {
-            "Content-Type": "application/json",
-          },
           withCredentials: true,
         }
       );
@@ -90,6 +87,7 @@ function LoginPage() {
       }
     } catch (error) {
       console.log(error);
+      navigate("/login");
     }
   };
   useEffect(() => {

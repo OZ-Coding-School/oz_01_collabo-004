@@ -1,4 +1,3 @@
-// Order.js
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
@@ -10,6 +9,8 @@ const Order = () => {
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [completedOnly, setCompletedOnly] = useState(false);
+  const [paymentCompletedOnly, setPaymentCompletedOnly] = useState(false);
+  const [cancelledOnly, setCancelledOnly] = useState(false);
 
   useEffect(() => {
     fetchOrders();
@@ -17,7 +18,7 @@ const Order = () => {
 
   useEffect(() => {
     filterOrders();
-  }, [orders, searchTerm, completedOnly]);
+  }, [orders, searchTerm, completedOnly, paymentCompletedOnly, cancelledOnly]);
 
   const fetchOrders = async () => {
     try {
@@ -25,15 +26,28 @@ const Order = () => {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setOrders(response.data);
+      console.log(response.data);
+      filterOrders();
     } catch (error) {
       console.log("Error fetching orders:", error);
     }
   };
-
   const filterOrders = () => {
     let filtered = orders.filter((order) => {
-      if (completedOnly && order.status !== "CANCEL") {
-        return false;
+      let includeOrder = true;
+
+      if (
+        completedOnly &&
+        !paymentCompletedOnly &&
+        order.status !== "ORDERED"
+      ) {
+        includeOrder = false;
+      }
+      if (!completedOnly && paymentCompletedOnly && order.status !== "PAID") {
+        includeOrder = false;
+      }
+      if (cancelledOnly && order.status !== "CANCELLED") {
+        includeOrder = false;
       }
       if (
         searchTerm &&
@@ -41,19 +55,32 @@ const Order = () => {
           .toLowerCase()
           .includes(searchTerm.toLowerCase())
       ) {
-        return false;
+        includeOrder = false;
       }
-      return true;
+
+      return includeOrder;
     });
     setFilteredOrders(filtered);
   };
-
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
   const handleCheckboxChange = (event) => {
-    setCompletedOnly(event.target.checked);
+    const { name, checked } = event.target;
+    switch (name) {
+      case "completedOnly":
+        setCompletedOnly(checked);
+        break;
+      case "paymentCompletedOnly":
+        setPaymentCompletedOnly(checked);
+        break;
+      case "cancelledOnly":
+        setCancelledOnly(checked);
+        break;
+      default:
+        break;
+    }
   };
 
   const handleSearch = () => {
@@ -68,7 +95,6 @@ const Order = () => {
         <h2>와 함께 할 여행지</h2>
       </div>
       <div className="order-list">
-        <h1>Order List</h1>
         <div className="filter-controls">
           <div className="search-input-container">
             <input
@@ -84,15 +110,33 @@ const Order = () => {
           <label>
             <input
               type="checkbox"
+              name="completedOnly"
               checked={completedOnly}
+              onChange={handleCheckboxChange}
+            />
+            예약 중
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              name="paymentCompletedOnly"
+              checked={paymentCompletedOnly}
+              onChange={handleCheckboxChange}
+            />
+            결제 완료
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              name="cancelledOnly"
+              checked={cancelledOnly}
               onChange={handleCheckboxChange}
             />
             예약 취소
           </label>
         </div>
         <div className="order-header">
-          <div>Package Name</div>
-          <div>Order Number</div>
+          <div>Package</div>
           <div>Price</div>
           <div>Status</div>
           <div>Start Date</div>
@@ -103,7 +147,6 @@ const Order = () => {
           {filteredOrders.map((order) => (
             <li key={order.order_id}>
               <div>{order.product_info.name}</div>
-
               <div>{order.total_price}</div>
               <div>{order.status}</div>
               <div>{order.departure_date}</div>
