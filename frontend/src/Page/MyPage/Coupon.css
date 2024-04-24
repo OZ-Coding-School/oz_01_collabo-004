@@ -6,6 +6,9 @@ body h1 h2 p button input {
   margin: 100px;
   margin-left: 150px;
 }
+.coupon_box:hover{
+  background-color: white;
+}
 
 .coupon-image {
   color: white;
@@ -44,21 +47,8 @@ body h1 h2 p button input {
   display: inline-block;
 }
 
-.coupon:hover .coupon-image,
-.coupon:hover .coupon-bottom {
-  background-color: rgb(255, 255, 255);
-  color: black;
-}
 .coupon:hover .dotted {
   border: 2px dashed rgb(3, 0, 0);
-}
-.coupon:hover .coupon-image {
-  border: 6px solid black;
-  border-bottom: none;
-}
-.coupon:hover .coupon-bottom {
-  border: 6px solid black;
-  border-top: none;
 }
 
 .coupon-bottom {
@@ -68,7 +58,6 @@ body h1 h2 p button input {
   background-color: rgb(27, 27, 27);
   text-align: center;
   padding: 10px;
-
   width: 200px;
   height: 70px;
   border-radius: 20px 20px 5px 5px;
