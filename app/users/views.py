@@ -156,14 +156,15 @@ class JWTLogoutView(APIView):
         """
         토큰을 보유한 유저의 로그아웃을 진행함.
         """
-        CLIENT_ID = os.environ.get("CLIENT_ID")
-        REDIRECT_URI = os.environ.get("REDIRECT_URI")
-        try:
+        if request.data.get("login_type") == "kakao":
+            CLIENT_ID = os.environ.get("CLIENT_ID")
+            REDIRECT_URI = str(os.environ.get("REDIRECT_URI")) + "/logout"
             logout_response = requests.get(
                 f"https://kauth.kakao.com/oauth/logout?client_id=${CLIENT_ID}&logout_redirect_uri=${REDIRECT_URI}"
             )
-            if logout_response.status_code != status.HTTP_302_FOUND:
+            if logout_response.status_code not in [status.HTTP_302_FOUND, status.HTTP_200_OK]:
                 return Response({"msg": "카카오 로그아웃 요청 실패"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        try:
             response = Response(status=status.HTTP_200_OK)
             # 응답으로 로그인한 사용자의 쿠키에서 토큰을 제거하는 설정
             response.delete_cookie("AUT_REF")
