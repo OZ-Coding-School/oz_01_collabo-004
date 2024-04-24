@@ -62,10 +62,6 @@
     border: none;
 }
 
-.paymentpage-check-storage {
-    text-align: right;
-}
-
 .paymentpage-check-storage button {
     background-color: rgb(90, 120, 250);
     border: none;
@@ -94,17 +90,18 @@
     font-size: 1.35rem;
     font-weight: 700;
 }
-
+.paymentpage-input-btn{
+    text-align: right;
+}
 .paymentpage-totalprice p {
     margin: 0;
     padding-bottom: 10px;
 }
 
-
 .paymentpage-totalprice p:nth-child(1) {
     font-size: 1.35rem;
     font-weight: 700;
-    padding: 50px 0 0;
+    padding: 20px 0 0;
 }
 
 .paymentpage-totalprice button,
@@ -146,12 +143,13 @@
     margin-top: 20px;
     box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
 }
-
 .paymentpage-form-totalpaybtn button:hover {
     background-color: rgb(90, 120, 250, 0.8);
 }
-
-/*hr �뚭렇*/
+.paymentpage-check-storage {
+    text-align: right;
+}
+/*hr*/
 .hr-sect {
     display: flex;
     flex-basis: 100%;

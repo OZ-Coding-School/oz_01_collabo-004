@@ -1,38 +1,39 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import CouponInfoComponent from "../../../Component/PaymentCoupon/PaymentCoupon";
 import PaymentPageModal from "../../../Component/PaymentPageModal/PaymentPageModal";
-import Coupon from "../../MyPage/Coupon";
 import "./PaymentPage.css";
 
 function PaymentPage() {
   const location = useLocation();
-  const travelData = location.state.travelData;
-  const posttravelData = location.state.posttravelData;
-  const totalPricepay = location.state.totalPrice;
+  const travelData = location?.state?.travelData;
+  const posttravelData = location?.state?.posttravelData;
+  const totalPricepay = location?.state?.totalPrice;
 
-  const [departureDate, setDepartureDate] = useState(posttravelData.departureDate);
-  const [numberOfPeople, setNumberOfPeople] = useState(posttravelData.numberOfPeople);
-  const [smallPetsCount, setSmallPetsCount] = useState(posttravelData.smallPetsCount);
-  const [mediumPetsCount, setMediumPetsCount] = useState(posttravelData.mediumPetsCount);
-  const [largePetsCount, setLargePetsCount] = useState(posttravelData.largePetsCount);
+  const [departureDate, setDepartureDate] = useState(posttravelData?.departureDate);
+  const [numberOfPeople, setNumberOfPeople] = useState(posttravelData?.numberOfPeople);
+  const [smallPetsCount, setSmallPetsCount] = useState(posttravelData?.smallPetsCount);
+  const [mediumPetsCount, setMediumPetsCount] = useState(posttravelData?.mediumPetsCount);
+  const [largePetsCount, setLargePetsCount] = useState(posttravelData?.largePetsCount);
   const navigate = useNavigate();
 
   const handleBack = () => {
     navigate(-1); //뒤로가기
   };
 
-  const handlePayment = async (e) => {
-    e.preventDefault();
 
+const handlePayment = async (e) => {
+    e.preventDefault();
     const paymentData = {
-      departureDate,
-      numberOfPeople,
-      smallPetsCount,
-      mediumPetsCount,
-      largePetsCount,
+        departure_date:departureDate,
+        people:numberOfPeople,
+        pet_size_small:smallPetsCount,
+        pet_size_medium:mediumPetsCount,
+        pet_size_big: largePetsCount,
+        user_coupon_id: null
     };
     try {
-      const response = await fetch("/api/v1/user/login/", {
+      const response = await fetch("/api/v1/order/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -50,6 +51,7 @@ function PaymentPage() {
       console.error("서버 요청 실패:", error.message);
     }
   };
+
   const [, setShowPaymentInputs] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -89,6 +91,7 @@ function PaymentPage() {
     setShowPaymentInputs(false);
   };
   return (
+
     <div className="paymentpage-container">
       <div className="paymentpage-des">
         {travelData ? (
@@ -127,17 +130,10 @@ function PaymentPage() {
       </div>
 
       <form
-        onSubmit={handlePayment}
         className="paymentpage-form">
         <h2>
-          <span
-              className="material-symbols-outlined"
-              onClick={handleBack}
-            >
-            undo
-            </span>
-          확인 및 결제
-        </h2>
+        <span className="material-symbols-outlined" onClick={handleBack}
+        >undo</span>확인 및 결제</h2>
         
         <h3>예약정보</h3>
         <label>출발일</label>
@@ -154,13 +150,16 @@ function PaymentPage() {
             <p>
               {numberOfPeople}명 /{" "}
               {smallPetsCount + mediumPetsCount + largePetsCount} 마리
+              <div className="paymentpage-input-btn">
               <button type="button" onClick={toggleModal}>
                 수정하기
               </button>
+              </div>
             </p>
-            <Coupon />
+            <CouponInfoComponent />
           </div>
         </div>
+
         <hr />
       <div className="paymentpage-form-info">
       <h3>환불정책</h3>
@@ -169,7 +168,8 @@ function PaymentPage() {
       </div>
       <hr />
       <div className="paymentpage-form-totalpaybtn">
-        <button type="submit">예약확정</button>
+      <button type="submit"
+          onClick={handlePayment}>예약확정</button>
       </div>
       </form>
 
