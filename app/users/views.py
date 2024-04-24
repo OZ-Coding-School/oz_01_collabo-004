@@ -1,4 +1,5 @@
 import os
+import uuid
 from datetime import datetime, timedelta
 
 import requests
@@ -331,10 +332,12 @@ class KakaoLoginView(APIView):
             return response  # type: ignore
         except User.DoesNotExist:
             user = User.objects.create(
+                user_id="oauth" + get_random_string(8),
                 email=kakao_account.get("email"),
                 nickname=profile.get("nickname"),
                 profile_image=profile.get("profile_image_url"),
             )
+            user.set_unusable_password()
             refresh_token = RefreshToken.for_user(user)
             response = Response({"access": str(refresh_token.access_token)}, status=status.HTTP_200_OK)  # type: ignore
             response.set_cookie(  # type: ignore
