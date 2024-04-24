@@ -156,11 +156,17 @@ class JWTLogoutView(APIView):
         """
         토큰을 보유한 유저의 로그아웃을 진행함.
         """
+        CLIENT_ID = os.environ.get("CLIENT_ID")
+        REDIRECT_URI = os.environ.get("REDIRECT_URI")
         try:
-            # 응답으로 로그인한 사용자의 쿠키에서 토큰을 제거하는 설정
+            logout_response = requests.get(
+                f"https://kauth.kakao.com/oauth/logout?client_id=${CLIENT_ID}&logout_redirect_uri=${REDIRECT_URI}"
+            )
+            if logout_response.status_code != status.HTTP_302_FOUND:
+                return Response({"msg": "카카오 로그아웃 요청 실패"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             response = Response(status=status.HTTP_200_OK)
+            # 응답으로 로그인한 사용자의 쿠키에서 토큰을 제거하는 설정
             response.delete_cookie("AUT_REF")
-
             return response
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
@@ -254,22 +260,31 @@ class UserDetailView(APIView):
 
 
 class KakaoLoginView(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
     def post(self, request: Request) -> Response:
-        # code = request.data.get("code")  # 프론트에서 보내준 코드
-        # # 카카오 oauth 토큰 발급 url로 code가 담긴 post 요청을 보내 응답을 받는다.
-        # token_response = requests.post(
-        #     "https://kauth.kakao.com/oauth/token",
-        #     headers={"Content-Type": "application/x-www-form-urlencoded"},
-        #     data={
-        #         "grant_type": "authorization_code",
-        #         "code": code,
-        #         "redirect_uri": "http://dog-go.store:8000/kakao/callback",
-        #         "client_id": os.environ.get("CLIENT_ID"),
-        #     },
-        # )
-        # # 응답으로부터 액세스 토큰을 가져온다.
-        # access_token = token_response.json().get("access_token")
-        access_token = request.data.get("access_token")
+        code = request.data.get("code")  # 프론트에서 보내준 코드
+        # 카카오 oauth 토큰 발급 url로 code가 담긴 post 요청을 보내 응답을 받는다.
+        CLIENT_ID = os.environ.get("CLIENT_ID")
+        REDIRECT_URI = os.environ.get("REDIRECT_URI")
+        token_response = requests.post(
+            "https://kauth.kakao.com/oauth/token",
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
+            data={
+                "grant_type": "authorization_code",
+                "code": code,
+                "redirect_uri": f"{REDIRECT_URI}/kakao/callback",
+                "client_id": CLIENT_ID,
+            },
+        )
+        if token_response.status_code != status.HTTP_200_OK:
+            return Response(
+                {"msg": "카카오 서버로 부터 토큰을 받아오는데 실패하였습니다."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+        # 응답으로부터 액세스 토큰을 가져온다.
+        access_token = token_response.json().get("access_token")
         response = requests.get(
             "https://kapi.kakao.com/v2/user/me",
             headers={
@@ -290,9 +305,9 @@ class KakaoLoginView(APIView):
         user_data_json = response.json()
         kakao_account = user_data_json["kakao_account"]
         profile = kakao_account.get("profile")
+        requests.post("https://kapi.kakao.com/v1/user/logout", headers={"Authorization": f"Bearer {access_token}"})
         try:
             user = User.objects.get(email=kakao_account.get("email"))
-            login(request, user)
             refresh_token = RefreshToken.for_user(user)
             response = Response({"access": str(refresh_token.access_token)}, status=status.HTTP_200_OK)  # type: ignore
             response.set_cookie(  # type: ignore
@@ -307,7 +322,7 @@ class KakaoLoginView(APIView):
         except User.DoesNotExist:
             user = User.objects.create(
                 email=kakao_account.get("email"),
-                name=profile.get("nickname"),
+                nickname=profile.get("nickname"),
                 profile_image=profile.get("profile_image_url"),
             )
             refresh_token = RefreshToken.for_user(user)
@@ -321,5 +336,5 @@ class KakaoLoginView(APIView):
                 expires=datetime.now() + timedelta(days=1),
             )
             return response  # type: ignore
-        except Exception:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"msg": str(e)}, status=status.HTTP_400_BAD_REQUEST)
