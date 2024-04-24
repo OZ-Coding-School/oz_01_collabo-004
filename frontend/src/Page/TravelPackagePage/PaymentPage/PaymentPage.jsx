@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import OtherLogin from "../../../Component/OutherLogin/OutherLogin";
+import { useLocation, useNavigate } from "react-router-dom";
 import PaymentPageModal from "../../../Component/PaymentPageModal/PaymentPageModal";
+import Coupon from "../../MyPage/Coupon";
 import "./PaymentPage.css";
 
 function PaymentPage() {
@@ -10,19 +10,16 @@ function PaymentPage() {
   const posttravelData = location.state.posttravelData;
   const totalPricepay = location.state.totalPrice;
 
-  const [departureDate, setDepartureDate] = useState("");
-  const [numberOfPeople, setNumberOfPeople] = useState(
-    posttravelData.numberOfPeople
-  );
-  const [smallPetsCount, setSmallPetsCount] = useState(
-    posttravelData.smallPetsCount
-  );
-  const [mediumPetsCount, setMediumPetsCount] = useState(
-    posttravelData.mediumPetsCount
-  );
-  const [largePetsCount, setLargePetsCount] = useState(
-    posttravelData.largePetsCount
-  );
+  const [departureDate, setDepartureDate] = useState(posttravelData.departureDate);
+  const [numberOfPeople, setNumberOfPeople] = useState(posttravelData.numberOfPeople);
+  const [smallPetsCount, setSmallPetsCount] = useState(posttravelData.smallPetsCount);
+  const [mediumPetsCount, setMediumPetsCount] = useState(posttravelData.mediumPetsCount);
+  const [largePetsCount, setLargePetsCount] = useState(posttravelData.largePetsCount);
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate(-1); //뒤로가기
+  };
 
   const handlePayment = async (e) => {
     e.preventDefault();
@@ -34,15 +31,6 @@ function PaymentPage() {
       mediumPetsCount,
       largePetsCount,
     };
-    // const handlePayment = (e) => {
-    //     e.preventDefault();
-    //     console.log("출발일:", departureDate);
-    //     console.log("인원수:", numberOfPeople);
-    //     console.log("반려동물 소:", smallPetsCount);
-    //     console.log("반려동물 중:", mediumPetsCount);
-    //     console.log("반려동물 대:", largePetsCount);
-    // };
-
     try {
       const response = await fetch("/api/v1/user/login/", {
         method: "POST",
@@ -122,20 +110,14 @@ function PaymentPage() {
               <span>₩{(numberOfPeople * 15000).toLocaleString()}원</span>
             </h5>
             <h5>
-              추가 반려견
-              <span>
-                ₩
-                {(
+              추가 반려견<span>₩{(
                   smallPetsCount * 6000 +
                   mediumPetsCount * 10000 +
-                  largePetsCount * 15000
-                ).toLocaleString()}
-                원
-              </span>
+                  largePetsCount * 15000).toLocaleString()}원</span>
             </h5>
             <hr />
             <h5>
-              총 합계(KRW) <span>₩{totalPrice().toLocaleString()}원</span>
+              총 합계(KRW)<span>₩{totalPrice().toLocaleString()}원</span>
             </h5>
             <p>저희 "DogGO" 를 이용해주셔서 감사합니다.</p>
           </div>
@@ -144,8 +126,19 @@ function PaymentPage() {
         )}
       </div>
 
-      <form onSubmit={handlePayment} className="paymentpage-form">
-        <h2>확인 및 결제</h2>
+      <form
+        onSubmit={handlePayment}
+        className="paymentpage-form">
+        <h2>
+          <span
+              className="material-symbols-outlined"
+              onClick={handleBack}
+            >
+            undo
+            </span>
+          확인 및 결제
+        </h2>
+        
         <h3>예약정보</h3>
         <label>출발일</label>
         <input
@@ -165,20 +158,19 @@ function PaymentPage() {
                 수정하기
               </button>
             </p>
+            <Coupon />
           </div>
         </div>
         <hr />
-        <h4>
-          예약하려면 로그인 또는 회원 가입하세요.
-          <Link to="/login" className="paymentpage-totalprice-link">
-            로그인
-          </Link>
-        </h4>
-        <div className="paymentpage-form-totalpaybtn">
-          <button type="submit">결제하기</button>
-          <div class="hr-sect">또는</div>
-        </div>
-        <OtherLogin />
+      <div className="paymentpage-form-info">
+      <h3>환불정책</h3>
+      <p>패키지구매 일 주일전까지 무료로 취소하실 수 있습니다.</p>
+      <p>당일예약 취소시 50%의 수수료가 발생합니다</p>
+      </div>
+      <hr />
+      <div className="paymentpage-form-totalpaybtn">
+        <button type="submit">예약확정</button>
+      </div>
       </form>
 
       <PaymentPageModal

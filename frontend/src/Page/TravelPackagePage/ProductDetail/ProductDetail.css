@@ -1,6 +1,9 @@
 .productdetail-page {
     width: 100%;
 }
+.productdetail-page_contnet_detail h4{
+    text-align: center;
+}
 .productdetail-page_product-img {
     width: 450px;
     height: 450px;
@@ -146,4 +149,21 @@
     color: blue;
     background: none;
     text-decoration: underline;
+}
+.description-img{
+    width: 750px;
+    height: 850px;
+}
+.reservation-form-info p{
+    margin: 0;
+    font-size: 0.75rem;
+    color: gray;
+}
+/*뒤로가기버튼*/
+.material-symbols-outlined{
+    font-size: 2.15rem;
+    margin:0 20px;
+}
+.material-symbols-outlined:hover{
+    color: rgb(90, 120, 250);
 }
