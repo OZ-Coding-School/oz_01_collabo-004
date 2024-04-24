@@ -12,21 +12,19 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserSignUpSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
+    profile_image = serializers.ImageField(required=False)
 
     class Meta:
         model = User
         fields = ["user_id", "password", "name", "nickname", "email", "phone", "profile_image"]
 
     def create(self, validated_data):
-        if not validated_data["user_id"]:
-            raise ValueError("Users must have an user_id")
-
         user = User(
-            user_id=validated_data["user_id"],
-            name=validated_data["name"],
-            nickname=validated_data["nickname"],
-            email=validated_data["email"],
-            phone=validated_data["phone"],
+            user_id=validated_data.get("user_id"),
+            name=validated_data.get("name"),
+            nickname=validated_data.get("nickname"),
+            email=validated_data.get("email"),
+            phone=validated_data.get("phone"),
         )
         user.set_password(validated_data["password"])
         user.save()

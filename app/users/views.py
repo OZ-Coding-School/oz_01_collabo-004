@@ -1,4 +1,5 @@
 import os
+import uuid
 from datetime import datetime, timedelta
 
 import requests
@@ -38,7 +39,7 @@ class Signup(APIView):
         profile_image = request.FILES.get("profile_image")
         if profile_image:
             user_data["profile_image"] = profile_image
-        serializer = serializers.UserSignUpSerializer(data=request.data, partial=True)
+        serializer = serializers.UserSignUpSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -126,29 +127,37 @@ class JWTLoginView(TokenObtainPairView):
         """
         유저가 입력한 아이디와 비밀번호를 검증하고 유저정보를 인식하는데 쓰일 토큰을 발급해줌.
         """
-        user = authenticate(request=request, username=request.data["user_id"], password=request.data["password"])
-        if not user:
-            return Response({"msg": "Invalid Credentials"}, status=status.HTTP_400_BAD_REQUEST)
-        user.last_login = timezone.now()
-        user.save()
-        response = super().post(request)
-        refresh_token = response.data["refresh"]
-        # 응답의 바디에 토큰값이 안들어가도록 객체에서 삭제.
-        del response.data["refresh"]
-        # jwt 토큰을 쿠키에 저장하도록함
-        # access token 은 30분 단위로 만료되도록함
-        # refresh token 은 하루 단위로 만료되도록함
-        response.set_cookie(
-            "AUT_REF",
-            refresh_token,
-            samesite=None,
-            secure=False,
-            httponly=False,
-            expires=datetime.now() + timedelta(days=1),
-        )
+        try:
+            user = authenticate(
+                request=request, user_id=request.data.get("user_id"), password=request.data.get("password")
+            )
+            if user is not None:
+                user.last_login = timezone.now()
+                user.save()
+                response = super().post(request)
+                refresh_token = response.data["refresh"]
+                # 응답의 바디에 토큰값이 안들어가도록 객체에서 삭제.
+                del response.data["refresh"]
+                # jwt 토큰을 쿠키에 저장하도록함
+                # access token 은 30분 단위로 만료되도록함
+                # refresh token 은 하루 단위로 만료되도록함
+                response.set_cookie(
+                    "AUT_REF",
+                    refresh_token,
+                    samesite=None,
+                    secure=False,
+                    httponly=False,
+                    expires=datetime.now() + timedelta(days=1),
+                )
 
-        response.status_code = status.HTTP_200_OK
-        return response
+                response.status_code = status.HTTP_200_OK
+                return response
+            else:
+                return Response(
+                    {"msg": "유저 아이디 또는 비밀번호가 올바르지 않습니다."}, status=status.HTTP_401_UNAUTHORIZED
+                )
+        except Exception as e:
+            return Response({"msg": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class JWTLogoutView(APIView):
@@ -251,6 +260,7 @@ class UserDetailView(APIView):
             user = request.user
             user.is_active = False
             user.del_req_time = datetime.now()  # type: ignore
+            user.save()
 
             # 로그아웃
             response = Response(status=status.HTTP_200_OK)
@@ -322,10 +332,12 @@ class KakaoLoginView(APIView):
             return response  # type: ignore
         except User.DoesNotExist:
             user = User.objects.create(
+                user_id="oauth" + get_random_string(8),
                 email=kakao_account.get("email"),
                 nickname=profile.get("nickname"),
                 profile_image=profile.get("profile_image_url"),
             )
+            user.set_unusable_password()
             refresh_token = RefreshToken.for_user(user)
             response = Response({"access": str(refresh_token.access_token)}, status=status.HTTP_200_OK)  # type: ignore
             response.set_cookie(  # type: ignore
