@@ -16,7 +16,6 @@ function MyPage() {
 
   return (
     <Tab.Container id="left-tabs-example" defaultActiveKey="first">
-      <div></div>
       <Row>
         <Col sm={3}>
           <Nav variant="pills" className="flex-column">
@@ -35,7 +34,7 @@ function MyPage() {
             <Nav.Item>
               <Nav.Link eventKey="fifth">REVIEW</Nav.Link>
             </Nav.Item>
-            {userId === "deokgeneral12" ? (
+            {userId === "deokgeneral12, startez" ? (
               <Nav.Item>
                 <Nav.Link eventKey="sixth">테스트</Nav.Link>
               </Nav.Item>

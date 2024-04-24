@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 const RecommendationItem = ({ spot }) => {
   return (
@@ -13,12 +12,9 @@ const RecommendationItem = ({ spot }) => {
       <div style={{ margin: "10px" }}>
         <h3>{spot.name}</h3>
         <p>{spot.description}</p>
-        <Link
-          target="_blank"
-          style={{ textDecoration: "none" }}
-          href={spot.link}
-        />
-        🏠Click Me!
+        <a target="_blank" style={{ textDecoration: "none" }} href={spot.link}>
+          🏠Click Me!
+        </a>
         <hr />
         <img
           style={{

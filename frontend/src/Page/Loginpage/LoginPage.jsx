@@ -58,7 +58,7 @@ function LoginPage() {
   const kakaoLogin = async () => {
     try {
       const REST_API_KEY = "dbf3d260e4ea71ea45acb4f0c53bd224";
-      const REDIRECT_URI = "http://localhost:3000/login";
+      const REDIRECT_URI = "https://dog-go.store/login";
       const url = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&prompt=login`;
       window.location.href = url;
 
@@ -72,7 +72,7 @@ function LoginPage() {
     console.log("인가코드", code);
     try {
       const response = await axios.post(
-        "http://dog-go.store/api/v1/user/auth/kakao_login/",
+        "https://dog-go.store/api/v1/user/auth/kakao_login/",
         {
           code: code,
         },
@@ -83,7 +83,7 @@ function LoginPage() {
       console.log(response);
       if (response.status === 200) {
         localStorage.setItem("token", response.data.access);
-        navigate("/");
+        window.location.href = "/";
       }
     } catch (error) {
       console.log(error);
