@@ -274,14 +274,14 @@ class KakaoLoginView(APIView):
             data={
                 "grant_type": "authorization_code",
                 "code": code,
-                "redirect_uri": f"{REDIRECT_URI}/kakao/callback",
+                "redirect_uri": f"{REDIRECT_URI}/login",
                 "client_id": CLIENT_ID,
             },
         )
         if token_response.status_code != status.HTTP_200_OK:
             return Response(
                 {"msg": "카카오 서버로 부터 토큰을 받아오는데 실패하였습니다."},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                status=token_response.status_code,
             )
         # 응답으로부터 액세스 토큰을 가져온다.
         access_token = token_response.json().get("access_token")
@@ -296,7 +296,7 @@ class KakaoLoginView(APIView):
         if response.status_code != status.HTTP_200_OK:
             return Response(
                 {"msg": "카카오 서버로 부터 프로필 데이터를 받아오는데 실패하였습니다."},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                status=token_response.status_code,
             )
         """
         1. 문제: 에러가 발생시 json데이터가 안올 수 있는데, 무조건 json()을 호출하면 시리얼라이저 에러가 발생할 가능성이 높다.
