@@ -3,7 +3,6 @@ body {
   font-family: "BinggraeII-Bold.ttf";
 }
 
-/* 네비게이션 스타일 */
 .nav-pills .nav-link.active {
   background-color: rgb(90, 120, 250) !important;
 }
@@ -20,9 +19,9 @@ body {
   --bs-nav-link-color: rgb(90, 120, 250) !important;
 }
 
-/* 페이지 컨테이너 스타일 */
 .my-page-container {
   display: flex;
+
   flex-direction: column;
   align-items: center;
 }
@@ -31,7 +30,6 @@ body {
   background-color: rgb(90, 120, 250);
 }
 
-/* 프로필 섹션 스타일 */
 .profile-section,
 .edit-section,
 .wishlist-section,
@@ -49,7 +47,6 @@ body {
   padding: 20px;
 }
 
-/* 프로필 정보 스타일 */
 .profile-info {
   margin-bottom: 20px;
 }
@@ -80,7 +77,6 @@ body {
   transform: translateY(1px);
 }
 
-/* 위시리스트 스타일 */
 .wishlist-section ul {
   list-style-type: none;
   padding: 0;
@@ -94,7 +90,6 @@ body {
   margin-right: 10px;
 }
 
-/* 쿠폰 섹션 스타일 */
 .coupon-section ul {
   list-style-type: none;
   padding: 0;
@@ -107,8 +102,47 @@ body {
   margin-bottom: 0px;
 }
 
-/* 모달 백드롭 스타일 */
 .modal-backdrop.show {
   opacity: 0;
   z-index: -1;
+}
+
+@media (max-width: 768px) {
+  .nav {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .my-page-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .profile-section,
+  .edit-section,
+  .wishlist-section,
+  .coupon-section {
+    width: 90%;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 1400px) {
+  .nav {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .my-page-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .profile-section,
+  .edit-section,
+  .wishlist-section,
+  .coupon-section {
+    width: 90%;
+    margin-bottom: 20px;
+  }
 }
