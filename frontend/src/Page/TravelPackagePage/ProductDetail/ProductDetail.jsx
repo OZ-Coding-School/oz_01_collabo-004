@@ -6,7 +6,7 @@ import "./ProductDetail.css";
 function ProductDetail(props) {
   const location = useLocation();
 
-  const [departureDate, setDepartureDate] = useState();
+  const [departureDate, setDepartureDate] = useState("");
   const [numberOfPeople, setNumberOfPeople] = useState(1);
   const [smallPetsCount, setSmallPetsCount] = useState(0);
   const [mediumPetsCount, setMediumPetsCount] = useState(0);
@@ -305,6 +305,7 @@ function ProductDetail(props) {
                   </button>
                 </span>
               </p>
+
               {showPetSizeInfo && (
                 <div>
                   <p>소 : (6000원) 5kg 미만 </p>
@@ -319,7 +320,7 @@ function ProductDetail(props) {
               className="reservation-btn"
               onClick={paybutton}
             >
-              결제하기
+              예약하기
             </button>
           </form>
           <div className="reservation-form-info">

@@ -162,7 +162,7 @@
 /*뒤로가기버튼*/
 .material-symbols-outlined{
     font-size: 2.15rem;
-    margin:0 20px;
+    margin-right: 30px;
 }
 .material-symbols-outlined:hover{
     color: rgb(90, 120, 250);
