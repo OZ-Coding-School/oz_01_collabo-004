@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import CouponInfoComponent from "../../../Component/PaymentCoupon/PaymentCoupon";
 import PaymentPageModal from "../../../Component/PaymentPageModal/PaymentPageModal";
+import axios from "../../../api/axios";
 import "./PaymentPage.css";
 
 function PaymentPage() {
@@ -30,11 +31,10 @@ const handlePayment = async (e) => {
         pet_size_small:smallPetsCount,
         pet_size_medium:mediumPetsCount,
         pet_size_big: largePetsCount,
-        user_coupon_id: null
+        user_coupon_id: 1
     };
     try {
-      const response = await fetch("/api/v1/order/", {
-        method: "POST",
+      const response = await axios.post("/api/v1/order/", {
         headers: {
           "Content-Type": "application/json",
         },

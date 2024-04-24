@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from '../../api/axios';
 import './PaymentCoupon.css';
+import PaymentCoupon from './PaymentCoupons';
 
 const CouponInfoComponent = ({ token }) => {
   const [couponInfo, setCouponInfo] = useState([]);
@@ -52,12 +53,7 @@ const CouponInfoComponent = ({ token }) => {
               <div key={index}
               className='paymentCoupon'
               >
-              <p>{item.coupon_info.content}</p>
-              <p>할인금액 : ₩ {item.coupon_info.sale_price}원</p>
-              <p></p>
-              <p>유효 기간</p>
-              <p>{item.expired_at}</p>
-              <button type='button'>적용하기</button>
+                <PaymentCoupon item={item} />
             </div>
             ))}
           </div>

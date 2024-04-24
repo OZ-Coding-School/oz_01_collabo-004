@@ -15,6 +15,7 @@
     text-align: center;
     box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.7);
     padding: 20px;
+    overflow: scroll;
 }
 .paymentCoupons{
     display: flex;
@@ -32,10 +33,7 @@
 
 }
 .paymentCoupon{
-    border: 4px solid rgb(90, 120, 250);
-    border-radius: 20px;
-    padding-bottom: 20px;
-    margin: 10px;
+    position: relative;
 }
 .paymentCoupon p:nth-child(3){
     padding: 0;
