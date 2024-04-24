@@ -200,6 +200,8 @@ function ProductDetail(props) {
             className="description-img"
           />
         </div>
+
+       
         <div className="reservation-form">
           <h3>패키지 요금 : {Number(travelData.price).toLocaleString()} 원</h3>
           <form onSubmit={handleSubmit}>
@@ -330,6 +332,7 @@ function ProductDetail(props) {
           <hr />
           <p>총 예약 가격 : {totalPrice} 원</p>
         </div>
+
       </div>
     </div>
   );
