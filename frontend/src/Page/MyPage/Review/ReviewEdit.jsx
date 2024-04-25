@@ -1,9 +1,9 @@
-import axios from "axios"; // axios import 추가
 import React, { useRef, useState } from "react";
+import axios from "../../../api/axios";
 import useOnclickOutside from "../../../hooks/modalClose";
-import "./NewReviewForm.css";
+import "./ReviewEdit.css";
 
-function NewReviewForm({ review, setShowModal }) {
+function ReviewEdit({ review, setShowModal }) {
   const [title, setTitle] = useState(review.title);
   const [content, setContent] = useState(review.content);
   const ref = useRef(null);
@@ -35,7 +35,6 @@ function NewReviewForm({ review, setShowModal }) {
   });
   return (
     <div ref={ref} className="review-form-container">
-      <h2 className="form-title">{title}</h2>
       <form onSubmit={handleSubmit} className="review-form">
         <div className="form-group">
           <label>제목:</label>
@@ -52,10 +51,10 @@ function NewReviewForm({ review, setShowModal }) {
             onChange={(e) => setContent(e.target.value)}
           />
         </div>
-        <button type="submit">작성하기</button>
+        <button type="submit">EDIT</button>
       </form>
     </div>
   );
 }
 
-export default NewReviewForm;
+export default ReviewEdit;
