@@ -2,6 +2,8 @@ import pdb
 from typing import Union
 
 from django.db.models import Q
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny
@@ -135,6 +137,14 @@ class ProductSearchView(APIView):
     authentication_classes = []
     permission_classes = [AllowAny]
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(name="keyword", description="이름 or 상품 설명", required=False, type=OpenApiTypes.STR),
+            OpenApiParameter(name="ct", description="카테고리 아이디", required=False, type=OpenApiTypes.STR),
+            OpenApiParameter(name="min_price", description="최소 금액", required=False, type=OpenApiTypes.INT),
+            OpenApiParameter(name="max_price", description="최대 금액", required=False, type=OpenApiTypes.INT),
+        ],
+    )
     def get(self, request: Request) -> Response:
         keyword = request.query_params.get("keyword", "")
         category_id = request.query_params.get("ct", "")
