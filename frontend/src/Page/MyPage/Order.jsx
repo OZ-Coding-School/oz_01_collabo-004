@@ -32,6 +32,7 @@ const Order = () => {
       console.log("Error fetching orders:", error);
     }
   };
+
   const filterOrders = () => {
     let filtered = orders.filter((order) => {
       let includeOrder = true;
