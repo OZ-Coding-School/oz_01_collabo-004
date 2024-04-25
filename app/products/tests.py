@@ -95,7 +95,7 @@ class ProductSearchTest(APITestCase):
 
     def test_키워드_상품_검색(self) -> None:
         url = reverse("product-search")
-        keyword = ["two"]
+        keyword = ["상품1"]
         query_test = {
             "keyword": keyword,
             "min_price": "30",
