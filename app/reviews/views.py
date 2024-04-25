@@ -21,10 +21,15 @@ from .serializers import (
 
 
 class MyReviewListView(APIView):
-    @extend_schema(responses=MyReviewListSerializer, description="Read products reviews for login user")
+    @extend_schema(
+        responses=MyReviewListSerializer(many=True),
+        description="로그인한 유저가 자신의 리뷰 작성 내역을 조회할 수 있음"
+    )
     def get(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         try:
             queryset = ProductReview.objects.filter(user_id=request.user.id).order_by("id")  # type: ignore
+            if not queryset:
+                return Response({"msg": "상품에 해당하는 리뷰가 없습니다."}, status=status.HTTP_404_NOT_FOUND)
             paginator = ProductReviewPagination()
             pagenated_queryset = paginator.paginate_queryset(queryset, request)
             serializer = MyReviewListSerializer(pagenated_queryset, many=True)
@@ -35,7 +40,7 @@ class MyReviewListView(APIView):
     @extend_schema(
         request=CreateReviewSerializer,
         responses=CreateReviewSerializer,
-        description="Get products reviews, After Post product-review",
+        description="리뷰를 작성하면 데이터 검증 후에 데이터베이스에 저장",
     )
     def post(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         data = request.data
@@ -50,13 +55,20 @@ class MyReviewListView(APIView):
 
 
 class ProductReviewDetailView(APIView):
-    serializer_class = ProductReviewDetailSerializer
-
+    @extend_schema(
+        responses=ProductReviewDetailSerializer,
+        description="리뷰 상세 조회"
+    )
     def get(self, request: Request, review_id: int, *args: Any, **kwargs: Any) -> Response:
         review = get_object_or_404(ProductReview, id=review_id)
         serializer = ProductReviewDetailSerializer(review)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @extend_schema(
+        request=ProductReviewDetailSerializer,
+        responses=ProductReviewDetailSerializer,
+        description="리뷰 제목, 내용 및 이미지 수정"
+    )
     def put(self, request: Request, review_id: int, *args: Any) -> Response:
         review = get_object_or_404(ProductReview, id=review_id, user=request.user.id)
         update_data = request.data
@@ -76,6 +88,9 @@ class ProductReviewDetailView(APIView):
         serializer.save()  # 인스턴스가 저장되면서 s3에 새로운 이미지가 업로드됨.
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @extend_schema(
+        description="리뷰를 삭제해서 더 이상 조회가 불가하게 만듦. status를 변경하여 리뷰데이터는 데이터베이스에 유지"
+    )
     def delete(self, request: Request, review_id: int, *args: Any) -> Response:
         review = get_object_or_404(ProductReview, id=review_id)
         if review.user == request.user:  # 리뷰를 작성한 유저가 보낸 삭제요청인지를 확인함
