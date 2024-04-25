@@ -1,3 +1,4 @@
+import pdb
 from typing import Union
 
 from django.db.models import Q
@@ -140,13 +141,22 @@ class ProductSearchView(APIView):
         min_price = request.query_params.get("min_price", "")
         max_price = request.query_params.get("max_price", "")
 
-        query = Product.objects.filter(price__gte=min_price, price__lte=max_price)
+        query = Product.objects.all()
+
+        if min_price:
+            query = query.filter(price__gte=min_price)
+
+        if max_price:
+            query = query.filter(price__lte=max_price)
 
         if keyword:
             query = query.filter(Q(name__icontains=keyword) | Q(description_text__icontains=keyword))
 
         if category_id:
             query = query.filter(categoryproductconnector__category_id=category_id)
+
+        if not query:
+            return Response({"msg": "조건에 해당하는 상품을 찾을수 없습니다."}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = ProductSerializer(query, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
