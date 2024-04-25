@@ -23,7 +23,7 @@ from .serializers import (
 class OrderListView(APIView):
     @extend_schema(responses=OrderListSerializer(many=True), description="유저의 모든 주문 내역을 조회할 수 있음.")
     def get(self, request: Request) -> Response:
-        orders = Order.objects.filter(user_id=request.user.id).exclude(status="CANCEL").order_by("created_at")  # type: ignore
+        orders = Order.objects.filter(user_id=request.user.id).order_by("-created_at")  # type: ignore
         if orders:
             serializer = OrderListSerializer(orders, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
