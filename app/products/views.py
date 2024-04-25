@@ -44,19 +44,18 @@ class ProductDetailView(APIView):
     authentication_classes = []
     permission_classes = [AllowAny]
 
-    def get_object(self, product_id: int) -> Union[Product, Response]:
+    def get_object(self, product_id: int) -> Union[Product, None]:
         try:
             return Product.objects.get(id=product_id)
         except Product.DoesNotExist:
-            return Response({"error": "상품을 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND)
+            return None
 
     def get(self, request: Request, product_id: int) -> Response:
         product = self.get_object(product_id)
         if product is not None:
             serializer = ProductSerializer(product)
-            return Response(serializer.data)
-        else:
-            return Response({"error": "상품을 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({"error": "상품을 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request: Request, product_id: int) -> Response:
         product = self.get_object(product_id)
@@ -73,8 +72,7 @@ class ProductDetailView(APIView):
     def delete(self, request: Request, product_id: int) -> Response:
         product = self.get_object(product_id)
         if product is not None:
-            # product.status = False  # type: ignore
-            product.delete()  # type: ignore
+            product.delete()
             return Response(
                 {"message": "상품이 성공적으로 삭제되었습니다."},
                 status=status.HTTP_204_NO_CONTENT,
