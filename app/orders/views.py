@@ -1,8 +1,8 @@
 import re
-from datetime import datetime, timedelta
 
 from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -21,18 +21,22 @@ from .serializers import (
 
 
 class OrderListView(APIView):
-    serializer_class = OrderListSerializer
-
+    @extend_schema(
+        responses=OrderListSerializer(many=True),
+        description="유저의 모든 주문 내역을 조회할 수 있음."
+    )
     def get(self, request: Request) -> Response:
-        """
-        취소된 주문을 제외한 모든 주문을 조회할 수 있음.
-        """
         orders = Order.objects.filter(user_id=request.user.id).exclude(status="CANCEL").order_by("created_at")  # type: ignore
         if orders:
             serializer = OrderListSerializer(orders, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_404_NOT_FOUND)
 
+    @extend_schema(
+        request=OrderListSerializer,
+        responses=OrderListSerializer,
+        description="요청에 따른 주문을 생성하고 데이터베이스에 저장함."
+    )
     def post(self, request: Request) -> Response:
         """
         유저가 주문을 요청하면 각각의 데이터의 유효성을 검증하고 주문을 생성해주는 post 메서드
@@ -82,8 +86,10 @@ def is_uuid4(value: str) -> bool:
 
 
 class OrderDetailView(APIView):
-    serializer_class = OrderDetailSerializer
-
+    @extend_schema(
+        responses=OrderDetailSerializer,
+        description="유저의 주문 내역 상세 조회"
+    )
     def get(self, request: Request, order_id: str) -> Response:
         """
         로그인 한 유저가 자신의 주문내역 중 하나를 상세히 볼 수 있도록 데이터를 내려주는 get 메서드
@@ -94,10 +100,12 @@ class OrderDetailView(APIView):
         serializer = OrderDetailSerializer(order)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @extend_schema(
+        request=OrderDetailSerializer,
+        responses=OrderDetailSerializer,
+        description="로그인한 유저가 자신의 주문내역 중에서 아직 결제나 취소가 되지않은 주문에 한해서 옵션, 쿠폰 등을 수정할 수 있음"
+    )
     def put(self, request: Request, order_id: str) -> Response:
-        """
-        로그인한 유저가 자신의 주문내역 중에서 아직 결제나 취소가 되지않은 주문에 한해서 옵션, 쿠폰 등을 수정할 수 있는 메서드
-        """
         order = get_object_or_404(Order, order_id=order_id, user_id=request.user.id)
 
         # 취소된 주문은 수정이 불가함을 알림
@@ -130,10 +138,10 @@ class OrderDetailView(APIView):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @extend_schema(
+        description="주문 내역을 삭제함. status의 변경으로 주문 정보는 데이터베이스에 유지"
+    )
     def delete(self, request: Request, order_id: str) -> Response:
-        """
-        주문 취소 요청시 주문의 status를 cancel로 변환해주는 메서드,,
-        """
         order = get_object_or_404(Order, order_id=order_id, user_id=request.user.id)
         if order.status == "ORDERED" or order.status == "PAID":
             order.status = "CANCEL"  # 주문 취소상태 설정
