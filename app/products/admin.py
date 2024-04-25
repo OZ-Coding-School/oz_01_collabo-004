@@ -15,7 +15,7 @@ class ProductAdmin(admin.ModelAdmin):
     )
 
     # 표에서 보이는 정보
-    list_display = ("name", "description_text", "price", "discount", "status", "view_count")
+    list_display = ("name", "description_text", "price", "discount", "travel_period", "view_count", "status")
     search_fields = ("price", "name", "description_text")
     ordering = ("id",)
 
@@ -42,16 +42,20 @@ class ProductAdmin(admin.ModelAdmin):
         """
         ModelAdmin.change_view를 오버라이드해서 업데이트 시 기존의 이미지는 삭제하고 새로운 이미지를 S3에 저장
         """
-        update_product = self.get_object(request, object_id)
-        if update_product:
-            if update_product.product_img:
+        prev_product = self.get_object(request, object_id)
+
+        response = super().change_view(request, object_id, form_url=form_url, extra_context=extra_context)
+
+        updated_product = self.get_object(request, object_id)
+        if updated_product.product_img != prev_product.product_img:
+            if updated_product.product_img:
                 image_uploader = S3ImgUploader()
-                image_uploader.delete_img_file(str(update_product.product_img))
-            if update_product.description_img:
+                image_uploader.delete_img_file(str(prev_product.product_img))
+        if updated_product.description_img != prev_product.description_img:
+            if updated_product.description_img:
                 image_uploader = S3ImgUploader()
-                image_uploader.delete_img_file(str(update_product.product_img))
-            return super().change_view(request, object_id, form_url=form_url, extra_context=extra_context)
-        return None
+                image_uploader.delete_img_file(str(prev_product.product_img))
+        return response
 
     def delete_selected_model(self, request, queryset):
         for obj in queryset:

@@ -59,6 +59,35 @@
   color: black;
   transform: scale(1.1);
 }
+.Main3-Click-deg{
+  position: relative;
+  top: -20%;
+  left: 18%;
+  width: 0;
+  height: 0;
+  z-index: 999;
+  transform: rotate(15deg);
+}
+.Main3-Click{
+    font-size: 10rem;
+    animation: sparkle 1s ease infinite;
+}
+@keyframes sparkle {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.7;
+    transform: scale(1.15);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 /* .WC2{
   display: flex;
   text-align: center;

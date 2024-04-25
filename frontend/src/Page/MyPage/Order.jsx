@@ -62,6 +62,8 @@ const Order = () => {
       return includeOrder;
     });
     setFilteredOrders(filtered);
+    console.log('필터',filteredOrders);
+    console.log('오더',orders);
   };
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);

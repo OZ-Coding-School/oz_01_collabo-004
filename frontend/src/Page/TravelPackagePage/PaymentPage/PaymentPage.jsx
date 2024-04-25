@@ -143,7 +143,7 @@ const handlePayment = async (e) => {
       <form
         className="paymentpage-form">
         <h2>
-        <span className="material-symbols-outlined" onClick={handleBack}
+        <span className="material-symbols-outlined paymentpage-goback-btn" onClick={handleBack}
         >undo</span>확인 및 결제</h2>
         <h3>예약정보</h3>
         <label>출발일</label>
