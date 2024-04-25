@@ -1,6 +1,3 @@
-import pdb
-from typing import Union
-
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
@@ -8,7 +5,6 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from categories import serializers
 from wishlist.serializers import CreateWishlistSerializer, WishlistSerializer
 
 from .models import Wishlist
@@ -43,9 +39,7 @@ class WishlistView(APIView):
                 user_id=request.user.id, product_id=serializer.validated_data["product"]
             ).first()
             if check_wishlist:
-                if check_wishlist.status:
-                    return Response({"msg": "already added"}, status=status.HTTP_200_OK)
-                check_wishlist.status = True
+                check_wishlist.status = not check_wishlist.status
                 check_wishlist.save()
                 serializer = CreateWishlistSerializer(check_wishlist)
                 return Response(serializer.data, status=status.HTTP_200_OK)
@@ -57,17 +51,18 @@ class WishlistView(APIView):
 
 class WishlistDetailView(APIView):
     # 위시리스트의 상품 상세내역
-    @extend_schema(responses=WishlistSerializer)
+    @extend_schema(responses=WishlistSerializer, description="위시리스트의 상세 조회(마이페이지용)")
     def get(self, request: Request, wishlist_id: int) -> Response:
         wishlist_product = get_object_or_404(Wishlist, id=wishlist_id, user_id=request.user.id, status=True)
         serializer = WishlistSerializer(wishlist_product)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     # 위시리스트 삭제하기
-    def delete(self, request: Request, wishlist_id: int) -> Response:
+    @extend_schema(description="위시리스트의 삭제(마이페이지용)")
+    def put(self, request: Request, wishlist_id: int) -> Response:
         wishlist = get_object_or_404(Wishlist, id=wishlist_id, user_id=request.user.id)
         if not wishlist.status:
-            return Response({"msg": "already deleted"}, status=status.HTTP_200_OK)
+            return Response({"msg": "already deleted"}, status=status.HTTP_400_BAD_REQUEST)
         wishlist.status = False
         wishlist.save()
         return Response(status=status.HTTP_200_OK)

@@ -1,6 +1,6 @@
 import React from "react";
 import RestaurantPage from "./RestaurantPage";
-import "./index.css";
+import "./RestaurantPage.css";
 
 const RestaurantItem = () => {
   const restaurantSpots = [

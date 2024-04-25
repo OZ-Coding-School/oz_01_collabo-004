@@ -1,0 +1,56 @@
+.paymentpage-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    }
+
+.paymentpage-modal{
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    width: 400px;
+    max-width: 80%;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+}
+.paymentpage-modal-overlay p{
+    color: rgb(166, 166, 166);
+    font-size: 0.75rem;
+    margin: 0;
+    padding: 0 0 40px;
+    text-align: left;
+}
+.paymentpage-modalclose-btn{
+    text-align: left;
+    padding: 0 0 20px;
+}
+.paymentpage-modalclose-btn button{
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.85rem;
+}
+.paymentpage-modalclose-btn2{
+    border: none;
+    background: none;
+    font-size: 1.15rem;
+    width: 50px;
+    position: absolute;
+    top: 520px;
+}
+.paymentpage-modalclose-btn2:hover{
+    text-decoration: underline;
+}
+
+.paymentpage-modalclose-btn button:hover{
+    color: rgb(90, 120, 250);
+}

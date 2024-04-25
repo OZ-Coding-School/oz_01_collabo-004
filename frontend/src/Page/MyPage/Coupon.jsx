@@ -1,23 +1,37 @@
-import React from "react";
-import "./Coupon.css";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 
-function Coupon({ coupon, onReceiveCoupon }) {
-  const handleReceiveCoupon = () => {
-    onReceiveCoupon(coupon);
+function Coupon() {
+  const [coupons, setCoupons] = useState([]);
+
+  useEffect(() => {
+    fetchCoupons();
+  }, []);
+
+  const fetchCoupons = async () => {
+    try {
+      const response = await axios.get("/api/v1/coupon/mycoupon/available", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setCoupons(response.data);
+    } catch (error) {
+      console.error("Error fetching coupons:", error);
+    }
   };
 
   return (
-    <div className="coupon_box">
-      <div onClick={handleReceiveCoupon} className="coupon">
-        <div className="coupon-image box">
-          <h2>-₩50,000</h2>
-          <h4>웰컴 쿠폰 받기</h4>
-        </div>
-        <div className="coupon-bottom box">
-          <div className="dotted"></div>
-          <p>할인 코드: DISCOUNT50</p>
-          <p>유효 기간: 2024년 12월 31일까지</p>
-        </div>
+    <div>
+      <h1>Coupon Page</h1>
+      <div>
+        {coupons.map((coupon_info) => (
+          <div key={coupon_info.type}>
+            <h2>{coupon_info.content}</h2>
+            <p>{coupon_info.sale_price}</p>
+            <p>Expires on: {coupon_info.duration}</p>
+          </div>
+        ))}
       </div>
     </div>
   );

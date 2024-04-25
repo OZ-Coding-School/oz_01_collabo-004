@@ -1,0 +1,29 @@
+.paymentpage-other-login{
+    text-align: center;
+}
+.paymentpage-other-login button{
+    margin-right: 20px;
+    width: 100px;
+    padding: 10px;
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+    border:none;
+    border-radius: 20px;
+    background:none;
+    transition: transform 0.3s ease-in-out;
+}
+.paymentpage-other-login button:hover{
+    transform: scale(1.1);
+    background-color: rgba(0, 0, 0, 0.1);
+}
+.paymentpage-other-login img{
+    width: 30px;
+}
+
+.paymentpage-other-login p{
+    margin: 10px 0 0;
+    padding: 0;
+    font-size: 0.85rem;
+}
+.facebook-login p{
+    font-size: 0.78rem;
+}

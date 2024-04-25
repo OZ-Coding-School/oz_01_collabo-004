@@ -3,7 +3,9 @@ body {
 }
 
 .review {
-  background-color: #f9f9f9;
+  position: relative;
+  background-color: #ffffff;
+  border: 3px solid rgb(70, 112, 250);
   border-radius: 10px;
   padding: 20px;
   margin-bottom: 20px;
@@ -14,20 +16,9 @@ body {
   margin-bottom: 10px;
 }
 
-.review-author {
-  font-style: italic;
-  margin-bottom: 5px;
-}
-
-.review-rating {
-  margin-bottom: 5px;
-}
-
 .review-content {
   line-height: 1.5;
 }
-
-/* ReviewBoard.css */
 
 .review-board {
   padding: 20px;
@@ -37,8 +28,6 @@ body {
   display: grid;
   gap: 20px;
 }
-
-/* ReviewPage.css */
 
 .review-page {
   max-width: 800px;

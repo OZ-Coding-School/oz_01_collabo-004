@@ -12,7 +12,7 @@ const Testaa = () => {
   const [discount, setDiscount] = useState(0);
   const [viewCount, setViewCount] = useState(0);
   const [status, setStatus] = useState(true);
-  const productId = 1;
+  const productId = 6;
   const handleReview = async () => {
     const response = await axios.post(
       "/api/v1/review/",

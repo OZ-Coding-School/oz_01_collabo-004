@@ -1,0 +1,148 @@
+body {
+  margin: 0;
+  font-family: "BinggraeII-Bold.ttf";
+}
+
+.nav-pills .nav-link.active {
+  background-color: rgb(90, 120, 250) !important;
+}
+
+.nav-link {
+  /* color: black; */
+  font-size: 2rem;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+}
+
+.nav {
+  width: 180px;
+  margin-left: 200px;
+  --bs-nav-link-color: rgb(90, 120, 250) !important;
+}
+
+.my-page-container {
+  display: flex;
+
+  flex-direction: column;
+  align-items: center;
+}
+
+#left-tabs-example {
+  background-color: rgb(90, 120, 250);
+}
+
+.profile-section,
+.edit-section,
+.wishlist-section,
+.coupon-section {
+  width: 80%;
+  margin-bottom: 20px;
+}
+
+.profile-section,
+.edit-section,
+.wishlist-section,
+.coupon-section {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+}
+
+.profile-info {
+  margin-bottom: 20px;
+}
+
+.profile-info p {
+  font-size: 20px;
+  margin: 10px 0;
+}
+
+.profile-info button {
+  display: inline-block;
+  padding: 1px 60px;
+  font-size: 20px;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: rgb(90, 120, 250);
+  color: #fff;
+}
+
+.profile-info button:hover {
+  background-color: #0056b3;
+}
+
+.profile-info button:active {
+  transform: translateY(1px);
+}
+
+.wishlist-section ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.wishlist-section li {
+  margin-bottom: 10px;
+}
+
+.wishlist-section input {
+  margin-right: 10px;
+}
+
+.coupon-section ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.coupon-section .coupon {
+  border: 1px solid #eee;
+  border-radius: 5px;
+  padding: 5px;
+  margin-bottom: 0px;
+}
+
+.modal-backdrop.show {
+  opacity: 0;
+  z-index: -1;
+}
+
+@media (max-width: 768px) {
+  .nav {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .my-page-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .profile-section,
+  .edit-section,
+  .wishlist-section,
+  .coupon-section {
+    width: 90%;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 1400px) {
+  .nav {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .my-page-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .profile-section,
+  .edit-section,
+  .wishlist-section,
+  .coupon-section {
+    width: 90%;
+    margin-bottom: 20px;
+  }
+}

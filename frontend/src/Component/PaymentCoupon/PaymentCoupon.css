@@ -1,0 +1,43 @@
+.payment-coupon-container p:nth-child(1){
+    font-size: 1.35rem;
+}
+.payment-coupon-container-btn{
+    text-align: right;
+}
+.payment-coupon-container-btn button{
+    color: rgb(90, 120, 250);
+    font-size: 1.25rem;
+    font-weight: 700;
+    background: none;
+    border: none;
+}
+.payment-coupon-info{
+    text-align: center;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    overflow: scroll;
+}
+.paymentCoupons{
+    display: flex;
+}
+.paymentCoupons button{
+    background: none;
+    border-left: none;
+    border-right: none;
+    background-color: rgb(90, 120, 250);
+    color: white;
+    font-family: 700;
+    width: 100%;
+}
+.paymentCoupons button:hover{
+
+}
+.paymentCoupon{
+    position: relative;
+}
+.paymentCoupon p:nth-child(3){
+    padding: 0;
+}
+.paymentCoupon p:nth-child(3) {
+
+}

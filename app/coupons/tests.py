@@ -13,8 +13,7 @@ from .models import Coupon, UserCoupon
 class CouponListViewTestCase(APITestCase):
     def setUp(self) -> None:
         self.admin_user = get_user_model().objects.create_superuser(
-            user_id="testuserid",
-            password="password123",
+            user_id="testuserid", password="password123", name="testname", email="test@example.com", phone="01012345678"
         )
 
         self.token = AccessToken.for_user(self.admin_user)
@@ -65,8 +64,7 @@ class CouponListViewTestCase(APITestCase):
 class CouponDetailViewTest(APITestCase):
     def setUp(self) -> None:
         self.admin_user = get_user_model().objects.create_superuser(
-            user_id="testuserid",
-            password="password123",
+            user_id="testuserid", password="password123", name="testname", email="test@example.com", phone="01012345678"
         )
         self.coupon = Coupon.objects.create(type="WELCOME", content="회원가입 축하 쿠폰", sale_price=10000, duration=30)
         self.coupon2 = Coupon.objects.create(type="EVENT", content="빅세일 이벤트 쿠폰", sale_price=30000, duration=7)

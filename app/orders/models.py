@@ -22,7 +22,7 @@ class Order(CommonModel):
     # fk 필드
     product = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    user_coupon = models.ForeignKey(UserCoupon, null=True, on_delete=models.SET_NULL)
+    user_coupon = models.ForeignKey(UserCoupon, null=True, on_delete=models.SET_NULL, blank=True)
     # 주문 금액 정보
     sale_price = models.IntegerField()
     total_price = models.IntegerField()
@@ -32,7 +32,6 @@ class Order(CommonModel):
 
     # 주문 옵션
     people = models.IntegerField()
-    pet = models.IntegerField()
     pet_size_big = models.IntegerField(default=0)
     pet_size_medium = models.IntegerField(default=0)
     pet_size_small = models.IntegerField(default=0)

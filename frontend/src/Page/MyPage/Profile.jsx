@@ -4,7 +4,7 @@ import axios from "../../api/axios";
 import Coupon from "./Coupon";
 import ProfileModal from "./ProfileModal";
 
-import "./index.css";
+import "./MyPage.css";
 
 function Profile({ setUserId }) {
   const user = {
@@ -86,7 +86,7 @@ function Profile({ setUserId }) {
 
   const handleReceiveCoupon = async () => {
     try {
-      const response = await axios.get("http://dog-go.store/api/v1/coupon/");
+      const response = await axios.get("/api/v1/coupon/");
       setUserData(response.data);
       console.log("User Coupon:", response.data);
     } catch (error) {
