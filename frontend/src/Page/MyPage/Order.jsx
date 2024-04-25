@@ -61,6 +61,8 @@ const Order = () => {
       return includeOrder;
     });
     setFilteredOrders(filtered);
+    console.log('필터',filteredOrders);
+    console.log('오더',orders);
   };
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -151,7 +153,7 @@ const Order = () => {
               <div>{order.status}</div>
               <div>{order.departure_date}</div>
               <div>{order.return_date}</div>
-              <div>{order.coupon.coupon_info.content}</div>
+              <div>{order.coupon ? order.coupon.coupon_info.content : ""}</div>
             </li>
           ))}
         </ul>

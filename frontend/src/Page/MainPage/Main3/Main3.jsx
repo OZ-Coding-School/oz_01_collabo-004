@@ -1,4 +1,5 @@
 import React from "react";
+import { HiCursorClick } from "react-icons/hi";
 import axios from "../../../api/axios";
 import "./Main3.css";
 
@@ -32,6 +33,9 @@ function Main3() {
       <div className="image_box_01">
         <div className="WC">
           <button onClick={postCoupon}>₩50,000</button>
+        </div>
+        <div className="Main3-Click-deg">
+          <span class="material-symbols-outlined Main3-Click"><HiCursorClick /></span>
         </div>
         <div className="WC2">
         </div>
