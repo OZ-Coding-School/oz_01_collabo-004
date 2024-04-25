@@ -1,9 +1,11 @@
 import os
 from datetime import datetime, timedelta
+from urllib.request import urlopen
 
 import requests
 from django.contrib.auth import authenticate
 from django.core.cache import cache
+from django.core.files import File
 from django.core.mail import EmailMessage
 from django.utils import timezone
 from django.utils.crypto import get_random_string
@@ -336,11 +338,14 @@ class KakaoLoginView(APIView):
             )
             return response  # type: ignore
         except User.DoesNotExist:
+            # 이미지를 다운로드하여 파일 객체로 가져옴
+            image_response = urlopen(profile.get("profile_image_url"))
+            kakao_profile_image = File(image_response)
             user = User.objects.create(
                 user_id="oauth" + get_random_string(8),
                 email=kakao_account.get("email"),
                 nickname=profile.get("nickname"),
-                profile_image=profile.get("profile_image_url"),
+                profile_image=kakao_profile_image,
             )
             user.set_unusable_password()
             refresh_token = RefreshToken.for_user(user)

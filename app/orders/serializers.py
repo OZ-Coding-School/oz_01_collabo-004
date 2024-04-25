@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
 from coupons.serializers import UserCouponSerializer
-from products.models import Product
 from products.serializers import ProductInfoSerializer
 
 from .models import Order, Payment
@@ -28,7 +27,7 @@ class OrderDetailSerializer(serializers.ModelSerializer):  # type: ignore
     class Meta:
         model = Order
         exclude = ("user",)
-        read_only_fields = ["order_id", "sale_price", "total_price", "status"]
+        read_only_fields = ["order_id", "sale_price", "total_price", "status", "return_date"]
         depth = 1
 
 
