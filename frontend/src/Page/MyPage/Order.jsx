@@ -32,6 +32,7 @@ const Order = () => {
       console.log("Error fetching orders:", error);
     }
   };
+
   const filterOrders = () => {
     let filtered = orders.filter((order) => {
       let includeOrder = true;
@@ -150,7 +151,13 @@ const Order = () => {
             <li key={order.order_id}>
               <div>{order.product_info.name}</div>
               <div>{order.total_price}</div>
-              <div>{order.status}</div>
+              <div>
+                {order.status === "ORDERED"
+                  ? "예약중"
+                  : order.status === "PAID"
+                  ? "결제완료"
+                  : "결제취소"}
+              </div>
               <div>{order.departure_date}</div>
               <div>{order.return_date}</div>
               <div>{order.coupon ? order.coupon.coupon_info.content : ""}</div>

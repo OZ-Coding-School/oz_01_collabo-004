@@ -56,10 +56,10 @@ const ReviewPage = () => {
           <div key={review?.id} className="review-container">
             <div className="review">
               <h3 className="review-title">{review.title}</h3>
-              <p className="review-created-at">
-                작성일: {formatDate(review.created_at)}
-              </p>
-              <p className="review-view-count">조회수: {review.view_count}</p>
+              <div className="review-count">
+                <p className="review-view-count">조회수: {review.view_count}</p>
+                <p>작성일: {formatDate(review.created_at)}</p>
+              </div>
               <div className="review-line"></div>
               <p className="review-content">{review.content}</p>
               <div className="review-line"></div>
