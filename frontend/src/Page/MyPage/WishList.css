@@ -1,0 +1,54 @@
+.card-item {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card-img {
+  height: 230px;
+  margin-bottom: 10px;
+}
+.card-deck {
+  position: relative;
+  overflow: hidden;
+  margin: 20px;
+  width: 270px;
+  border: 0.5px solid rgba(0, 0, 0, 0.5);
+  border-radius: 5%;
+}
+
+.card-details h2 {
+  padding: 5px;
+  font-size: 1.5rem;
+  font-weight: bolder;
+}
+.card-details p {
+  width: 270px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 5px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: rgb(70, 70, 70);
+}
+
+.go-title {
+  width: 100%;
+  height: 50px;
+  background-color: black;
+  color: aliceblue;
+}
+/* 
+.wishlist-bt {
+  display: flex;
+  justify-content: center;
+} */
+
+.wishlist-bt button {
+  background-color: transparent;
+  width: 100%;
+  border: none;
+  text-align: center;
+  padding: 5px;
+  height: 40px;
+}
