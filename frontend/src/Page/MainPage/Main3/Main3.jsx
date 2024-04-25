@@ -5,16 +5,28 @@ import "./Main3.css";
 function Main3() {
   const postCoupon = async () => {
     try {
-      const response = await axios.post(`/api/v1/coupon/issue/`);
+      const response = await axios.post(`/api/v1/coupon/issue/1`,
+        {}, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        }
+      );
+      console.log(response)
       if (response.status === 200) {
         console.log("쿠폰이 성공적으로 발급되었습니다!");
+        alert("쿠폰이성공적으로 발급되었습니다!")
       } else {
         throw new Error("서버 응답 실패");
       }
     } catch (error) {
-      console.error("쿠폰 발급 요청 실패:", error.message);
+      console.log(error);
+      console.log(error.response.data.msg)
+      if (error.response.data.msg === 'already issued coupon.')
+        alert("이미발급된쿠폰입니다.")
     }
   };
+
   return (
     <div className="Main3-contanier">
       <div className="image_box_01">

@@ -23,7 +23,7 @@ function ProductDetail(props) {
 
   const [posttravelData, setPosttravelData] = useState({
     departureDate: "",
-    numberOfPeople: 1,
+    numberOfPeople: 0,
     smallPetsCount: 0,
     mediumPetsCount: 0,
     largePetsCount: 0,
@@ -35,12 +35,7 @@ function ProductDetail(props) {
   const mediumPetsTotalPrice = mediumPetsCount * 10000;
   const largePetsTotalPrice = largePetsCount * 15000;
 
-  let totalPrice =
-    basePrice +
-    PersonToTalPrice +
-    smallPetsTotalPrice +
-    mediumPetsTotalPrice +
-    largePetsTotalPrice;
+  let totalPrice = basePrice
 
   const getTravelDetailData = async () => {
     try {
@@ -91,41 +86,42 @@ function ProductDetail(props) {
     });
   };
 
-  const handlePeopleChange = (amount) => {
-    setNumberOfPeople((prevCount) => Math.max(1, prevCount + amount));
-    setPosttravelData({
-      ...posttravelData,
-      numberOfPeople: numberOfPeople + 1,
-    });
-  };
+const handlePeopleChange = (amount) => {
+  const updatedNumberOfPeople = Math.max(0, numberOfPeople + amount);
+  setNumberOfPeople(updatedNumberOfPeople);
 
-  const handlePetsChange = (size, amount) => {
-    switch (size) {
-      case "small":
-        setSmallPetsCount((prevCount) => Math.max(0, prevCount + amount));
-        setPosttravelData({
-          ...posttravelData,
-          smallPetsCount: smallPetsCount + 1,
-        });
-        break;
-      case "medium":
-        setMediumPetsCount((prevCount) => Math.max(0, prevCount + amount));
-        setPosttravelData({
-          ...posttravelData,
-          mediumPetsCount: mediumPetsCount + 1,
-        });
-        break;
-      case "large":
-        setLargePetsCount((prevCount) => Math.max(0, prevCount + amount));
-        setPosttravelData({
-          ...posttravelData,
-          largePetsCount: largePetsCount + 1,
-        });
-        break;
-      default:
-        break;
-    }
+  const updatedPosttravelData = {
+    ...posttravelData,
+    numberOfPeople: updatedNumberOfPeople,
   };
+  setPosttravelData(updatedPosttravelData);
+};
+
+const handlePetsChange = (size, amount) => {
+  let updatedPetsCount;
+  switch (size) {
+    case "small":
+      updatedPetsCount = Math.max(0, smallPetsCount + amount);
+      setSmallPetsCount(updatedPetsCount);
+      break;
+    case "medium":
+      updatedPetsCount = Math.max(0, mediumPetsCount + amount);
+      setMediumPetsCount(updatedPetsCount);
+      break;
+    case "large":
+      updatedPetsCount = Math.max(0, largePetsCount + amount);
+      setLargePetsCount(updatedPetsCount);
+      break;
+    default:
+      break;
+  }
+  const updatedPosttravelData = {
+    ...posttravelData,
+    [`${size}PetsCount`]: updatedPetsCount,
+  };
+  setPosttravelData(updatedPosttravelData);
+};
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -135,7 +131,7 @@ function ProductDetail(props) {
     console.log("중 반려동물 수:", mediumPetsCount);
     console.log("대 반려동물 수:", largePetsCount);
   };
-
+  const prouductId = location.state.id;
   const paybutton = () => {
     if (!posttravelData.departureDate) {
       alert("출발일을 선택해주세요!!");
@@ -147,6 +143,7 @@ function ProductDetail(props) {
           posttravelData,
           totalPrice,
           imageUrl,
+          prouductId
         },
       });
     }
@@ -236,16 +233,19 @@ function ProductDetail(props) {
                       +
                     </button>
                   </td>
+                  
                 </tr>
                 <tr>
                   <td>반려동물 (소): </td>
                   <td>
+
                     <button
                       onClick={() => handlePetsChange("small", -1)}
                       className="counter-button"
                     >
                       -
                     </button>
+
                     <span>{smallPetsCount}</span>
                     <button
                       onClick={() => handlePetsChange("small", 1)}
@@ -330,7 +330,12 @@ function ProductDetail(props) {
           <p>모든 상품은 인원수,반려동물의수의 따라 변결될수있습니다.</p>
           </div>
           <hr />
-          <p>총 예약 가격 : {totalPrice} 원</p>
+          <p>총 예약 가격 : {
+            basePrice+
+            PersonToTalPrice +
+            smallPetsTotalPrice +
+            mediumPetsTotalPrice +
+            largePetsTotalPrice} 원</p>
         </div>
 
       </div>
