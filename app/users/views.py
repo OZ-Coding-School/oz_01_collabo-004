@@ -41,7 +41,7 @@ class Signup(APIView):
         serializer = serializers.UserSignUpSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response({"msg": "회원가입 성공"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -156,7 +156,7 @@ class JWTLoginView(TokenObtainPairView):
                     {"msg": "유저 아이디 또는 비밀번호가 올바르지 않습니다."}, status=status.HTTP_401_UNAUTHORIZED
                 )
         except Exception as e:
-            return Response({"msg": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class JWTLogoutView(APIView):
@@ -173,12 +173,12 @@ class JWTLogoutView(APIView):
         #     if logout_response.status_code not in [status.HTTP_302_FOUND, status.HTTP_200_OK]:
         #         return Response({"msg": "카카오 로그아웃 요청 실패"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         try:
-            response = Response(status=status.HTTP_200_OK)
+            response = Response({"msg": "로그아웃 성공"}, status=status.HTTP_200_OK)
             # 응답으로 로그인한 사용자의 쿠키에서 토큰을 제거하는 설정
             response.delete_cookie("AUT_REF")
             return response
         except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class JWTRefreshView(APIView):
@@ -266,7 +266,7 @@ class UserDetailView(APIView):
             response.delete_cookie("AUT_REF")
             return response
         except Exception as e:
-            return Response({"msg": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class KakaoLoginView(APIView):
@@ -291,7 +291,7 @@ class KakaoLoginView(APIView):
         if token_response.status_code != status.HTTP_200_OK:
             return Response(
                 {"msg": "카카오 서버로 부터 토큰을 받아오는데 실패하였습니다."},
-                status=token_response.status_code,
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
         # 응답으로부터 액세스 토큰을 가져온다.
         access_token = token_response.json().get("access_token")
@@ -306,7 +306,7 @@ class KakaoLoginView(APIView):
         if response.status_code != status.HTTP_200_OK:
             return Response(
                 {"msg": "카카오 서버로 부터 프로필 데이터를 받아오는데 실패하였습니다."},
-                status=token_response.status_code,
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
         """
         1. 문제: 에러가 발생시 json데이터가 안올 수 있는데, 무조건 json()을 호출하면 시리얼라이저 에러가 발생할 가능성이 높다.
@@ -361,4 +361,4 @@ class KakaoLoginView(APIView):
             )
             return response  # type: ignore
         except Exception as e:
-            return Response({"msg": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

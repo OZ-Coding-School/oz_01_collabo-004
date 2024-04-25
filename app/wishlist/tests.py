@@ -122,7 +122,7 @@ class WishlistDetailTestCase(APITestCase):
 
         response = self.client.put(url, headers={"Authorization": f"Bearer {self.token}"})
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["msg"], "already deleted")
 
         url = reverse("wishlist_detail", kwargs={"wishlist_id": 919919191911})
