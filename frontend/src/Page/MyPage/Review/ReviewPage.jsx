@@ -36,18 +36,17 @@ function ReviewPage() {
 
   return (
     <div className="review-page">
+      {reviews.map((review) => (
+        <div key={review?.id}>
+          <Review review={review} />
+          <button onClick={() => handleShowModal(review.id)}> EDIT </button>
+          {editReviewId === review.id && (
+            <NewReviewForm review={review} setShowModal={handleCloseModal} />
+          )}
+        </div>
+      ))}
       <h2 className="review-page-title">Review List</h2>
-      <div className="review-list">
-        {reviews.map((review) => (
-          <div key={review?.id}>
-            <Review review={review} />
-            <button onClick={() => handleShowModal(review.id)}> EDIT </button>
-            {editReviewId === review.id && (
-              <NewReviewForm review={review} setShowModal={handleCloseModal} />
-            )}
-          </div>
-        ))}
-      </div>
+      <div className="review-list"></div>
     </div>
   );
 }
