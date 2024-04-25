@@ -41,7 +41,7 @@ function MyPage() {
             ) : null}
           </Nav>
         </Col>
-        <Col sm={6}>
+        <Col sm={8}>
           <Tab.Content>
             <Tab.Pane eventKey="first">
               <Profile setUserId={setUserId} />
