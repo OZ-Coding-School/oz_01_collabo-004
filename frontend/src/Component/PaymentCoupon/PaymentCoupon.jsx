@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from '../../api/axios';
 import './PaymentCoupon.css';
-import PaymentCoupon from './PaymentCoupons';
 
-const CouponInfoComponent = ({ token }) => {
+const PaymentCoupon = () => {
   const [couponInfo, setCouponInfo] = useState([]);
   const [loading, setLoading] = useState(true); 
   const [showCoupon, setShowCoupon] = useState(false);
   
   // 쿠폰 정보 가져오는 함수
-  const fetchCouponInfo = async () => {
+  const getCouponInfo = async () => {
     try {
       const response = await axios.get('/api/v1/coupon/mycoupon', {
         headers: {
@@ -30,7 +29,7 @@ const CouponInfoComponent = ({ token }) => {
   };
 
   useEffect(() => {
-    fetchCouponInfo();
+    getCouponInfo();
   }, []);
 
   // 쿠폰 정보 토글 함수
@@ -53,7 +52,21 @@ const CouponInfoComponent = ({ token }) => {
               <div key={index}
               className='paymentCoupon'
               >
-                <PaymentCoupon item={item} />
+      <div className="paymentcoupon-box">
+      <div className="paymentcoupon">
+        <div className="paymentcoupon-image">
+          <h5>할인금액</h5>
+          <h5> - ₩{item.coupon_info.sale_price}원</h5>
+          <h5>{item.coupon_info.content}</h5>
+        </div>
+        <div className="paymentcoupon-bottom">
+          <div className="dotted"></div>
+          <p>유효 기간</p>
+          <p>{item.expired_at}</p>
+          <p>만료일 : {item.coupon_info.duration}일</p>
+        </div>
+      </div>
+    </div>
             </div>
             ))}
           </div>
@@ -63,4 +76,4 @@ const CouponInfoComponent = ({ token }) => {
   );
 };
 
-export default CouponInfoComponent;
+export default PaymentCoupon;
