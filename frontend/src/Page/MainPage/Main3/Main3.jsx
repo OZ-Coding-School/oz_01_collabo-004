@@ -5,14 +5,25 @@ import "./Main3.css";
 function Main3() {
   const postCoupon = async () => {
     try {
-      const response = await axios.post(`/api/v1/coupon/issue/`);
+      const response = await axios.post(`/api/v1/coupon/issue/1`,
+        {},
+        {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
       if (response.status === 200) {
         console.log("쿠폰이 성공적으로 발급되었습니다!");
+        alert("쿠폰이 성공적으로 발급되었습니다!")
       } else {
         throw new Error("서버 응답 실패");
       }
     } catch (error) {
-      console.error("쿠폰 발급 요청 실패:", error.message);
+      console.log(error);
+      console.log(error.response.data.msg);
+      if (error.response.data.msg === 'already issued coupon.') {
+        alert("이미 발급된 쿠폰입니다!")
+      }
     }
   };
   return (

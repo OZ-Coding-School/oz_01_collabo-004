@@ -1,1 +1,151 @@
 
+.payment-coupon-mypage-container p:nth-child(1) {
+    font-size: 1.35rem;
+}
+
+.payment-coupon-mypage-container-btn {
+    text-align: right;
+}
+
+.payment-coupon-mypage-container-btn button {
+    color: rgb(90, 120, 250);
+    font-size: 1.25rem;
+    font-weight: 700;
+    background: none;
+    border: none;
+}
+
+.payment-coupon-mypage-info {
+    text-align: center;
+    padding: 20px;
+}
+
+.paymentCoupons {
+    display: flex;
+}
+
+.paymentCoupons button {
+    background: none;
+    border-left: none;
+    border-right: none;
+    background-color: rgb(90, 120, 250);
+    color: white;
+    font-family: 700;
+    width: 100%;
+}
+
+.paymentCoupon {
+    position: relative;
+}
+
+.paymentCoupon p:nth-child(3) {
+    padding: 0;
+}
+
+/*페이먼트쿠폰 css*/
+body h1 h2 p button input {
+    font-family: "TiltNeon-Regular-VariableFont_XROT,YROT";
+}
+
+.paymentcoupon-box {
+    margin: 15px;
+}
+
+.paymentcoupon-image {
+    display: flex;
+    color: white;
+    width: 200px;
+    height: 140px;
+    border-radius: 10px 10px 20px 20px;
+    background-color: rgb(240, 209, 71);
+    text-align: center;
+    padding: 5px;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.dotted {
+    position: absolute;
+    width: 170px;
+    top: -2px;
+    left: 50%;
+    transform: translate(-50%);
+    border: 2px dashed white;
+}
+
+.paymentcoupon-image h2 {
+    margin-top: 5px;
+}
+
+.paymentcoupon-image p {
+    margin: 0;
+    color: #000000;
+}
+
+.paymentcoupon-image img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.paymentcoupon {
+    display: inline-block;
+}
+
+.paymentcoupon:hover .paymentcoupon-image {
+    background-color: white;
+    color: black;
+    cursor: pointer;
+    border: 2px solid black;
+}
+
+.paymentcoupon:hover .paymentcoupon-bottom {
+    background-color: white;
+    color: black;
+    cursor: pointer;
+    border: 2px solid black;
+}
+
+.paymentcoupon-bottom .paymentcoupon:hover .dotted {
+    border: 2px dashed rgb(3, 0, 0);
+}
+
+.paymentcoupon-bottom {
+    font-size: 0.75rem;
+    color: white;
+    position: relative;
+    background-color: rgb(240, 209, 71);
+    text-align: center;
+    width: 200px;
+    height: 80px;
+    padding: 12px 0;
+    border-radius: 20px 20px 5px 5px;
+}
+
+.paymentcoupon-bottom p {
+    padding: 0
+}
+
+/* .paymentcoupon_box{
+    margin: 20px;
+}
+.paymentcoupon_box:hover{
+    background-color: white;
+    color: black;
+    cursor: pointer;
+}
+.paymentcoupon-bottom {
+    font-size: 0.75rem;
+    color: white;
+    position: relative;
+    background-color: rgb(27, 27, 27);
+    text-align: center;
+    padding: 10px;
+    width: 200px;
+    height: 70px;
+    border-radius: 20px 20px 5px 5px;
+}
+
+.paymentcoupon-bottom p {
+    padding: 0;
+} */

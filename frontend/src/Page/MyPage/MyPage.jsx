@@ -3,8 +3,8 @@ import Col from "react-bootstrap/Col";
 import Nav from "react-bootstrap/Nav";
 import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
-import PaymentCoupon from "../../Component/PaymentCoupon/PaymentCoupon";
 import Testaa from "../../Component/Testaa";
+import Coupon from "./Coupon";
 import "./MyPage.css";
 import Order from "./Order";
 import Profile from "./Profile";
@@ -53,7 +53,7 @@ function MyPage() {
               <Order />
             </Tab.Pane>
             <Tab.Pane eventKey="fourth">
-              <PaymentCoupon />
+              <Coupon/>
             </Tab.Pane>
             <Tab.Pane eventKey="fifth">
               <Review />
