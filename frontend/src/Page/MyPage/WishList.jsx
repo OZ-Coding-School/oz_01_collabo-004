@@ -1,16 +1,38 @@
 import React, { useEffect, useState } from "react";
-import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
 import { useNavigate } from "react-router-dom";
 import axios from "../../api/axios";
 import "./WishList.css";
 
 function WishList() {
   const [cards, setCards] = useState([]);
+  const [isClicked, setIsClicked] = useState(false);
+  const [count, setCount] = useState(0);
   const navigate = useNavigate();
-  useEffect(() => {
-    fetchData();
-  }, []);
+  console.log("카운터", count);
+
+  const wishlistClick = async (id) => {
+    setCount((prev) => prev + 1);
+    try {
+      const response = await axios.post(
+        "/api/v1/wishlist/",
+        {
+          product: id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        setCards(cards.filter((card) => card.product.id !== id));
+        console.log("서버 응답:", response);
+      }
+    } catch (error) {
+      console.log("서버 요청 실패:", error.message);
+    }
+  };
 
   const fetchData = async () => {
     try {
@@ -20,10 +42,16 @@ function WishList() {
         },
       });
       setCards(response.data);
+      console.log(response.data);
     } catch (error) {
       console.log("Error fetching data:", error);
     }
   };
+
+  useEffect(() => {
+    console.log("다시 부르나");
+    fetchData();
+  }, []);
 
   const handleClickPackage = (productId) => {
     navigate(`/travel/${productId.name.replace(/ /g, "")}`, {
@@ -33,30 +61,37 @@ function WishList() {
     });
   };
   return (
-    <>
-      {cards.map((card) => (
-        <Card
-          key={card?.id}
-          style={{
-            margin: "120px",
-            width: "18rem",
-          }}
-        >
-          <Card.Img variant="top" src={card.product?.product_img} />
-          <Card.Body>
-            <Card.Title>{card.product?.name}</Card.Title>
-            <Card.Text>{card.product?.description_text}</Card.Text>
-
-            <Button
-              variant={card.isBookmarked ? "success" : "dark"}
+    <div className="card-list">
+      <div className="card-item">
+        {cards.map((card) => (
+          <div className="card-deck" key={card.id}>
+            <img
+              className="card-img"
+              src={card.product.product_img}
+              alt={card.product.name}
+            />
+            <div className="card-details">
+              <h2>{card.product.name}</h2>
+              <p>{card.product.description_text}</p>
+            </div>
+            <button
+              className="go-title"
               onClick={() => handleClickPackage(card.product)}
             >
-              여행하러갈까?
-            </Button>
-          </Card.Body>
-        </Card>
-      ))}
-    </>
+              여행하러 갈까?
+            </button>
+            <div className="wishlist-bt">
+              <button
+                onClick={() => wishlistClick(card.product.id)}
+                type="button"
+              >
+                다음에 가자..
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 

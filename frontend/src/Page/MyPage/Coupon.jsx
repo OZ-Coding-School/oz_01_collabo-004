@@ -1,5 +1,5 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
+import axios from "../../api/axios";
 
 function Coupon() {
   const [coupons, setCoupons] = useState([]);
@@ -16,6 +16,7 @@ function Coupon() {
         },
       });
       setCoupons(response.data);
+      console.log(coupons);
     } catch (error) {
       console.error("Error fetching coupons:", error);
     }
@@ -25,16 +26,15 @@ function Coupon() {
     <div>
       <h1>Coupon Page</h1>
       <div>
-        {coupons.map((coupon_info) => (
-          <div key={coupon_info.type}>
-            <h2>{coupon_info.content}</h2>
-            <p>{coupon_info.sale_price}</p>
-            <p>Expires on: {coupon_info.duration}</p>
+        {coupons.map((coupon, index) => (
+          <div key={index}>
+            <h2>{coupon.coupon_info.content}</h2>
+            <p>{coupon.coupon_info.sale_price}</p>
+            <p>{coupon.coupon_info.duration}</p>
           </div>
         ))}
       </div>
     </div>
   );
 }
-
 export default Coupon;
