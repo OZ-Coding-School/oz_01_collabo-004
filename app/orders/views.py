@@ -21,10 +21,7 @@ from .serializers import (
 
 
 class OrderListView(APIView):
-    @extend_schema(
-        responses=OrderListSerializer(many=True),
-        description="유저의 모든 주문 내역을 조회할 수 있음."
-    )
+    @extend_schema(responses=OrderListSerializer(many=True), description="유저의 모든 주문 내역을 조회할 수 있음.")
     def get(self, request: Request) -> Response:
         orders = Order.objects.filter(user_id=request.user.id).exclude(status="CANCEL").order_by("created_at")  # type: ignore
         if orders:
@@ -35,7 +32,7 @@ class OrderListView(APIView):
     @extend_schema(
         request=OrderListSerializer,
         responses=OrderListSerializer,
-        description="요청에 따른 주문을 생성하고 데이터베이스에 저장함."
+        description="요청에 따른 주문을 생성하고 데이터베이스에 저장함.",
     )
     def post(self, request: Request) -> Response:
         """
@@ -86,10 +83,7 @@ def is_uuid4(value: str) -> bool:
 
 
 class OrderDetailView(APIView):
-    @extend_schema(
-        responses=OrderDetailSerializer,
-        description="유저의 주문 내역 상세 조회"
-    )
+    @extend_schema(responses=OrderDetailSerializer, description="유저의 주문 내역 상세 조회")
     def get(self, request: Request, order_id: str) -> Response:
         """
         로그인 한 유저가 자신의 주문내역 중 하나를 상세히 볼 수 있도록 데이터를 내려주는 get 메서드
@@ -103,7 +97,7 @@ class OrderDetailView(APIView):
     @extend_schema(
         request=OrderDetailSerializer,
         responses=OrderDetailSerializer,
-        description="로그인한 유저가 자신의 주문내역 중에서 아직 결제나 취소가 되지않은 주문에 한해서 옵션, 쿠폰 등을 수정할 수 있음"
+        description="로그인한 유저가 자신의 주문내역 중에서 아직 결제나 취소가 되지않은 주문에 한해서 옵션, 쿠폰 등을 수정할 수 있음",
     )
     def put(self, request: Request, order_id: str) -> Response:
         order = get_object_or_404(Order, order_id=order_id, user_id=request.user.id)
@@ -138,9 +132,7 @@ class OrderDetailView(APIView):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @extend_schema(
-        description="주문 내역을 삭제함. status의 변경으로 주문 정보는 데이터베이스에 유지"
-    )
+    @extend_schema(description="주문 내역을 삭제함. status의 변경으로 주문 정보는 데이터베이스에 유지")
     def delete(self, request: Request, order_id: str) -> Response:
         order = get_object_or_404(Order, order_id=order_id, user_id=request.user.id)
         if order.status == "ORDERED" or order.status == "PAID":

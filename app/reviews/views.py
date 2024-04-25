@@ -23,7 +23,7 @@ from .serializers import (
 class MyReviewListView(APIView):
     @extend_schema(
         responses=MyReviewListSerializer(many=True),
-        description="로그인한 유저가 자신의 리뷰 작성 내역을 조회할 수 있음"
+        description="로그인한 유저가 자신의 리뷰 작성 내역을 조회할 수 있음",
     )
     def get(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         try:
@@ -55,10 +55,7 @@ class MyReviewListView(APIView):
 
 
 class ProductReviewDetailView(APIView):
-    @extend_schema(
-        responses=ProductReviewDetailSerializer,
-        description="리뷰 상세 조회"
-    )
+    @extend_schema(responses=ProductReviewDetailSerializer, description="리뷰 상세 조회")
     def get(self, request: Request, review_id: int, *args: Any, **kwargs: Any) -> Response:
         review = get_object_or_404(ProductReview, id=review_id)
         serializer = ProductReviewDetailSerializer(review)
@@ -67,7 +64,7 @@ class ProductReviewDetailView(APIView):
     @extend_schema(
         request=ProductReviewDetailSerializer,
         responses=ProductReviewDetailSerializer,
-        description="리뷰 제목, 내용 및 이미지 수정"
+        description="리뷰 제목, 내용 및 이미지 수정",
     )
     def put(self, request: Request, review_id: int, *args: Any) -> Response:
         review = get_object_or_404(ProductReview, id=review_id, user=request.user.id)

@@ -345,7 +345,7 @@ class KakaoLoginView(APIView):
                 user_id="oauth" + get_random_string(8),
                 email=kakao_account.get("email"),
                 nickname=profile.get("nickname"),
-                profile_image=kakao_profile_image
+                profile_image=kakao_profile_image,
             )
             user.set_unusable_password()
             refresh_token = RefreshToken.for_user(user)
