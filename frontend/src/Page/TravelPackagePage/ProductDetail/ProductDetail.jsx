@@ -158,7 +158,7 @@ const handlePetsChange = (size, amount) => {
         <div className="productdetail-page-title">
           <h2>
             <span
-              className="material-symbols-outlined"
+              className="material-symbols-outlined product-goback-btn"
               onClick={handleBack}
             >
               undo

@@ -54,7 +54,7 @@ function Product({ products }) {
         type="button" 
         className={isClicked ? "wishlist-btn-clicked" : ""}
         >
-          <span className="material-symbols-outlined">favorite</span>
+        <span className="material-symbols-outlined favorite">favorite</span>
         </button>
 
 

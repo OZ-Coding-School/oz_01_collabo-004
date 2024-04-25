@@ -177,3 +177,10 @@
     line-height: 0px;
     margin-right: 10px;
 }
+.paymentpage-goback-btn{
+    font-size: 2.15rem;
+    margin-right: 20px;
+}
+.paymentpage-goback-btn:hover{
+    color: rgb(90, 120, 250, 0.8);
+}
