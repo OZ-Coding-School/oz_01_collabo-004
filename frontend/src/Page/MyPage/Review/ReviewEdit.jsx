@@ -51,8 +51,12 @@ function ReviewEdit({ review, setShowModal }) {
             onChange={(e) => setContent(e.target.value)}
           />
         </div>
-        <button type="submit">Img</button>
-        <button type="submit">EDIT</button>
+        <button className="review-image-btn" type="submit">
+          Img
+        </button>
+        <button className="review-image-btn" type="submit">
+          EDIT
+        </button>
       </form>
     </div>
   );

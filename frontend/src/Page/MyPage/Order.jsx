@@ -1,10 +1,12 @@
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "../../api/axios";
 import "./Order.css";
 
 const Order = () => {
+  const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -62,9 +64,8 @@ const Order = () => {
       return includeOrder;
     });
     setFilteredOrders(filtered);
-    console.log('필터',filteredOrders);
-    console.log('오더',orders);
   };
+
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
@@ -88,6 +89,10 @@ const Order = () => {
 
   const handleSearch = () => {
     filterOrders();
+  };
+
+  const handleReservationClick = (orderId) => {
+    navigate.push(`/reservation/${orderId}`);
   };
 
   return (
@@ -135,7 +140,7 @@ const Order = () => {
               checked={cancelledOnly}
               onChange={handleCheckboxChange}
             />
-            예약 취소
+            결제 취소
           </label>
         </div>
         <div className="order-header">
@@ -156,11 +161,16 @@ const Order = () => {
                   ? "예약중"
                   : order.status === "PAID"
                   ? "결제완료"
-                  : "결제취소"}
+                  : "결제 취소"}
               </div>
               <div>{order.departure_date}</div>
               <div>{order.return_date}</div>
               <div>{order.coupon ? order.coupon.coupon_info.content : ""}</div>
+              {order.status === "ORDERED" && (
+                <button onClick={() => handleReservationClick(order.order_id)}>
+                  예약 페이지로 이동
+                </button>
+              )}
             </li>
           ))}
         </ul>
