@@ -10,45 +10,50 @@ function PaymentPage() {
   const travelData = location?.state?.travelData;
   const posttravelData = location?.state?.posttravelData;
   const totalPricepay = location?.state?.totalPrice;
+  console.log(location);
 
   const [departureDate, setDepartureDate] = useState(posttravelData?.departureDate);
   const [numberOfPeople, setNumberOfPeople] = useState(posttravelData?.numberOfPeople);
   const [smallPetsCount, setSmallPetsCount] = useState(posttravelData?.smallPetsCount);
   const [mediumPetsCount, setMediumPetsCount] = useState(posttravelData?.mediumPetsCount);
   const [largePetsCount, setLargePetsCount] = useState(posttravelData?.largePetsCount);
+  const [paymentCoupon, setPaymentCoupon] = useState(0);
   const navigate = useNavigate();
+  const couponPrice = paymentCoupon !== 0 ? 50000 : 0;
 
   const handleBack = () => {
     navigate(-1); //뒤로가기
   };
 
-
 const handlePayment = async (e) => {
-    e.preventDefault();
-    const paymentData = {
-        departure_date:departureDate,
-        people:numberOfPeople,
-        pet_size_small:smallPetsCount,
-        pet_size_medium:mediumPetsCount,
-        pet_size_big: largePetsCount,
-        user_coupon_id: 1
-    };
+  e.preventDefault();
+
+  const paymentData = {
+    product:location.state.prouductId,
+    departure_date: departureDate,
+    people: numberOfPeople,
+    pet_size_small: smallPetsCount,
+    pet_size_medium: mediumPetsCount,
+    pet_size_big: largePetsCount,
+    user_coupon_id: paymentCoupon
+  };
+  
     try {
-      const response = await axios.post("/api/v1/order/", {
+      const response = await axios.post(`/api/v1/order/`,
+        paymentData, {
         headers: {
-          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-        body: JSON.stringify(paymentData),
-      });
-
-      if (!response.ok) {
-        throw new Error("서버 응답 실패");
-      }
-
-      const responseData = await response.json();
-      console.log("서버 응답:", responseData);
+        }
+      );
+      console.log(response);
+      if (response.status === 201) {
+        alert("예약이완료 되었습니다!")
+        navigate("/travel")
+      };
+      
     } catch (error) {
-      console.error("서버 요청 실패:", error.message);
+      console.log(error);
     }
   };
 
@@ -62,7 +67,7 @@ const handlePayment = async (e) => {
     const mediumPetPrice = mediumPetsCount * 10000;
     const largePetPrice = largePetsCount * 15000;
     return (
-      basePrice + personPrice + smallPetPrice + mediumPetPrice + largePetPrice
+      basePrice + personPrice + smallPetPrice + mediumPetPrice + largePetPrice - couponPrice
     );
   };
 
@@ -119,6 +124,11 @@ const handlePayment = async (e) => {
                   mediumPetsCount * 10000 +
                   largePetsCount * 15000).toLocaleString()}원</span>
             </h5>
+            <h5>쿠폰
+              <span>
+            - ₩{Number(couponPrice).toLocaleString()}원
+              </span>
+            </h5>
             <hr />
             <h5>
               총 합계(KRW)<span>₩{totalPrice().toLocaleString()}원</span>
@@ -135,7 +145,6 @@ const handlePayment = async (e) => {
         <h2>
         <span className="material-symbols-outlined" onClick={handleBack}
         >undo</span>확인 및 결제</h2>
-        
         <h3>예약정보</h3>
         <label>출발일</label>
         <input
@@ -147,7 +156,7 @@ const handlePayment = async (e) => {
 
         <div className="paymentpage-input">
           <div className="paymentpage-totalprice">
-            <p>인원 / 반려동물</p>
+            <h4>인원 / 반려동물</h4>
             <p>
               {numberOfPeople}명 /{" "}
               {smallPetsCount + mediumPetsCount + largePetsCount} 마리
@@ -157,7 +166,7 @@ const handlePayment = async (e) => {
               </button>
               </div>
             </p>
-            <CouponInfoComponent />
+            <CouponInfoComponent paymentCoupon={paymentCoupon} setPaymentCoupon={setPaymentCoupon} />
           </div>
         </div>
 
