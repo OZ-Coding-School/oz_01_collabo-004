@@ -123,16 +123,6 @@ class ProductReviewDetailTestCase(APITestCase):
         self.token = AccessToken.for_user(self.user)
         self.client.force_login(user=self.user)
 
-    def test_get_product_review_detail(self) -> None:
-        url = reverse("product-review-detail", kwargs={"review_id": self.review.pk})
-        response = self.client.get(url, headers={"Authorization": f"Bearer {self.token}"})
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["title"], self.review.title)
-        self.assertEqual(response.data["content"], self.review.content)
-        self.assertTrue(response.data["status"])
-        self.assertEqual(response.data["product"]["id"], self.review.product.id)  # type: ignore
-
     def test_put_product_review_detail(self) -> None:
         url = reverse("product-review-detail", kwargs={"review_id": self.review.pk})
         data = {
@@ -143,11 +133,11 @@ class ProductReviewDetailTestCase(APITestCase):
         response = self.client.put(url, data=data, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(ProductReview.objects.count(), 1)
         self.assertEqual(response.data["product"]["id"], self.product.id)
         self.assertEqual(response.data["title"], "testtitle_update")
         self.assertEqual(response.data["content"], "testcontent_update")
         self.assertTrue(response.data["status"])
-        self.assertEqual(ProductReview.objects.count(), 1)
 
         url = reverse("product-review-detail", kwargs={"review_id": 9919283123})
         response = self.client.delete(url, headers={"Authorization": f"Bearer {self.token}"})
@@ -218,31 +208,34 @@ class ProductReviewTestCase(APITestCase):
         self.assertEqual(response.data[0]["profile_image"], self.user.profile_image)
 
 
-class AddReviewViewCountTest(APITestCase):
+class ReviewDetailViewTest(APITestCase):
     def setUp(self) -> None:
-        self.product = Product.objects.create(name="testproduct", description_text="testdescription", price=100000)
-        self.user = User.objects.create(
-            user_id="testuserid", password="password123", name="testname", email="test@example.com", phone="01012345678"
-        )
-        self.review = ProductReview.objects.create(
-            user_id=self.user.id,
-            product_id=self.product.id,
-            title="testtitle",
-            content="testcontent",
+        self.user = get_user_model().objects.create_user(
+            user_id="testuserid",
+            password="password123",
+            name="testname",
+            nickname="testnickname",
+            email="test@example.com",
+            phone="01012345678",
         )
 
-    def test_정상적인_리뷰id가_들어왔을떄(self) -> None:
-        url = reverse("add-review-view-count", kwargs={"review_id": self.review.id})
-        response = self.client.post(url)
+        self.product = Product.objects.create(
+            name="testname",
+            description_text="testdescription",
+            price=1000000,
+        )
+
+        self.review = ProductReview.objects.create(
+            user_id=self.user.id, product_id=self.product.id, title="testtitle", content="testcontent"
+        )
+
+    def test_get_review_detail(self) -> None:
+        url = reverse("review-detail", kwargs={"review_id": self.review.pk})
+        response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(ProductReview.objects.get(id=self.review.id).view_count, 1)
-        self.assertEqual(response.data.get("msg"), "Successful add ViewCount")
-
-    def test_비정상적인_리뷰id가_들어왔을때(self) -> None:
-        url = reverse("add-review-view-count", kwargs={"review_id": 12313131})
-        response = self.client.post(url)
-
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(ProductReview.objects.get(id=self.review.id).view_count, 0)
-        self.assertEqual(response.data.get("msg"), "Review does not exist")
+        self.assertEqual(response.data["view_count"], self.review.view_count + 1)
+        self.assertEqual(response.data["title"], self.review.title)
+        self.assertEqual(response.data["content"], self.review.content)
+        self.assertTrue(response.data["status"])
+        self.assertEqual(response.data["product"]["id"], self.review.product.id)  # type: ignore
