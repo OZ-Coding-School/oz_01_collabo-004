@@ -5,6 +5,7 @@ from rest_framework.test import APITestCase
 from rest_framework_simplejwt.tokens import AccessToken
 
 from products.models import Product
+from users.models import User
 
 from .models import ProductReview
 
@@ -215,3 +216,33 @@ class ProductReviewTestCase(APITestCase):
         self.assertTrue(response.data[0]["status"])
         self.assertEqual(response.data[0]["writer"], self.user.nickname)
         self.assertEqual(response.data[0]["profile_image"], self.user.profile_image)
+
+
+class AddReviewViewCountTest(APITestCase):
+    def setUp(self) -> None:
+        self.product = Product.objects.create(name="testproduct", description_text="testdescription", price=100000)
+        self.user = User.objects.create(
+            user_id="testuserid", password="password123", name="testname", email="test@example.com", phone="01012345678"
+        )
+        self.review = ProductReview.objects.create(
+            user_id=self.user.id,
+            product_id=self.product.id,
+            title="testtitle",
+            content="testcontent",
+        )
+
+    def test_정상적인_리뷰id가_들어왔을떄(self) -> None:
+        url = reverse("add-review-view-count", kwargs={"review_id": self.review.id})
+        response = self.client.post(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(ProductReview.objects.get(id=self.review.id).view_count, 1)
+        self.assertEqual(response.data.get("msg"), "Successful add ViewCount")
+
+    def test_비정상적인_리뷰id가_들어왔을때(self) -> None:
+        url = reverse("add-review-view-count", kwargs={"review_id": 12313131})
+        response = self.client.post(url)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(ProductReview.objects.get(id=self.review.id).view_count, 0)
+        self.assertEqual(response.data.get("msg"), "Review does not exist")

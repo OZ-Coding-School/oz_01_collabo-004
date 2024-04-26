@@ -134,8 +134,25 @@ class ProductReviewListView(APIView):
         description="상품의 상세 페이지에서 보여줄 리뷰 리스트를 내려주는 get 메서드",
     )
     def get(self, request: Request, product_id: int) -> Response:
-        reviews = ProductReview.objects.filter(product_id=product_id)
+        reviews = ProductReview.objects.filter(product_id=product_id, status=True)
         if reviews:
             serializer = ProductReviewListSerializer(reviews, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({"msg": "Review not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class AddReviewViewCount(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
+    @extend_schema(description="리뷰 리스트 중에서 리뷰 상세보기 시 뷰카운트 증가")
+    def post(self, request: Request, review_id: int) -> Response:
+        try:
+            review = ProductReview.objects.get(id=review_id, status=True)
+            review.view_count += 1
+            review.save()
+            return Response({"msg": "Successful add ViewCount"}, status=status.HTTP_200_OK)
+        except ProductReview.DoesNotExist:
+            return Response({"msg": "Review does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
