@@ -26,6 +26,7 @@ class CreateReviewSerializer(serializers.ModelSerializer):
 class ProductReviewDetailSerializer(serializers.ModelSerializer):  # type: ignore
     product = ProductInfoSerializer(read_only=True)
     image_file = serializers.ImageField(write_only=True)
+    writer = serializers.CharField(source="user.nickname", read_only=True)
 
     class Meta:
         model = ProductReview
