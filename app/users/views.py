@@ -56,7 +56,7 @@ class SendVerificationCodeView(APIView):
         description="유저가 회원가입시 이메일을 입력하면 인증을 진행해야하는데, 입력한 이메일을 검증 후에 인증에 쓰일 코드를 이메일로 보내줌.",
     )
     def post(self, request: Request) -> Response:
-        serializer = serializers.EmailSerializer(data=request)
+        serializer = serializers.EmailSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         email = serializer.validated_data.get("email")

@@ -54,13 +54,7 @@ class MyReviewListView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ProductReviewDetailView(APIView):
-    @extend_schema(responses=ProductReviewDetailSerializer, description="리뷰 상세 조회")
-    def get(self, request: Request, review_id: int, *args: Any, **kwargs: Any) -> Response:
-        review = get_object_or_404(ProductReview, id=review_id)
-        serializer = ProductReviewDetailSerializer(review)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
+class MyReviewDetailView(APIView):
     @extend_schema(
         request=ProductReviewDetailSerializer,
         responses=ProductReviewDetailSerializer,
@@ -95,6 +89,24 @@ class ProductReviewDetailView(APIView):
             review.save()
             return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+
+class ReviewDetailView(APIView):
+    authentication_classes = []
+    permission_classes = [AllowAny]
+
+    @extend_schema(responses=ProductReviewDetailSerializer, description="모든 유저가 리뷰 자세히보기가 가능함")
+    def get(self, request: Request, review_id: int) -> Response:
+        try:
+            review = ProductReview.objects.get(id=review_id, status=True)
+            review.view_count += 1
+            review.save()
+            serializer = ProductReviewDetailSerializer(review)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except ProductReview.DoesNotExist:
+            return Response({"msg": "Review does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 # class ProductReviewImageUploadView(APIView):
@@ -134,7 +146,7 @@ class ProductReviewListView(APIView):
         description="상품의 상세 페이지에서 보여줄 리뷰 리스트를 내려주는 get 메서드",
     )
     def get(self, request: Request, product_id: int) -> Response:
-        reviews = ProductReview.objects.filter(product_id=product_id)
+        reviews = ProductReview.objects.filter(product_id=product_id, status=True)
         if reviews:
             serializer = ProductReviewListSerializer(reviews, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)

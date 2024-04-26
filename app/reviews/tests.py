@@ -5,6 +5,7 @@ from rest_framework.test import APITestCase
 from rest_framework_simplejwt.tokens import AccessToken
 
 from products.models import Product
+from users.models import User
 
 from .models import ProductReview
 
@@ -122,16 +123,6 @@ class ProductReviewDetailTestCase(APITestCase):
         self.token = AccessToken.for_user(self.user)
         self.client.force_login(user=self.user)
 
-    def test_get_product_review_detail(self) -> None:
-        url = reverse("product-review-detail", kwargs={"review_id": self.review.pk})
-        response = self.client.get(url, headers={"Authorization": f"Bearer {self.token}"})
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["title"], self.review.title)
-        self.assertEqual(response.data["content"], self.review.content)
-        self.assertTrue(response.data["status"])
-        self.assertEqual(response.data["product"]["id"], self.review.product.id)  # type: ignore
-
     def test_put_product_review_detail(self) -> None:
         url = reverse("product-review-detail", kwargs={"review_id": self.review.pk})
         data = {
@@ -142,11 +133,11 @@ class ProductReviewDetailTestCase(APITestCase):
         response = self.client.put(url, data=data, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(ProductReview.objects.count(), 1)
         self.assertEqual(response.data["product"]["id"], self.product.id)
         self.assertEqual(response.data["title"], "testtitle_update")
         self.assertEqual(response.data["content"], "testcontent_update")
         self.assertTrue(response.data["status"])
-        self.assertEqual(ProductReview.objects.count(), 1)
 
         url = reverse("product-review-detail", kwargs={"review_id": 9919283123})
         response = self.client.delete(url, headers={"Authorization": f"Bearer {self.token}"})
@@ -215,3 +206,36 @@ class ProductReviewTestCase(APITestCase):
         self.assertTrue(response.data[0]["status"])
         self.assertEqual(response.data[0]["writer"], self.user.nickname)
         self.assertEqual(response.data[0]["profile_image"], self.user.profile_image)
+
+
+class ReviewDetailViewTest(APITestCase):
+    def setUp(self) -> None:
+        self.user = get_user_model().objects.create_user(
+            user_id="testuserid",
+            password="password123",
+            name="testname",
+            nickname="testnickname",
+            email="test@example.com",
+            phone="01012345678",
+        )
+
+        self.product = Product.objects.create(
+            name="testname",
+            description_text="testdescription",
+            price=1000000,
+        )
+
+        self.review = ProductReview.objects.create(
+            user_id=self.user.id, product_id=self.product.id, title="testtitle", content="testcontent"
+        )
+
+    def test_get_review_detail(self) -> None:
+        url = reverse("review-detail", kwargs={"review_id": self.review.pk})
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["view_count"], self.review.view_count + 1)
+        self.assertEqual(response.data["title"], self.review.title)
+        self.assertEqual(response.data["content"], self.review.content)
+        self.assertTrue(response.data["status"])
+        self.assertEqual(response.data["product"]["id"], self.review.product.id)  # type: ignore

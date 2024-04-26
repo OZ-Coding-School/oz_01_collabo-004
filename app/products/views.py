@@ -62,6 +62,18 @@ class ProductDetailView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({"error": "상품을 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND)
 
+    @extend_schema(description="상품 리스트에서 상품 상세페이지로 이동 시 뷰카운트 증가")
+    def post(self, request: Request, product_id: int) -> Response:
+        try:
+            product = Product.objects.get(id=product_id)
+            product.view_count += 1
+            product.save()
+            return Response({"msg": "Successful add ViewCount"}, status=status.HTTP_200_OK)
+        except Product.DoesNotExist:
+            return Response({"msg": "Product does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
     # def put(self, request: Request, product_id: int) -> Response:
     #     product = self.get_object(product_id)
     #     if product is not None:
