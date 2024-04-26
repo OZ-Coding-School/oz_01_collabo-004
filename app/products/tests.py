@@ -169,3 +169,25 @@ class ProductSearchTest(APITestCase):
         self.assertEqual(response_body[1]["discount"], self.product4.discount)
         self.assertEqual(response_body[1]["view_count"], self.product4.view_count)
         self.assertEqual(response_body[1]["status"], self.product4.status)
+
+
+class AddProductViewCountTest(APITestCase):
+    def setUp(self) -> None:
+        self.product = Product.objects.create(name="TestProduct123", price=10000, description_text="Test description")
+
+    def test_정상적인_상품_id가_들어왔을때(self) -> None:
+        url = reverse("product-detail", kwargs={"product_id": self.product.id})
+
+        response = self.client.post(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("msg"), "Successful add ViewCount")
+        self.assertEqual(Product.objects.get(id=self.product.pk).view_count, 1)
+
+    def test_비정상적인_상품id가_들어왔을때(self) -> None:
+        url = reverse("product-detail", kwargs={"product_id": 313131231})
+        response = self.client.post(url)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data.get("msg"), "Product does not exist")
+        self.assertEqual(Product.objects.get(id=self.product.pk).view_count, 0)
