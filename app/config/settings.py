@@ -15,7 +15,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-load_dotenv(dotenv_path="./local.env")
+load_dotenv(dotenv_path="./.env")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,9 +28,9 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["dog-go.store"]
 
 SITE_ID = 1  # 현재 Django 사이트의 고유 식별자를 설정
 
@@ -45,7 +45,6 @@ DJANGO_SYSTEM_APPS = [
 ]
 
 CUSTOM_USER_APPS = [
-    "corsheaders",
     "users",
     "orders",
     "products",
@@ -53,33 +52,23 @@ CUSTOM_USER_APPS = [
     "categories",
     "wishlist",
     "coupons",
-    "allauth",  # 로그인, 로그아웃, 회원가입, 비밀번호 변경, 비밀번호 초기화 등과 같은 기본적인 사용자 인증 기능을 제공
-    "allauth.account",  # 사용자의 계정 설정을 커스터마이징하고 관리
-    "allauth.socialaccount",  # 소셜 로그인 및 회원가입 기능을 제공
-    "allauth.socialaccount.providers.kakao",  # 카카오 로그인 제공
     "core",
-    "storages",
-    "rest_framework",
-    "drf_spectacular",
-    "rest_framework_simplejwt",
 ]
 
-INSTALLED_APPS = CUSTOM_USER_APPS + DJANGO_SYSTEM_APPS
+THIRD_PARTY_APPS = [
+    "corsheaders",
+    "storages",
+    "rest_framework",
+    "rest_framework_simplejwt",
+    "drf_spectacular",
+]
+
+INSTALLED_APPS = THIRD_PARTY_APPS + CUSTOM_USER_APPS + DJANGO_SYSTEM_APPS
 
 # 유저 관련 설정
 AUTH_USER_MODEL = "users.User"
 
-AUTHENTICATION_BACKENDS = (
-    "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend",
-)
-
-ACCOUNT_AUTHENTICATION_METHOD = "username"
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-ACCOUNT_CONFIRM_EMAIL_ON_GET = True
-ACCOUNT_EMAIL_VERIFICATION_EXPIRE_DAYS = 1
+AUTHENTICATION_BACKENDS = ("django.contrib.auth.backends.ModelBackend",)
 
 # 이메일 인증을 위한 설정
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
@@ -89,8 +78,6 @@ EMAIL_HOST_USER = os.environ.get("GOOGLE_EMAIL")
 EMAIL_HOST_PASSWORD = os.environ.get("GOOGLE_EMAIL_PASS")
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
-LOGIN_REDIRECT_URL = "/"  # 로그인 후에 메인페이지로 리다이렉트
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -107,11 +94,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-from django.urls.base import reverse_lazy
-
-# LOGIN_URL = reverse_lazy('users:login') # 로그인 페이지로 리다이렉트
-# ACCOUNT_LOGOUT_REDIRECT_URL = reverse_lazy('users:login') # 로그아웃 후에 리다이렉트 될 경로
-
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
@@ -121,7 +103,6 @@ CACHES = {
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
-    "allauth.account.middleware.AccountMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -237,8 +218,24 @@ AWS_S3_REGION_NAME = os.environ.get("AWS_S3_REGION_NAME")
 
 DEFAULT_FILE_STORAGE = os.environ.get("DEFAULT_FILE_STORAGE")
 
-STATIC_URL = "/static/static/"
-MEDIA_URL = "/static/media/"
+STATIC_URL = "/static/"
+STATIC_ROOT = "../static/"
 
-MEDIA_ROOT = "/vol/web/media"
-STATIC_ROOT = "/vol/web/static"
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "file": {
+            "level": "DEBUG",
+            "class": "logging.FileHandler",
+            "filename": "django.log",  # 로그 파일 경로 지정
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["file"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+    },
+}
