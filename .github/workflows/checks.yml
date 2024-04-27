@@ -5,9 +5,9 @@ on:
 
 jobs:
   ci:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     env:
-      SECRET_KEY: didtjdgns1dltngus2fpcmrh3
+      SECRET_KEY: dkanrjsktlzmfltzltkdydgkrl
       DB_HOST: 127.0.0.1
       DB_PORT: 3306
       DB_USER: root
