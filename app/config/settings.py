@@ -218,8 +218,8 @@ AWS_S3_REGION_NAME = os.environ.get("AWS_S3_REGION_NAME")
 
 DEFAULT_FILE_STORAGE = os.environ.get("DEFAULT_FILE_STORAGE")
 
-STATIC_URL = "/static/"
-STATIC_ROOT = "../static/"
+STATIC_URL = "/static-django/"
+STATIC_ROOT = "/root/static-django/"
 
 LOGGING = {
     "version": 1,
