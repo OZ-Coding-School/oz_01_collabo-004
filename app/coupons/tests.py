@@ -157,6 +157,14 @@ class UserCouponTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["msg"], "already issued coupon.")
 
+    def test_쿠폰번호가_유효하지않은_쿠폰발급요청_테스트(self) -> None:
+        url = reverse("user-coupon-issue", kwargs={"coupon_id": 12321241})
+        response = self.client.post(url, headers={"Authorization": f"Bearer {self.token}"})
+
+        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        self.assertEqual(UserCoupon.objects.filter(user_id=self.user.pk).count(), 0)
+        self.assertEqual(response.data["msg"], "Invalid Coupon_id")
+
     def test_user_coupon_list(self) -> None:
         url = reverse("user-coupon-list")
         user_coupon = UserCoupon.objects.create(
