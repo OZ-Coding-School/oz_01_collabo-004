@@ -1,0 +1,33 @@
+name: Django React Auto Deployment Manager
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  ci:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Run Checks
+        uses: ./.github/workflows/checks.yml
+
+  build:
+    runs-on: ubuntu-22.04
+    needs: ci
+    steps:
+      - name: EC2 ssh connection and deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}			# 연결할 EC2 
+          username: ${{ secrets.SSH_USERNAME }}	# 사용자
+          password: ${{ secrets.SSH_PASSWORD }}				# pem 파일 내용
+          command_timeout: 5m						# timeout 시간 설정
+          script: |
+              cd oz_01_collabo-004/frontend
+              rm -rf build
+              git pull origin main
+              cd frontend
+              npm run build
+              sudo systemctl restart uwsgi
+              sudo systemctl restart nginx
