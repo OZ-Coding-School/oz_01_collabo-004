@@ -129,8 +129,7 @@ class UserCouponDetailView(APIView):
 
 class UserCouponIssueView(APIView):
     @extend_schema(
-        description=
-        """
+        description="""
         쿠폰 발급요청을 처리하는 View
         이미 생성되어있는 쿠폰이 있으면 400 응답과 메시지를 반환,
         없다면 쿠폰의 유효성을 검증하고, 시리얼라이저로 데이터의 유효성 검증 후에 생성.
@@ -140,6 +139,7 @@ class UserCouponIssueView(APIView):
     )
     def post(self, request: Request, coupon_id: int) -> Response:
         from django.db import IntegrityError
+
         try:
             user_coupon, created = UserCoupon.objects.get_or_create(
                 coupon_id=coupon_id, user_id=request.user.id, status=True
@@ -151,4 +151,3 @@ class UserCouponIssueView(APIView):
             return Response({"msg": "Invalid Coupon_id"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except Exception as e:
             return Response({"msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
