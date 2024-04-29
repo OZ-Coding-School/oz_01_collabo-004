@@ -153,10 +153,6 @@ function PaymentPage() {
                 {Number(couponPrice).toLocaleString()}원
               </span>
             </h5>
-            <h5>
-              쿠폰
-              <span>- ₩{Number(couponPrice).toLocaleString()}원</span>
-            </h5>
             <hr />
             <h5>
               총 합계(KRW)<span>₩{totalPrice().toLocaleString()}원</span>
