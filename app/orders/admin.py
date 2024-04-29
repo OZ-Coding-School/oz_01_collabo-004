@@ -78,7 +78,10 @@ class OrderAdmin(admin.ModelAdmin):
         if obj.return_date is None:
             obj.return_date = obj.cal_return_date()
         if obj.sale_price is None:
-            obj.sale_price = obj.product.discount + obj.user_coupon.coupon.sale_price
+            obj.sale_price = obj.product.discount
+            if obj.user_coupon is not None:
+                if obj.user_coupon.coupon is not None:
+                    obj.sale_price += obj.user_coupon.coupon.sale_price
         if obj.total_price is None:
             obj.total_price = obj.product.price + self.option_price(obj) - obj.sale_price
         super().save_model(request, obj, form, change)
@@ -89,7 +92,10 @@ class OrderAdmin(admin.ModelAdmin):
         new_obj = self.get_object(request, object_id)
 
         new_obj.return_date = new_obj.cal_return_date()
-        new_obj.sale_price = new_obj.product.discount + new_obj.user_coupon.coupon.sale_price
+        new_obj.sale_price = new_obj.product.discount
+        if new_obj.user_coupon is not None:
+            if new_obj.user_coupon.coupon is not None:
+                new_obj.sale_price += new_obj.user_coupon.coupon.sale_price
         new_obj.total_price = new_obj.product.price + self.option_price(new_obj) - new_obj.sale_price
         new_obj.save()
 

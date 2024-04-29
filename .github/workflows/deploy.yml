@@ -1,68 +1,89 @@
-name: Django CI
+name: Django React Auto Deploy
 
 on:
   push:
+    branches:
+      - main
 
 jobs:
   ci:
     runs-on: ubuntu-22.04
     env:
-      SECRET_KEY: dkanrjsktlzmfltzltkdydgkrl
-      DB_HOST: 127.0.0.1
-      DB_PORT: 3306
-      DB_USER: root
-      DB_PASS: 1234
-      DB_NAME: oz_django
+        SECRET_KEY: dkanrjsktlzmfltzltkdydgkrl
+        DB_HOST: 127.0.0.1
+        DB_PORT: 3306
+        DB_USER: root
+        DB_PASS: 1234
+        DB_NAME: oz_django
     steps:
       - name: Check out the codes
         uses: actions/checkout@v2
-
+  
       - name: Setup python environment
         id: setup-python
         uses: actions/setup-python@v2
         with:
           python-version: 3.12
-
+  
       - name: Set timezone to KST
         run: |
           sudo rm /etc/localtime
           sudo ln -s /usr/share/zoneinfo/Asia/Seoul /etc/localtime
-
-      # Start Mysql
-      # https://ovirium.com/blog/how-to-make-mysql-work-in-your-github-actions/
+  
+        # Start Mysql
+        # https://ovirium.com/blog/how-to-make-mysql-work-in-your-github-actions/
       - name: Start Mysql
         run: |
           sudo systemctl start mysql
           mysql -e "use mysql; FLUSH PRIVILEGES; ALTER USER '${{ env.DB_USER }}'@'localhost' IDENTIFIED BY '${{ env.DB_PASS }}';" -uroot -proot
           mysql -e 'CREATE DATABASE ${{ env.DB_NAME }};' -u${{ env.DB_USER }} -p${{ env.DB_PASS }}
-
+  
       - name: Install Poetry
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
           echo "${HOME}/.local/bin" >> $GITHUB_PATH
-
+  
       - name: Install dependencies
         run: |
           cd app
           poetry install
-
+  
       - name: Run black
         run: |
           cd app
           poetry run black . --check
-
+  
       - name: Run isort
         run: |
           cd app
           poetry run isort . --check --diff
-
+  
       - name: Run Mypy
         run: |
           cd app
           poetry run mypy .
-
+  
       - name: Test python project
         run: |
           cd app
           poetry run python manage.py test
 
+  deploy:
+    runs-on: ubuntu-22.04
+    needs: ci
+    steps:
+      - name: EC2 ssh connection and deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}			# 연결할 EC2 
+          username: ${{ secrets.SSH_USERNAME }}	# 사용자
+          password: ${{ secrets.SSH_PASSWORD }}				# pem 파일 내용
+          command_timeout: 5m						# timeout 시간 설정
+          script: |
+              cd oz_01_collabo-004/frontend
+              rm 
+              git pull origin main
+              cd frontend
+              npm run build
+              sudo systemctl restart uwsgi
+              sudo systemctl restart nginx

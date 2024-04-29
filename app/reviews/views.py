@@ -21,10 +21,15 @@ from .serializers import (
 
 
 class MyReviewListView(APIView):
-    @extend_schema(responses=MyReviewListSerializer, description="Read products reviews for login user")
+    @extend_schema(
+        responses=MyReviewListSerializer(many=True),
+        description="로그인한 유저가 자신의 리뷰 작성 내역을 조회할 수 있음",
+    )
     def get(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         try:
             queryset = ProductReview.objects.filter(user_id=request.user.id).order_by("id")  # type: ignore
+            if not queryset:
+                return Response({"msg": "상품에 해당하는 리뷰가 없습니다."}, status=status.HTTP_404_NOT_FOUND)
             paginator = ProductReviewPagination()
             pagenated_queryset = paginator.paginate_queryset(queryset, request)
             serializer = MyReviewListSerializer(pagenated_queryset, many=True)
@@ -35,30 +40,29 @@ class MyReviewListView(APIView):
     @extend_schema(
         request=CreateReviewSerializer,
         responses=CreateReviewSerializer,
-        description="Get products reviews, After Post product-review",
+        description="리뷰를 작성하면 데이터 검증 후에 데이터베이스에 저장",
     )
     def post(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         data = request.data
         image_file = request.FILES.get("image_file")
         if image_file:
             data["image_url"] = image_file
-        serializer = CreateReviewSerializer(data=data, partial=True)
+        serializer = CreateReviewSerializer(data=data)
         if serializer.is_valid():
             serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ProductReviewDetailView(APIView):
-    serializer_class = ProductReviewDetailSerializer
-
-    def get(self, request: Request, review_id: int, *args: Any, **kwargs: Any) -> Response:
-        review = get_object_or_404(ProductReview, id=review_id)
-        serializer = ProductReviewDetailSerializer(review)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
+class MyReviewDetailView(APIView):
+    @extend_schema(
+        request=ProductReviewDetailSerializer,
+        responses=ProductReviewDetailSerializer,
+        description="리뷰 제목, 내용 및 이미지 수정",
+    )
     def put(self, request: Request, review_id: int, *args: Any) -> Response:
         review = get_object_or_404(ProductReview, id=review_id, user=request.user.id)
+        prev_image_url = review.image_url
         update_data = request.data
         update_image = request.FILES.get("image_file")
         if update_image:
@@ -66,16 +70,19 @@ class ProductReviewDetailView(APIView):
         serializer = ProductReviewDetailSerializer(review, data=request.data, partial=True)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        if update_image:
-            if review.image_url:
+        if prev_image_url != update_image:
+            if prev_image_url:
                 image_uploader = S3ImgUploader()
                 try:
-                    image_uploader.delete_img_file(str(review.image_url))  # 기존의 리뷰 이미지를 삭제
+                    image_uploader.delete_img_file(str(prev_image_url))  # 기존의 리뷰 이미지를 삭제
                 except Exception as e:
                     return Response({"msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         serializer.save()  # 인스턴스가 저장되면서 s3에 새로운 이미지가 업로드됨.
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @extend_schema(
+        description="리뷰를 삭제해서 더 이상 조회가 불가하게 만듦. status를 변경하여 리뷰데이터는 데이터베이스에 유지"
+    )
     def delete(self, request: Request, review_id: int, *args: Any) -> Response:
         review = get_object_or_404(ProductReview, id=review_id)
         if review.user == request.user:  # 리뷰를 작성한 유저가 보낸 삭제요청인지를 확인함
@@ -83,6 +90,24 @@ class ProductReviewDetailView(APIView):
             review.save()
             return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+
+class ReviewDetailView(APIView):
+    authentication_classes = []
+    permission_classes = [AllowAny]
+
+    @extend_schema(responses=ProductReviewDetailSerializer, description="모든 유저가 리뷰 자세히보기가 가능함")
+    def get(self, request: Request, review_id: int) -> Response:
+        try:
+            review = ProductReview.objects.get(id=review_id, status=True)
+            review.view_count += 1
+            review.save()
+            serializer = ProductReviewDetailSerializer(review)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except ProductReview.DoesNotExist:
+            return Response({"msg": "Review does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 # class ProductReviewImageUploadView(APIView):
@@ -122,7 +147,7 @@ class ProductReviewListView(APIView):
         description="상품의 상세 페이지에서 보여줄 리뷰 리스트를 내려주는 get 메서드",
     )
     def get(self, request: Request, product_id: int) -> Response:
-        reviews = ProductReview.objects.filter(product_id=product_id)
+        reviews = ProductReview.objects.filter(product_id=product_id, status=True)
         if reviews:
             serializer = ProductReviewListSerializer(reviews, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)

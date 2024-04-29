@@ -120,13 +120,13 @@ class OrderListTestCase(APITestCase):
         response = self.client.get(url, headers={"Authorization": f"Bearer {self.token}"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data[0]["total_price"], self.product.price)
-        self.assertEqual(response.data[0]["people"], 2)
-        self.assertEqual(response.data[0]["status"], "ordered")
-        self.assertEqual(response.data[1]["total_price"], self.product2.price)
-        self.assertEqual(response.data[1]["people"], 3)
+        self.assertEqual(response.data[1]["total_price"], self.product.price)
+        self.assertEqual(response.data[1]["people"], 2)
         self.assertEqual(response.data[1]["status"], "ordered")
-        self.assertEqual(response.data[0]["product_info"]["id"], self.product.id)
+        self.assertEqual(response.data[0]["total_price"], self.product2.price)
+        self.assertEqual(response.data[0]["people"], 3)
+        self.assertEqual(response.data[0]["status"], "ordered")
+        self.assertEqual(response.data[1]["product_info"]["id"], self.product.id)
         self.assertEqual(Order.objects.count(), 2)
 
 

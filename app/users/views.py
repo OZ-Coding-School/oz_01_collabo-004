@@ -1,9 +1,11 @@
 import os
 from datetime import datetime, timedelta
+from urllib.request import urlopen
 
 import requests
 from django.contrib.auth import authenticate
 from django.core.cache import cache
+from django.core.files import File
 from django.core.mail import EmailMessage
 from django.utils import timezone
 from django.utils.crypto import get_random_string
@@ -54,7 +56,7 @@ class SendVerificationCodeView(APIView):
         description="유저가 회원가입시 이메일을 입력하면 인증을 진행해야하는데, 입력한 이메일을 검증 후에 인증에 쓰일 코드를 이메일로 보내줌.",
     )
     def post(self, request: Request) -> Response:
-        serializer = serializers.EmailSerializer(data=request)
+        serializer = serializers.EmailSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         email = serializer.validated_data.get("email")
@@ -198,11 +200,11 @@ class JWTRefreshView(APIView):
             refresh_token_validate = RefreshToken(refresh_token)  # type: ignore
             access_token = str(refresh_token_validate.access_token)
             return Response({"access_token": access_token}, status=status.HTTP_200_OK)
-        except TokenError as e:
-            return Response({"msg": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except TokenError:
+            return Response({"msg": "Plz Login again"}, status=status.HTTP_400_BAD_REQUEST)
         except ValidationError as e:
             return Response({"msg": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
+        except Exception:
             # 예상치 못한 다른 예외 처리
             return Response({"msg": "an unexpected error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -336,11 +338,14 @@ class KakaoLoginView(APIView):
             )
             return response  # type: ignore
         except User.DoesNotExist:
+            # 이미지를 다운로드하여 파일 객체로 가져옴
+            image_response = urlopen(profile.get("profile_image_url"))
+            kakao_profile_image = File(image_response)
             user = User.objects.create(
                 user_id="oauth" + get_random_string(8),
                 email=kakao_account.get("email"),
                 nickname=profile.get("nickname"),
-                profile_image=profile.get("profile_image_url"),
+                profile_image=kakao_profile_image,
             )
             user.set_unusable_password()
             refresh_token = RefreshToken.for_user(user)

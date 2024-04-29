@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "../../api/axios";
 import Navbar from "../Navbar/Navbar";
 import "./Header.css";
 
@@ -26,17 +25,17 @@ function Search() {
 
   const handleUser = async () => {
     try {
-      await axios.post(
-        "https://dog-go.store/api/v1/user/logout/",
-        {
-          login_type: localStorage.getItem("kakao") ? "kakao" : "",
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      // await axios.post(
+      //   "https://dog-go.store/api/v1/user/logout/",
+      //   {
+      //     login_type: localStorage.getItem("kakao") ? "kakao" : "",
+      //   },
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${localStorage.getItem("token")}`,
+      //     },
+      //   }
+      // );
       localStorage.removeItem("token");
       localStorage.removeItem("kakao");
       navigate("/");

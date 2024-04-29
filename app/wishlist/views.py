@@ -25,10 +25,7 @@ class WishlistView(APIView):
         request=CreateWishlistSerializer, responses=CreateWishlistSerializer, description="Create a new wishlist"
     )
     def post(self, request: Request) -> Response:
-        data = {
-            "product": request.data.get("product"),
-        }
-        serializer = CreateWishlistSerializer(data=data)
+        serializer = CreateWishlistSerializer(data=request.data)
 
         if serializer.is_valid():
             # 기존에 위시리스트에 추가되어있던 경우

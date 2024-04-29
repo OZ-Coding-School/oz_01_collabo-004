@@ -1,4 +1,6 @@
+from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser
 from rest_framework.request import Request
@@ -127,20 +129,22 @@ class UserCouponDetailView(APIView):
 
 
 class UserCouponIssueView(APIView):
-    """
-    쿠폰 발급요청을 처리하는 View
-    이미 생성되어있는 쿠폰이 있으면 400 응답과 메시지를 반환,
-    없다면 쿠폰의 유효성을 검증하고, 시리얼라이저로 데이터의 유효성 검증 후에 생성.
-    시리얼라이저에서 유효성 검증 실패시 400 상태 코드, 시리얼라이저의 error 메시지를 반환.
-    생성이 완료되면 응답으로 생성된 쿠폰의 정보와, 201 상태코드 반환.
-    """
-
-    serializer_class = UserCouponSerializer
-
+    @extend_schema(
+        description="""
+        쿠폰 발급요청을 처리하는 View
+        이미 생성되어있는 쿠폰이 있으면 400 응답과 메시지를 반환,
+        없다면 쿠폰의 유효성을 검증하고, 시리얼라이저로 데이터의 유효성 검증 후에 생성.
+        시리얼라이저에서 유효성 검증 실패시 400 상태 코드, 시리얼라이저의 error 메시지를 반환.
+        생성이 완료되면 응답으로 생성된 쿠폰의 정보와, 201 상태코드 반환.
+        """
+    )
     def post(self, request: Request, coupon_id: int) -> Response:
-        user_coupon, created = UserCoupon.objects.get_or_create(
-            coupon_id=coupon_id, user_id=request.user.id, status=True
-        )
-        if not created:
-            return Response({"msg": "already issued coupon."}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({"msg": "Successfully issued coupon."}, status=status.HTTP_201_CREATED)
+        try:
+            user_coupon, created = UserCoupon.objects.get_or_create(coupon_id=coupon_id, user_id=request.user.id)
+            if not created:
+                return Response({"msg": "already issued coupon."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"msg": "Successfully issued coupon."}, status=status.HTTP_201_CREATED)
+        except IntegrityError:
+            return Response({"msg": "Invalid Coupon_id"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as e:
+            return Response({"msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

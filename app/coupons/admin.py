@@ -70,9 +70,10 @@ class UserCouponAdmin(admin.ModelAdmin):
         return obj.coupon.duration
 
     def save_model(self, request, obj, form, change):
+        response = super().save_model(request, obj, form, change)
         if obj.expired_at is None:
-            obj.expired_at = timezone.now() + timedelta(days=obj.coupon.duration)
-        return super().save_model(request, obj, form, change)
+            obj.set_expired_at()
+        return response
 
     def change_view(self, request, object_id, form_url="", extra_context=None):
         """
@@ -87,8 +88,7 @@ class UserCouponAdmin(admin.ModelAdmin):
         new = self.get_object(request, object_id)
 
         if prev.coupon != new.coupon:
-            new.expired_at = new.set_expired_at()
-            new.save()
+            new.set_expired_at()
 
         return response
 

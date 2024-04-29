@@ -36,7 +36,7 @@ function ProductDetail(props) {
   const mediumPetsTotalPrice = mediumPetsCount * 10000;
   const largePetsTotalPrice = largePetsCount * 15000;
 
-  let totalPrice = basePrice
+  let totalPrice = basePrice;
 
   const getTravelDetailData = async () => {
     try {
@@ -86,42 +86,56 @@ function ProductDetail(props) {
     });
   };
 
-const handlePeopleChange = (amount) => {
-  const updatedNumberOfPeople = Math.max(0, numberOfPeople + amount);
-  setNumberOfPeople(updatedNumberOfPeople);
+  const handlePeopleChange = (amount) => {
+    const updatedNumberOfPeople = Math.max(0, numberOfPeople + amount);
+    setNumberOfPeople(updatedNumberOfPeople);
 
-  const updatedPosttravelData = {
-    ...posttravelData,
-    numberOfPeople: updatedNumberOfPeople,
+    const updatedPosttravelData = {
+      ...posttravelData,
+      numberOfPeople: updatedNumberOfPeople,
+    };
+    setPosttravelData(updatedPosttravelData);
   };
-  setPosttravelData(updatedPosttravelData);
-};
-
-const handlePetsChange = (size, amount) => {
-  let updatedPetsCount;
-  switch (size) {
-    case "small":
-      updatedPetsCount = Math.max(0, smallPetsCount + amount);
-      setSmallPetsCount(updatedPetsCount);
-      break;
-    case "medium":
-      updatedPetsCount = Math.max(0, mediumPetsCount + amount);
-      setMediumPetsCount(updatedPetsCount);
-      break;
-    case "large":
-      updatedPetsCount = Math.max(0, largePetsCount + amount);
-      setLargePetsCount(updatedPetsCount);
-      break;
-    default:
-      break;
-  }
-  const updatedPosttravelData = {
-    ...posttravelData,
-    [`${size}PetsCount`]: updatedPetsCount,
+  const getMinDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    let month = today.getMonth() + 1;
+    if (month < 10) {
+      month = "0" + month;
+    }
+    let day = today.getDate();
+    if (day < 10) {
+      day = "0" + day;
+    }
+    return `${year}-${month}-${day}`;
   };
-  setPosttravelData(updatedPosttravelData);
-};
 
+  const [minDate] = useState(getMinDate());
+
+  const handlePetsChange = (size, amount) => {
+    let updatedPetsCount;
+    switch (size) {
+      case "small":
+        updatedPetsCount = Math.max(0, smallPetsCount + amount);
+        setSmallPetsCount(updatedPetsCount);
+        break;
+      case "medium":
+        updatedPetsCount = Math.max(0, mediumPetsCount + amount);
+        setMediumPetsCount(updatedPetsCount);
+        break;
+      case "large":
+        updatedPetsCount = Math.max(0, largePetsCount + amount);
+        setLargePetsCount(updatedPetsCount);
+        break;
+      default:
+        break;
+    }
+    const updatedPosttravelData = {
+      ...posttravelData,
+      [`${size}PetsCount`]: updatedPetsCount,
+    };
+    setPosttravelData(updatedPosttravelData);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -131,19 +145,21 @@ const handlePetsChange = (size, amount) => {
     console.log("중 반려동물 수:", mediumPetsCount);
     console.log("대 반려동물 수:", largePetsCount);
   };
-  const prouductId = location.state.id;
+  const productId = location.state.id;
+
+  console.log("아무거나나", productId);
   const paybutton = () => {
     if (!posttravelData.departureDate) {
       alert("출발일을 선택해주세요!!");
       return;
     } else {
-      navigate("/paymentpage", {
+      navigate(`/paymentpage/${productId}`, {
         state: {
           travelData,
           posttravelData,
           totalPrice,
           imageUrl,
-          prouductId
+          productId,
         },
       });
     }
@@ -172,7 +188,10 @@ const handlePetsChange = (size, amount) => {
           />
         </div>
         <div className="productdetail-page_contnet_review-content">
-          <h3><GiPin className="review-pin"/>해당상품 리뷰</h3>
+          <h3>
+            <GiPin className="review-pin" />
+            해당상품 리뷰
+          </h3>
           <div className="productdetail-page_contnet_review">
             <ul>
               {reviewData.map((review, index) => (
@@ -186,11 +205,8 @@ const handlePetsChange = (size, amount) => {
       </div>
 
       <div className="productdetail-page2">
-
         <div className="productdetail-page_contnet_detail">
-          <h4>
-            {travelData.description_text}
-          </h4>
+          <h4>{travelData.description_text}</h4>
           <hr />
           <img
             src={travelData.description_img}
@@ -209,6 +225,7 @@ const handlePetsChange = (size, amount) => {
                   <td>
                     <input
                       type="date"
+                      min={minDate}
                       value={departureDate}
                       onChange={handleDateChange}
                       required
@@ -233,12 +250,10 @@ const handlePetsChange = (size, amount) => {
                       +
                     </button>
                   </td>
-                  
                 </tr>
                 <tr>
                   <td>반려동물 (소): </td>
                   <td>
-
                     <button
                       onClick={() => handlePetsChange("small", -1)}
                       className="counter-button"
@@ -326,18 +341,20 @@ const handlePetsChange = (size, amount) => {
             </button>
           </form>
           <div className="reservation-form-info">
-          <p>예약 확정 전에는 요금이 청구되지 않습니다.</p>
-          <p>모든 상품은 인원수,반려동물의수의 따라 변결될수있습니다.</p>
+            <p>예약 확정 전에는 요금이 청구되지 않습니다.</p>
+            <p>모든 상품은 인원수,반려동물의수의 따라 변결될수있습니다.</p>
           </div>
           <hr />
-          <p>총 예약 가격 : {
-            basePrice+
-            PersonToTalPrice +
-            smallPetsTotalPrice +
-            mediumPetsTotalPrice +
-            largePetsTotalPrice} 원</p>
+          <p>
+            총 예약 가격 :{" "}
+            {basePrice +
+              PersonToTalPrice +
+              smallPetsTotalPrice +
+              mediumPetsTotalPrice +
+              largePetsTotalPrice}{" "}
+            원
+          </p>
         </div>
-
       </div>
     </div>
   );

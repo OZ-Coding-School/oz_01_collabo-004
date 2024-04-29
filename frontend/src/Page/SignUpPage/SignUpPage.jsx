@@ -11,8 +11,53 @@ function SignupForm({ setSignUp }) {
     email: "",
     phone: "",
     password: "",
-    confirmPassword: "",
   });
+  const [isChecked, setIsChecked] = useState(false);
+  const [emailCode, setEmailCode] = useState("");
+  const [emailMeg, setEmailMeg] = useState("");
+  const emailChecked2 = async () => {
+    const response = await axios.post(
+      "/api/v1/user/email-verify/",
+      {
+        email: formData.email,
+        code: emailCode,
+        verification_type: "signup",
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log(response);
+    if (response.status === 200) {
+      setIsChecked(false);
+      setEmailMeg(response.data.msg);
+      alert("이메일 인증이 완료되었습니다.");
+    }
+  };
+  console.log(formData.email);
+  const emailChecked = async () => {
+    try {
+      const response = await axios.post(
+        "/api/v1/user/email-verify/send/",
+        {
+          email: formData.email,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(response);
+      if (response.status === 200) {
+        setIsChecked(true);
+      }
+    } catch (error) {
+      console.log("이메일 인증 실패:", error);
+    }
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -34,38 +79,41 @@ function SignupForm({ setSignUp }) {
       }));
     }
   };
-
+  console.log(emailMeg);
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log(formData);
-
-    try {
-      const response = await axios.post("/api/v1/user/signup/", formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      });
-      console.log(response);
-
-      if (response.status === 201) {
-        alert("DogGo의 가족이 되었습니다. 환영합니다!");
-        console.log("회원가입에 성공했습니다.");
-        setFormData({
-          user_id: "",
-          name: "",
-          nickname: "",
-          email: "",
-          phone: "",
-          password: "",
-          confirmPassword: "",
+    if (emailMeg === "Email Veryfied Successfully.") {
+      try {
+        const response = await axios.post("/api/v1/user/signup/", formData, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
         });
-        setSignUp(false);
+        console.log(response);
+
+        if (response.status === 201) {
+          alert("DogGo의 가족이 되었습니다. 환영합니다!");
+          console.log("회원가입에 성공했습니다.");
+          setFormData({
+            user_id: "",
+            name: "",
+            nickname: "",
+            email: "",
+            phone: "",
+            password: "",
+            confirmPassword: "",
+          });
+          setSignUp(false);
+        }
+      } catch (error) {
+        alert("회원가입 실패:", error.message);
+        console.log("회원가입 실패:", error);
+        console.log(formData);
       }
-    } catch (error) {
-      alert("회원가입 실패:", error.message);
-      console.log("회원가입 실패:", error.message);
-      console.log(formData);
+    } else {
+      alert("이메일 인증을 완료해주세요.");
     }
   };
 
@@ -116,7 +164,7 @@ function SignupForm({ setSignUp }) {
             required
           />
         </div>
-        <div className="input-group">
+        <div className="input-group" style={{ display: "inline-block" }}>
           <label htmlFor="email">이메일 주소</label>
           <input
             type="email"
@@ -126,7 +174,39 @@ function SignupForm({ setSignUp }) {
             onChange={handleChange}
             required
           />
+          <button
+            type="button"
+            style={{ width: "35%", display: "inline-block", height: "42px" }}
+            onClick={emailChecked}
+          >
+            이메일 인증
+          </button>
         </div>
+        {isChecked ? (
+          <>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={emailCode}
+              style={{ margin: "10px 5px 0 0", width: "60%" }}
+              onChange={(e) => setEmailCode(e.target.value)}
+              required
+            />
+            <button
+              type="button"
+              style={{
+                width: "20%",
+                display: "inline-block",
+                height: "30px",
+                backgroundColor: "gray",
+              }}
+              onClick={emailChecked2}
+            >
+              확인
+            </button>
+          </>
+        ) : null}
         <div className="input-group">
           <label htmlFor="phone">전화번호</label>
           <input

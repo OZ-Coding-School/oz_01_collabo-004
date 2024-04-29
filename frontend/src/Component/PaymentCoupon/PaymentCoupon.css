@@ -1,69 +1,70 @@
-.payment-coupon-info{
-    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.7);
-    padding: 70px;
-    overflow: scroll;
-    background-color: #f1f1f1;
-    margin-top: 20px;
+.payment-coupon-info {
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.7);
+  padding: 70px;
+  overflow: scroll;
+  background-color: #f1f1f1;
+  margin-top: 20px;
+  scrollbar-width: none;
 }
 .payment-coupon-info::-webkit-scrollbar {
-    width: 0.5em;
-    background-color: #f1f1f1;
-    /* 배경색과 동일하게 설정 */
+  width: 0.5em;
+  background-color: #f1f1f1;
+  /* 배경색과 동일하게 설정 */
 }
 
 .payment-coupon-info::-webkit-scrollbar-thumb {
-    background-color: #f1f1f1;
-    /* 스크롤 바 색상과 동일하게 설정 */
+  background-color: #f1f1f1;
+  /* 스크롤 바 색상과 동일하게 설정 */
 }
-.payment-coupon-container-btn{
-    text-align: right;
+.payment-coupon-container-btn {
+  text-align: right;
 }
-.payment-coupon-container-btn button{
-    background: none;
-    border: none;
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: rgb(90, 120, 250);
+.payment-coupon-container-btn button {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: rgb(90, 120, 250);
 }
-.paymentcoupon{
-    background-color: white;
-    border-radius: 15px;
-    padding: 20px;
-    margin: 0 0 20px;
-    border: 4px solid rgb(253, 159, 49);
-    width: 400px;
-    transition: transform 0.3s ease;
+.paymentcoupon {
+  background-color: white;
+  border-radius: 15px;
+  padding: 20px;
+  margin: 0 0 20px;
+  border: 4px solid rgb(253, 159, 49);
+  width: 400px;
+  transition: transform 0.3s ease;
 }
-.paymentcoupon-title{
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
+.paymentcoupon-title {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
-.paymentcoupon-title h5{
-    font-size: 1.95rem;
-    color: rgb(253, 159, 49);
-    margin-bottom: 5px;
+.paymentcoupon-title h5 {
+  font-size: 1.95rem;
+  color: rgb(253, 159, 49);
+  margin-bottom: 5px;
 }
-.paymentcoupon-title p{
-    font-size: 1.25rem;
-    color: rgb(255, 136, 140);
+.paymentcoupon-title p {
+  font-size: 1.25rem;
+  color: rgb(255, 136, 140);
 }
 .paymentcoupon-bottom {
-    display: flex;
-    align-items: flex-end;
-    margin-top: -55px;
+  display: flex;
+  align-items: flex-end;
+  margin-top: -55px;
 }
 .paymentcoupon-bottom img {
-    width: 150px;
+  width: 150px;
 }
-.paymentcoupon-icon{
-    font-size: 1.95rem;
+.paymentcoupon-icon {
+  font-size: 1.95rem;
 }
-.paymentcoupon-icon-clicked{
-    color: rgb(90, 120, 250);
+.paymentcoupon-icon-clicked {
+  color: rgb(90, 120, 250);
 }
-.paymentcoupon-box:hover .paymentcoupon{
-    border: 5px solid rgb(90, 120, 250);
-    transform: scale(1.05);
-    cursor: pointer;
+.paymentcoupon-box:hover .paymentcoupon {
+  border: 5px solid rgb(90, 120, 250);
+  transform: scale(1.05);
+  cursor: pointer;
 }

@@ -54,7 +54,6 @@ function PaymentPage() {
     if (couponiconClicked && couponPrice.id !== 0) {
       paymentData.user_coupon_id = paymentCoupon.id;
     }
-
     try {
       const response = await axios.post(`/api/v1/order/`, paymentData, {
         headers: {
@@ -153,6 +152,10 @@ function PaymentPage() {
                 {couponPrice === 0 ? "" : "-"} ₩
                 {Number(couponPrice).toLocaleString()}원
               </span>
+            </h5>
+            <h5>
+              쿠폰
+              <span>- ₩{Number(couponPrice).toLocaleString()}원</span>
             </h5>
             <hr />
             <h5>
