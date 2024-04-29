@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from typing import Any
 
 from django.db import models
 
@@ -36,3 +37,7 @@ class UserCoupon(CommonModel):
         if self.expired_at is None:
             self.expired_at = self.created_at + timedelta(days=self.coupon.duration)
             self.save()
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        super().save(*args, **kwargs)
+        self.set_expired_at()

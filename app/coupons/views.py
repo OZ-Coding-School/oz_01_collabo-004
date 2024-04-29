@@ -1,3 +1,4 @@
+from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
@@ -138,12 +139,8 @@ class UserCouponIssueView(APIView):
         """
     )
     def post(self, request: Request, coupon_id: int) -> Response:
-        from django.db import IntegrityError
-
         try:
-            user_coupon, created = UserCoupon.objects.get_or_create(
-                coupon_id=coupon_id, user_id=request.user.id, status=True
-            )
+            user_coupon, created = UserCoupon.objects.get_or_create(coupon_id=coupon_id, user_id=request.user.id)
             if not created:
                 return Response({"msg": "already issued coupon."}, status=status.HTTP_400_BAD_REQUEST)
             return Response({"msg": "Successfully issued coupon."}, status=status.HTTP_201_CREATED)
