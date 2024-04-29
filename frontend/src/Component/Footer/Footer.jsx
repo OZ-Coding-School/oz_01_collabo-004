@@ -1,5 +1,5 @@
 import React from "react";
-import { FaStar, FaStarOfDavid } from "react-icons/fa";
+import { FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import "./Footer.css";
 
@@ -11,7 +11,7 @@ function Footer() {
           <h3 className="column-title">공지사항</h3>
           <p>사이트제작 팀명 | DogGo</p>
           <p>
-            작업자명단 | BD:김기철,유용준/ BE:임대용, <strong><FaStar /><FaStarOfDavid /><FaStar />서운할뻔한 김형빈</strong> / FE:민덕기,김태율
+            작업자명단 | BD:김기철,유용준/ BE:임대용, <strong><FaStar />서운할뻔한 김형빈</strong> / FE:민덕기,김태율
           </p>
           <p>팀장:임대용 부팀장:민덕기</p>
           <p>주소 | Oz코딩스쿨</p>

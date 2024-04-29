@@ -12,7 +12,7 @@ const PaymentCoupon = ({setPaymentCoupon,paymentCoupon}) => {
   // 쿠폰 정보 가져오는 함수
   const getCouponInfo = async () => {
     try {
-      const response = await axios.get('/api/v1/coupon/mycoupon', {
+      const response = await axios.get('/api/v1/coupon/mycoupon/', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -88,7 +88,6 @@ console.log(formattedDateTimeString);
               <span
               className={`material-symbols-outlined paymentcoupon-icon
               ${couponiconClicked ? 'paymentcoupon-icon-clicked' : ''}`}
-              onClick={handleIconClick}
               >
                 pets
               </span>
