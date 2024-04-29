@@ -27,22 +27,18 @@ function Product({ products }) {
         }
   };
 
-    const handleLinkClick = async () => {
+  // //리뷰증가시에 서버에
+    const reviewOnClick = async () => {
     try {
-      const response = await axios.post(`/api/v1/products/`,
+      const response = await axios.post(`/api/v1/product/${products.id}/`,
         {}, {
-              headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
         });
-      if (response.status === 200) {
-        console.log("조회수 증가 완료");
-      }
+      console.log('리뷰포인트',response);
     } catch (error) {
-      console.log("조회수 증가 실패:", error.message);
+      console.log("조회수 증가 실패:", error);
     }
-  };
+    };
+  
   return (
 
     <div className="product">
@@ -50,7 +46,7 @@ function Product({ products }) {
         to={`/travel/${products.name.replace(/ /g, "")}`}
         className="product-link"
         state={{ id: products.id }}
-        onClick={handleLinkClick}
+        onClick={reviewOnClick}
       >
         <img
           src={products.product_img}
