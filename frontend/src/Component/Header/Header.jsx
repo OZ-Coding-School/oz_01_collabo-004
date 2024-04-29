@@ -36,6 +36,7 @@ function Search() {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
+          withCredentials: true,
         }
       );
       localStorage.removeItem("token");
