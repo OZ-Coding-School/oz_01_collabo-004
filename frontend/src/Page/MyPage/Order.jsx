@@ -16,7 +16,6 @@ const Order = ({ setCount }) => {
   const [cancelledOnly, setCancelledOnly] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [reviewOrderId, setReviewOrderId] = useState(null);
-
   const [productId, setProductId] = useState();
 
   useEffect(() => {
@@ -113,7 +112,7 @@ const Order = ({ setCount }) => {
     setReviewOrderId(null);
   };
 
-  const abcd = (order) => {
+  const handleOrderItemClick = (order) => {
     if (order.status === "ORDERED") {
       handleReservationClick(order);
     } else if (order.status === "PAID") {
@@ -182,10 +181,9 @@ const Order = ({ setCount }) => {
         <ul className="order">
           {filteredOrders.map((order) => (
             <li
-              onClick={() => {
-                abcd(order);
-              }}
+              onClick={() => handleOrderItemClick(order)}
               key={order.order_id}
+              className={order.status === "PAID" ? "paid" : ""}
             >
               <div>{order.product_info.name}</div>
               <div>{order.total_price}</div>
@@ -199,6 +197,13 @@ const Order = ({ setCount }) => {
               <div>{order.departure_date}</div>
               <div>{order.return_date}</div>
               <div>{order.coupon ? order.coupon.coupon_info.content : ""}</div>
+              <div>
+                {order.status === "PAID" ? (
+                  <span className="review_button">리뷰작성</span>
+                ) : (
+                  ""
+                )}
+              </div>
             </li>
           ))}
         </ul>
