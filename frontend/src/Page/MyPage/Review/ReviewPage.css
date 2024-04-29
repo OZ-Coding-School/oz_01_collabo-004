@@ -1,3 +1,21 @@
+.review-page {
+  background-color: rgba(255, 255, 255, 0.8); /* 배경을 흐리게 설정 */
+  padding: 20px;
+  min-height: 100vh; /* 최소 높이를 화면 높이로 설정하여 페이지가 비어 보이지 않게 함 */
+  box-sizing: border-box;
+}
+
+.review-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.review-container {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
 .review {
   font-family: "BinggraeII-Bold";
   text-shadow: 1px 2px 4px rgba(255, 252, 252, 0.9);
@@ -6,6 +24,7 @@
   border-radius: 5px;
   padding: 0px;
   margin-bottom: 0px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   background: rgba(255, 255, 255, 0.9)
     url("../../../../public/images/noname.png") center center/cover no-repeat;
 }
