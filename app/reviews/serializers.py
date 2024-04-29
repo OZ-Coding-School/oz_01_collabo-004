@@ -15,7 +15,7 @@ class MyReviewListSerializer(serializers.ModelSerializer):  # type: ignore
 
 
 class CreateReviewSerializer(serializers.ModelSerializer):
-    image_file = serializers.ImageField(write_only=True, required=False)
+    image_url = serializers.ImageField(write_only=True, required=False)
 
     class Meta:
         model = ProductReview
@@ -25,7 +25,7 @@ class CreateReviewSerializer(serializers.ModelSerializer):
 
 class ProductReviewDetailSerializer(serializers.ModelSerializer):  # type: ignore
     product = ProductInfoSerializer(read_only=True)
-    image_file = serializers.ImageField(write_only=True)
+    image_url = serializers.ImageField(write_only=True)
     writer = serializers.CharField(source="user.nickname", read_only=True)
 
     class Meta:
