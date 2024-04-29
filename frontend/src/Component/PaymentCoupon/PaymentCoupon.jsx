@@ -11,7 +11,9 @@ const PaymentCoupon = ({ setPaymentCoupon, paymentCoupon }) => {
   // 쿠폰 정보 가져오는 함수
   const getCouponInfo = async () => {
     try {
-      const response = await axios.get("/api/v1/coupon/mycoupon", {
+
+      const response = await axios.get('/api/v1/coupon/mycoupon/', {
+
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -70,6 +72,7 @@ const PaymentCoupon = ({ setPaymentCoupon, paymentCoupon }) => {
       </div>
 
       {showCoupon && (
+
         <div className="payment-coupon-info">
           <div className="paymentCoupons">
             {couponInfo.map((item, index) => (
@@ -107,6 +110,7 @@ const PaymentCoupon = ({ setPaymentCoupon, paymentCoupon }) => {
                   </div>
                 </div>
               </div>
+
             ))}
           </div>
         </div>

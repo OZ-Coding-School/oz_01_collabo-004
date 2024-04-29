@@ -7,6 +7,7 @@
 .productdetail-page_product-img {
     width: 450px;
     border-radius: 10px;
+    border: 2px solid rgb(0, 0, 0, 0.4);
 }
 .productdetail-page_contnet {
     display: flex;
