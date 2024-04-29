@@ -44,7 +44,7 @@ function PaymentPage() {
     e.preventDefault();
 
     const paymentData = {
-      product: location.state.prouductId,
+      product: location.state.productId,
       departure_date: departureDate,
       people: numberOfPeople,
       pet_size_small: smallPetsCount,
