@@ -26,7 +26,8 @@ function Search() {
   const handleUser = async () => {
     try {
       await axios.post(
-        "https://dog-go.store/api/v1/user/logout/",{},
+        "https://dog-go.store/api/v1/user/logout/",
+      // {},
       //   {
       //     login_type: localStorage.getItem("kakao") ? "kakao" : "",
       //   },
