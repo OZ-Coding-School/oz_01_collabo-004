@@ -71,7 +71,7 @@ class MyReviewDetailView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         if prev_image_url != update_image:
-            if prev_image_url is not None:
+            if prev_image_url:
                 image_uploader = S3ImgUploader()
                 try:
                     image_uploader.delete_img_file(str(prev_image_url))  # 기존의 리뷰 이미지를 삭제
