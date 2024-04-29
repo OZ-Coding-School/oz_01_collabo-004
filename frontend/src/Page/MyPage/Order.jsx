@@ -4,8 +4,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../api/axios";
 import "./Order.css";
+import ReviewModal from "./Review/ReviewModal";
 
-const Order = () => {
+const Order = ({ setCount }) => {
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
@@ -13,6 +14,10 @@ const Order = () => {
   const [completedOnly, setCompletedOnly] = useState(false);
   const [paymentCompletedOnly, setPaymentCompletedOnly] = useState(false);
   const [cancelledOnly, setCancelledOnly] = useState(false);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [reviewOrderId, setReviewOrderId] = useState(null);
+
+  const [productId, setProductId] = useState();
 
   useEffect(() => {
     fetchOrders();
@@ -28,7 +33,6 @@ const Order = () => {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setOrders(response.data);
-      console.log(response.data);
       filterOrders();
     } catch (error) {
       console.log("Error fetching orders:", error);
@@ -92,7 +96,30 @@ const Order = () => {
   };
 
   const handleReservationClick = (orderId) => {
-    navigate.push(`/reservation/${orderId}`);
+    navigate(`/BookingPage/${orderId.product_info.id}`, {
+      state: {
+        id: orderId.order_id,
+      },
+    });
+  };
+
+  const handleReviewSubmit = (orderId) => {
+    setIsReviewModalOpen(true);
+    setReviewOrderId(orderId);
+  };
+
+  const handleReviewModalClose = () => {
+    setIsReviewModalOpen(false);
+    setReviewOrderId(null);
+  };
+
+  const abcd = (order) => {
+    if (order.status === "ORDERED") {
+      handleReservationClick(order);
+    } else if (order.status === "PAID") {
+      handleReviewSubmit(order.order_id);
+    }
+    setProductId(order.product_info.id);
   };
 
   return (
@@ -150,10 +177,16 @@ const Order = () => {
           <div>Start Date</div>
           <div>End Date</div>
           <div>Coupon</div>
+          <div>Review</div>
         </div>
         <ul className="order">
           {filteredOrders.map((order) => (
-            <li key={order.order_id}>
+            <li
+              onClick={() => {
+                abcd(order);
+              }}
+              key={order.order_id}
+            >
               <div>{order.product_info.name}</div>
               <div>{order.total_price}</div>
               <div>
@@ -166,15 +199,18 @@ const Order = () => {
               <div>{order.departure_date}</div>
               <div>{order.return_date}</div>
               <div>{order.coupon ? order.coupon.coupon_info.content : ""}</div>
-              {order.status === "ORDERED" && (
-                <button onClick={() => handleReservationClick(order.order_id)}>
-                  예약 페이지로 이동
-                </button>
-              )}
             </li>
           ))}
         </ul>
       </div>
+      {isReviewModalOpen && (
+        <ReviewModal
+          setCount={setCount}
+          productId={productId}
+          orderId={reviewOrderId}
+          onClose={handleReviewModalClose}
+        />
+      )}
     </div>
   );
 };

@@ -13,7 +13,7 @@ import WishList from "./WishList";
 
 function MyPage() {
   const [userId, setUserId] = useState("");
-
+  const [count, setCount] = useState(0);
   return (
     <Tab.Container id="left-tabs-example" defaultActiveKey="first">
       <Row>
@@ -50,13 +50,13 @@ function MyPage() {
               <WishList />
             </Tab.Pane>
             <Tab.Pane eventKey="third">
-              <Order />
+              <Order setCount={setCount} />
             </Tab.Pane>
             <Tab.Pane eventKey="fourth">
-              <Coupon/>
+              <Coupon />
             </Tab.Pane>
             <Tab.Pane eventKey="fifth">
-              <Review />
+              <Review count={count} />
             </Tab.Pane>
             <Tab.Pane eventKey="sixth">
               <Testaa />
