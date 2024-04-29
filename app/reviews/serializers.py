@@ -31,7 +31,7 @@ class ProductReviewDetailSerializer(serializers.ModelSerializer):  # type: ignor
     class Meta:
         model = ProductReview
         exclude = ("user",)
-        read_only_fields = ["status", "created_at", "modified_at", "image_url", "view_count"]
+        read_only_fields = ["status", "created_at", "modified_at", "view_count"]
 
 
 class ProductReviewListSerializer(serializers.ModelSerializer):
