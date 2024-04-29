@@ -1,77 +1,37 @@
-.petshop-page {
-  width: 90%;
-  margin: 0 auto;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.petshop-page-title {
-  text-align: center;
-}
-
-.petshop-page-title h1 {
-  font-size: 3.5rem;
-  color: #333;
-  margin-bottom: 20px;
-}
-
-.petshop-page-title p {
-  font-size: 1.5rem;
-  line-height: 1.5;
-  color: #666;
-  margin-bottom: 20px;
-}
-
-.petshop-page input[type="text"],
-select {
-  width: 40%;
-  padding: 8px;
-  margin-bottom: 20px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.product-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
 .product {
+  width: 420px;
+  height: 480px;
   background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 20px;
   margin: 10px;
+  border-radius: 20px;
+  border: 2px solid rgb(0,0,0,0.4);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease-in-out;
 }
-
+.product-info{
+  position: relative;
+  top: -140px;
+  padding: 20px;
+  color: white;
+  font-family: "BinggraeII-Bold";
+  text-shadow: 2px 2px 4px black;
+  margin: 0;
+}
+.product p{
+  margin: 0;
+}
 .product a {
   text-decoration: none;
 }
-
 .product-img {
-  width: 350px;
-  height: 380px;
-  display: block;
-  margin-bottom: 20px;
-  border-radius: 20px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 18px;
 }
-
-.product h3 {
-  font-size: 1.2rem;
-  color: #333;
-  margin-bottom: 10px;
+.product:hover{
+  transform: scale(1.05);
 }
-
-.product p {
-  font-size: 1rem;
-  color: #666;
-}
-
 .favorite-btn {
   display: flex;
   align-items: center;
@@ -84,20 +44,23 @@ select {
 }
 
 .wishlist-btn {
+  position: relative;
+  top: -220px;
+  right: 20px;
   text-align: right;
+  margin: 0;
+  padding: 0;
 }
-
 .wishlist-btn span {
-  font-size: 1.95rem;
+  font-size: 3.25rem;
 }
-
 .wishlist-btn button {
   background: none;
   border: none;
   cursor: pointer;
+  color: white;
+  text-shadow: 2px 2px 4px black;
 }
-
 .wishlist-btn-clicked span {
-  color: red;
-  border-radius: 20px;
+  color: rgb(90, 120, 250);
 }

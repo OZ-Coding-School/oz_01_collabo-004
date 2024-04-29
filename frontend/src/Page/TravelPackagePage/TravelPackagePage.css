@@ -1,24 +1,57 @@
-.petshop-page {
-    width: 85%;
-    margin: 0 auto;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.product-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 80px 0; 
 }
 .petshop-page-title{
+    display: flex;
+    justify-content: center;
     text-align: center;
 }
-
 .petshop-page-title h1 {
     font-size: 3.5rem;
     color: #333;
     margin-bottom: 20px;
+}
+.petshop-page-title h1 span{
+    color: rgb(90, 120, 250);
 }
 .petshop-page-title p {
     font-size: 1.5rem;
     line-height: 1.5;
     color: #666;
     margin-bottom: 20px;
+}
+.petshop-page-img{
+    position: absolute;
+    top: 65px;
+    width: 300px;
+    margin-left: 90px;
+}
+
+.product-list-title{
+    text-align: center;
+    width: 300px;
+    /* background-color: rgb(254,241,213);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid black;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px; */
+}
+.product-list-title h2{
+    margin: 0 5px;
+    padding: 10px;
+}
+.product-list-title-icon{
+    font-size: 1.65rem;
+    margin-left: 20px;
+}
+.petshop-page input[type="text"],
+select {
+    width: 100%;
+    padding: 10px;
+    border: 3px solid rgb(90, 120, 250);
+    border-radius: 10px;
 }
 
