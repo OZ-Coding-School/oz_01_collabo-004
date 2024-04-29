@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const request = axios.create({
-  baseURL: "https://dog-go.store",
+  baseURL: "https://dog-go.store/",
   headers: {
     "Content-Type": "application/json",
   },
@@ -10,11 +10,11 @@ const request = axios.create({
 const refreshToken = async () => {
   try {
     const response = await axios.post(
-      "/api/v1/user/simple/jwt_refresh_token",
+      "https://dog-go.store/api/v1/user/simple/jwt_refresh_token",
       {}
     );
     const newAccessToken = response.data.access;
-    localStorage.setItem("accessToken", newAccessToken);
+    localStorage.setItem("token", newAccessToken);
     return newAccessToken;
   } catch (error) {
     console.log("리프레시 토큰 에러", error);
@@ -24,7 +24,7 @@ const refreshToken = async () => {
 
 request.interceptors.request.use(
   async (config) => {
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = localStorage.getItem("token");
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }

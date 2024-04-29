@@ -11,7 +11,7 @@ body {
   transform: translate(-50%, -50%);
   display: flex;
   width: 600px;
-  height: 700px;
+  height: 750px;
   z-index: 999;
   animation: fadeIn 400ms;
   border-radius: 10%;
@@ -33,7 +33,7 @@ body {
 }
 
 .signup-form {
-  max-width: 400px;
+  max-width: 310px;
   margin: 20px auto;
   padding: 20px;
 }
@@ -46,13 +46,16 @@ body {
   display: block;
   margin-bottom: 5px;
 }
-/* 
-.input-group input {
-  width: 100%;
-  padding: 0px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-} */
+
+.input-group {
+  flex-wrap: nowrap;
+  display: block;
+}
+
+.input-group input[id="email"] {
+  width: 65%;
+  display: inline-block;
+}
 
 .signup-form button {
   height: 40px;

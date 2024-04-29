@@ -1,68 +1,69 @@
 .maypage-payment-coupon-info {
-    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.7);
-    padding: 40px;
-    overflow: scroll;
-    background-color: #f1f1f1;
-    margin-top: 20px;
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.7);
+  padding: 40px;
+  overflow: scroll;
+  background-color: #f1f1f1;
+  margin-top: 20px;
+  scrollbar-width: none;
 }
 .maypage-payment-coupon-info::-webkit-scrollbar {
-    width: 8px;
-    /* 스크롤바 너비 조정 */
-    background-color: transparent;
-    /* 스크롤바 배경색 투명화 */
+  width: 8px;
+  /* 스크롤바 너비 조정 */
+  background-color: transparent;
+  /* 스크롤바 배경색 투명화 */
 }
 
 .maypage-payment-coupon-info::-webkit-scrollbar-thumb {
-    background-color: transparent;
-    /* 스크롤바 색상 투명화 */
+  background-color: transparent;
+  /* 스크롤바 색상 투명화 */
 }
 
 .maypage-payment-coupon-info::-webkit-scrollbar-track {
-    background-color: transparent;
-    /* 스크롤바 트랙 색상 투명화 */
+  background-color: transparent;
+  /* 스크롤바 트랙 색상 투명화 */
 }
 .maypage-payment-coupon-container-btn {
-    text-align: right;
+  text-align: right;
 }
 
 .maypage-payment-coupon-container-btn button {
-    background: none;
-    border: none;
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: rgb(90, 120, 250);
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: rgb(90, 120, 250);
 }
 
 .maypage-paymentcoupon {
-    background-color: white;
-    border-radius: 15px;
-    padding: 20px;
-    margin: 0 0 20px;
-    border: 1.5px solid rgb(253, 159, 49);
-    width: 380px;
+  background-color: white;
+  border-radius: 15px;
+  padding: 20px;
+  margin: 0 0 20px;
+  border: 1.5px solid rgb(253, 159, 49);
+  width: 380px;
 }
 
 .maypage-paymentcoupon-title {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .maypage-paymentcoupon-title h5 {
-    font-size: 1.95rem;
-    color: rgb(253, 159, 49);
-    margin-bottom: 5px;
+  font-size: 1.95rem;
+  color: rgb(253, 159, 49);
+  margin-bottom: 5px;
 }
 
 .maypage-paymentcoupon-title p {
-    font-size: 1.25rem;
-    color: rgb(255, 136, 140);
+  font-size: 1.25rem;
+  color: rgb(255, 136, 140);
 }
 
 .maypage-paymentcoupon-bottom {
-    display: flex;
-    align-items: flex-end;
-    margin-top: -55px;
+  display: flex;
+  align-items: flex-end;
+  margin-top: -55px;
 }
 
 .maypage-paymentcoupon-bottom img {
-    width: 150px;
+  width: 150px;
 }

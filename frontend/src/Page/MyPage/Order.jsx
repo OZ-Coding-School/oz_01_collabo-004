@@ -1,16 +1,23 @@
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "../../api/axios";
 import "./Order.css";
+import ReviewModal from "./Review/ReviewModal";
 
-const Order = () => {
+const Order = ({ setCount }) => {
+  const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [completedOnly, setCompletedOnly] = useState(false);
   const [paymentCompletedOnly, setPaymentCompletedOnly] = useState(false);
   const [cancelledOnly, setCancelledOnly] = useState(false);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [reviewOrderId, setReviewOrderId] = useState(null);
+
+  const [productId, setProductId] = useState();
 
   useEffect(() => {
     fetchOrders();
@@ -26,7 +33,6 @@ const Order = () => {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setOrders(response.data);
-      console.log(response.data);
       filterOrders();
     } catch (error) {
       console.log("Error fetching orders:", error);
@@ -62,9 +68,8 @@ const Order = () => {
       return includeOrder;
     });
     setFilteredOrders(filtered);
-    console.log('필터',filteredOrders);
-    console.log('오더',orders);
   };
+
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
@@ -88,6 +93,33 @@ const Order = () => {
 
   const handleSearch = () => {
     filterOrders();
+  };
+
+  const handleReservationClick = (orderId) => {
+    navigate(`/BookingPage/${orderId.product_info.id}`, {
+      state: {
+        id: orderId.order_id,
+      },
+    });
+  };
+
+  const handleReviewSubmit = (orderId) => {
+    setIsReviewModalOpen(true);
+    setReviewOrderId(orderId);
+  };
+
+  const handleReviewModalClose = () => {
+    setIsReviewModalOpen(false);
+    setReviewOrderId(null);
+  };
+
+  const abcd = (order) => {
+    if (order.status === "ORDERED") {
+      handleReservationClick(order);
+    } else if (order.status === "PAID") {
+      handleReviewSubmit(order.order_id);
+    }
+    setProductId(order.product_info.id);
   };
 
   return (
@@ -135,7 +167,7 @@ const Order = () => {
               checked={cancelledOnly}
               onChange={handleCheckboxChange}
             />
-            예약 취소
+            결제 취소
           </label>
         </div>
         <div className="order-header">
@@ -145,10 +177,16 @@ const Order = () => {
           <div>Start Date</div>
           <div>End Date</div>
           <div>Coupon</div>
+          <div>Review</div>
         </div>
         <ul className="order">
           {filteredOrders.map((order) => (
-            <li key={order.order_id}>
+            <li
+              onClick={() => {
+                abcd(order);
+              }}
+              key={order.order_id}
+            >
               <div>{order.product_info.name}</div>
               <div>{order.total_price}</div>
               <div>
@@ -156,7 +194,7 @@ const Order = () => {
                   ? "예약중"
                   : order.status === "PAID"
                   ? "결제완료"
-                  : "결제취소"}
+                  : "결제 취소"}
               </div>
               <div>{order.departure_date}</div>
               <div>{order.return_date}</div>
@@ -165,6 +203,14 @@ const Order = () => {
           ))}
         </ul>
       </div>
+      {isReviewModalOpen && (
+        <ReviewModal
+          setCount={setCount}
+          productId={productId}
+          orderId={reviewOrderId}
+          onClose={handleReviewModalClose}
+        />
+      )}
     </div>
   );
 };

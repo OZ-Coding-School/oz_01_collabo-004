@@ -12,11 +12,12 @@ import HeaderBar from "./Component/Header/Header.jsx";
 import ScrollTop from "./Component/ScrollTop.jsx";
 import Testaa from "./Component/Testaa.jsx";
 import Hotel from "./Page/HotelPage/HotelPage.jsx";
-
 import Login from "./Page/Loginpage/LoginPage.jsx";
 import LogoutPage from "./Page/Loginpage/LogoutPage.jsx";
 import MainPage from "./Page/MainPage/MainPage.jsx";
+import BookingPage from "./Page/MyPage/BookingPage.jsx";
 import MyPage from "./Page/MyPage/MyPage.jsx";
+import ReviewModal from "./Page/MyPage/Review/ReviewModal.jsx";
 import Travel from "./Page/RecommendedSpotPage/RecommendedSpotPage.jsx";
 import Restaurant from "./Page/RestaurantPage/RestaurantItem.jsx";
 import Service from "./Page/SevicePage/SevicePage.jsx";
@@ -55,8 +56,10 @@ function App() {
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/service" element={<Service />} />
           <Route path="/test" element={<Testaa />} />
-          <Route path="/paymentpage" element={<PaymentPage />} />
+          <Route path="/paymentpage/:productId" element={<PaymentPage />} />
           <Route path="/logout" element={<LogoutPage />} />
+          <Route path="/bookingpage/:productId" element={<BookingPage />} />
+          <Route path="/reviewmodal/:productId" element={<ReviewModal />} />
         </Route>
       </Routes>
     </BrowserRouter>

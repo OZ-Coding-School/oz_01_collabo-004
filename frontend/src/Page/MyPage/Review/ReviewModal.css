@@ -1,0 +1,44 @@
+.review-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  max-width: 400px;
+  width: 90%;
+}
+
+.review-modal-title {
+  margin-top: 0;
+}
+
+.review-modal-input,
+.review-modal-textarea {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.review-modal-button {
+  padding: 10px 20px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: rgb(90, 120, 250);
+  color: white;
+  cursor: pointer;
+}
+
+.review-modal-button:last-child {
+  margin-right: 0;
+}
+
+.review-modal-button:hover {
+  background-color: #0056b3;
+}

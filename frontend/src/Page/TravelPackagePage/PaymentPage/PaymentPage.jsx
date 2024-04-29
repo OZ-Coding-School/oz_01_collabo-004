@@ -12,11 +12,21 @@ function PaymentPage() {
   const totalPricepay = location?.state?.totalPrice;
   console.log(location);
 
-  const [departureDate, setDepartureDate] = useState(posttravelData?.departureDate);
-  const [numberOfPeople, setNumberOfPeople] = useState(posttravelData?.numberOfPeople);
-  const [smallPetsCount, setSmallPetsCount] = useState(posttravelData?.smallPetsCount);
-  const [mediumPetsCount, setMediumPetsCount] = useState(posttravelData?.mediumPetsCount);
-  const [largePetsCount, setLargePetsCount] = useState(posttravelData?.largePetsCount);
+  const [departureDate, setDepartureDate] = useState(
+    posttravelData?.departureDate
+  );
+  const [numberOfPeople, setNumberOfPeople] = useState(
+    posttravelData?.numberOfPeople
+  );
+  const [smallPetsCount, setSmallPetsCount] = useState(
+    posttravelData?.smallPetsCount
+  );
+  const [mediumPetsCount, setMediumPetsCount] = useState(
+    posttravelData?.mediumPetsCount
+  );
+  const [largePetsCount, setLargePetsCount] = useState(
+    posttravelData?.largePetsCount
+  );
   const [paymentCoupon, setPaymentCoupon] = useState(0);
   const navigate = useNavigate();
   const couponPrice = paymentCoupon !== 0 ? 50000 : 0;
@@ -25,33 +35,30 @@ function PaymentPage() {
     navigate(-1); //뒤로가기
   };
 
-const handlePayment = async (e) => {
-  e.preventDefault();
+  const handlePayment = async (e) => {
+    e.preventDefault();
 
-  const paymentData = {
-    product:location.state.prouductId,
-    departure_date: departureDate,
-    people: numberOfPeople,
-    pet_size_small: smallPetsCount,
-    pet_size_medium: mediumPetsCount,
-    pet_size_big: largePetsCount,
-    user_coupon_id: paymentCoupon
-  };
-  
+    const paymentData = {
+      product: location.state.productId,
+      departure_date: departureDate,
+      people: numberOfPeople,
+      pet_size_small: smallPetsCount,
+      pet_size_medium: mediumPetsCount,
+      pet_size_big: largePetsCount,
+      user_coupon_id: paymentCoupon,
+    };
+    console.log(paymentData);
     try {
-      const response = await axios.post(`/api/v1/order/`,
-        paymentData, {
+      const response = await axios.post(`/api/v1/order/`, paymentData, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        }
-      );
+      });
       console.log(response);
       if (response.status === 201) {
-        alert("예약이완료 되었습니다!")
-        navigate("/travel")
-      };
-      
+        alert("예약이완료 되었습니다!");
+        navigate("/travel");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -67,7 +74,12 @@ const handlePayment = async (e) => {
     const mediumPetPrice = mediumPetsCount * 10000;
     const largePetPrice = largePetsCount * 15000;
     return (
-      basePrice + personPrice + smallPetPrice + mediumPetPrice + largePetPrice - couponPrice
+      basePrice +
+      personPrice +
+      smallPetPrice +
+      mediumPetPrice +
+      largePetPrice -
+      couponPrice
     );
   };
 
@@ -96,9 +108,7 @@ const handlePayment = async (e) => {
     setShowPaymentInputs(false);
   };
   return (
-
     <div className="paymentpage-container">
-
       <div className="paymentpage-des">
         {travelData ? (
           <div>
@@ -119,15 +129,20 @@ const handlePayment = async (e) => {
               <span>₩{(numberOfPeople * 15000).toLocaleString()}원</span>
             </h5>
             <h5>
-              추가 반려견<span>₩{(
+              추가 반려견
+              <span>
+                ₩
+                {(
                   smallPetsCount * 6000 +
                   mediumPetsCount * 10000 +
-                  largePetsCount * 15000).toLocaleString()}원</span>
-            </h5>
-            <h5>쿠폰
-              <span>
-            - ₩{Number(couponPrice).toLocaleString()}원
+                  largePetsCount * 15000
+                ).toLocaleString()}
+                원
               </span>
+            </h5>
+            <h5>
+              쿠폰
+              <span>- ₩{Number(couponPrice).toLocaleString()}원</span>
             </h5>
             <hr />
             <h5>
@@ -140,11 +155,16 @@ const handlePayment = async (e) => {
         )}
       </div>
 
-      <form
-        className="paymentpage-form">
+      <form className="paymentpage-form">
         <h2>
-        <span className="material-symbols-outlined paymentpage-goback-btn" onClick={handleBack}
-        >undo</span>확인 및 결제</h2>
+          <span
+            className="material-symbols-outlined paymentpage-goback-btn"
+            onClick={handleBack}
+          >
+            undo
+          </span>
+          확인 및 결제
+        </h2>
         <h3>예약정보</h3>
         <label>출발일</label>
         <input
@@ -161,26 +181,30 @@ const handlePayment = async (e) => {
               {numberOfPeople}명 /{" "}
               {smallPetsCount + mediumPetsCount + largePetsCount} 마리
               <div className="paymentpage-input-btn">
-              <button type="button" onClick={toggleModal}>
-                수정하기
-              </button>
+                <button type="button" onClick={toggleModal}>
+                  수정하기
+                </button>
               </div>
             </p>
-            <CouponInfoComponent paymentCoupon={paymentCoupon} setPaymentCoupon={setPaymentCoupon} />
+            <CouponInfoComponent
+              paymentCoupon={paymentCoupon}
+              setPaymentCoupon={setPaymentCoupon}
+            />
           </div>
         </div>
 
         <hr />
-      <div className="paymentpage-form-info">
-      <h3>환불정책</h3>
-      <p>패키지구매 일 주일전까지 무료로 취소하실 수 있습니다.</p>
-      <p>당일예약 취소시 50%의 수수료가 발생합니다</p>
-      </div>
-      <hr />
-      <div className="paymentpage-form-totalpaybtn">
-      <button type="submit"
-          onClick={handlePayment}>예약확정</button>
-      </div>
+        <div className="paymentpage-form-info">
+          <h3>환불정책</h3>
+          <p>패키지구매 일 주일전까지 무료로 취소하실 수 있습니다.</p>
+          <p>당일예약 취소시 50%의 수수료가 발생합니다</p>
+        </div>
+        <hr />
+        <div className="paymentpage-form-totalpaybtn">
+          <button type="submit" onClick={handlePayment}>
+            예약확정
+          </button>
+        </div>
       </form>
 
       <PaymentPageModal

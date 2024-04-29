@@ -3,7 +3,7 @@ import axios from "../../../api/axios";
 import ReviewEdit from "./ReviewEdit";
 import "./ReviewPage.css";
 
-const ReviewPage = () => {
+const ReviewPage = (count) => {
   const [reviews, setReviews] = useState([]);
   const [editReviewId, setEditReviewId] = useState(null);
 
@@ -16,14 +16,14 @@ const ReviewPage = () => {
           },
         });
         setReviews(response.data.results);
-        console.log("리뷰", response.data.results);
+        console.log("리뷰", response.data.results[0].image_url);
       } catch (error) {
         console.error("Error fetching reviews:", error);
       }
     };
 
     fetchReviews();
-  }, []);
+  }, [count]);
 
   const handleShowModal = (reviewId) => {
     setEditReviewId(reviewId);
