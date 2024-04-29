@@ -7,11 +7,13 @@ import "./PaymentPage.css";
 
 function PaymentPage() {
   const location = useLocation();
+  const [couponId, setCouponId] = useState(0);
+  console.log(location);
   const travelData = location?.state?.travelData;
   const posttravelData = location?.state?.posttravelData;
   const totalPricepay = location?.state?.totalPrice;
   console.log(location);
-
+  const [couponiconClicked, setICouponiconClicked] = useState(false);
   const [departureDate, setDepartureDate] = useState(
     posttravelData?.departureDate
   );
@@ -29,8 +31,11 @@ function PaymentPage() {
   );
   const [paymentCoupon, setPaymentCoupon] = useState(0);
   const navigate = useNavigate();
-  const couponPrice = paymentCoupon !== 0 ? 50000 : 0;
-
+  const couponPrice =
+    paymentCoupon.id !== 0 && couponiconClicked
+      ? paymentCoupon.coupon_info.sale_price
+      : 0;
+  console.log("쿠폰", paymentCoupon);
   const handleBack = () => {
     navigate(-1); //뒤로가기
   };
@@ -39,15 +44,16 @@ function PaymentPage() {
     e.preventDefault();
 
     const paymentData = {
-      product: location.state.productId,
+      product: location.state.prouductId,
       departure_date: departureDate,
       people: numberOfPeople,
       pet_size_small: smallPetsCount,
       pet_size_medium: mediumPetsCount,
       pet_size_big: largePetsCount,
-      user_coupon_id: paymentCoupon,
     };
-    console.log(paymentData);
+    if (couponiconClicked && couponPrice.id !== 0) {
+      paymentData.user_coupon_id = paymentCoupon.id;
+    }
     try {
       const response = await axios.post(`/api/v1/order/`, paymentData, {
         headers: {
@@ -142,6 +148,13 @@ function PaymentPage() {
             </h5>
             <h5>
               쿠폰
+              <span>
+                {couponPrice === 0 ? "" : "-"} ₩
+                {Number(couponPrice).toLocaleString()}원
+              </span>
+            </h5>
+            <h5>
+              쿠폰
               <span>- ₩{Number(couponPrice).toLocaleString()}원</span>
             </h5>
             <hr />
@@ -189,6 +202,8 @@ function PaymentPage() {
             <CouponInfoComponent
               paymentCoupon={paymentCoupon}
               setPaymentCoupon={setPaymentCoupon}
+              couponiconClicked={couponiconClicked}
+              setICouponiconClicked={setICouponiconClicked}
             />
           </div>
         </div>

@@ -2,11 +2,15 @@ import React, { useEffect, useState } from "react";
 import axios from "../../api/axios";
 import "./PaymentCoupon.css";
 
-const PaymentCoupon = ({ setPaymentCoupon, paymentCoupon }) => {
+const PaymentCoupon = ({
+  setPaymentCoupon,
+  paymentCoupon,
+  setICouponiconClicked,
+  couponiconClicked,
+}) => {
   const [couponInfo, setCouponInfo] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showCoupon, setShowCoupon] = useState(false);
-  const [couponiconClicked, setICouponiconClicked] = useState(false);
 
   // 쿠폰 정보 가져오는 함수
   const getCouponInfo = async () => {
@@ -18,17 +22,19 @@ const PaymentCoupon = ({ setPaymentCoupon, paymentCoupon }) => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      console.log(response);
+      console.log("쿠폰", response);
       if (response.status === 200) {
-        const data = response.data;
-        setCouponInfo(data);
-        setPaymentCoupon(data[0].id);
-        console.log("coupon", response.data);
+        if (response.data[0].status !== false) {
+          const data = response.data;
+          setCouponInfo(data);
+          setPaymentCoupon(data[0]);
+          console.log("coupon", response.data);
+        } else {
+          return;
+        }
       }
     } catch (error) {
-      console.log("쿠폰 정보를 불러오는 데 실패했습니다:", error.message);
-    } finally {
-      setLoading(false);
+      console.log("1쿠폰 정보를 불러오는 데 실패했습니다:", error);
     }
   };
 
@@ -72,7 +78,6 @@ const PaymentCoupon = ({ setPaymentCoupon, paymentCoupon }) => {
       </div>
 
       {showCoupon && (
-
         <div className="payment-coupon-info">
           <div className="paymentCoupons">
             {couponInfo.map((item, index) => (
@@ -110,7 +115,6 @@ const PaymentCoupon = ({ setPaymentCoupon, paymentCoupon }) => {
                   </div>
                 </div>
               </div>
-
             ))}
           </div>
         </div>
