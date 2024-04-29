@@ -47,7 +47,7 @@ class MyReviewListView(APIView):
         image_file = request.FILES.get("image_file")
         if image_file:
             data["image_url"] = image_file
-        serializer = CreateReviewSerializer(data=data, partial=True)
+        serializer = CreateReviewSerializer(data=data)
         if serializer.is_valid():
             serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)

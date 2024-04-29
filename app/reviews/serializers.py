@@ -15,12 +15,12 @@ class MyReviewListSerializer(serializers.ModelSerializer):  # type: ignore
 
 
 class CreateReviewSerializer(serializers.ModelSerializer):
-    image_file = serializers.ImageField(write_only=True)
+    image_file = serializers.ImageField(write_only=True, required=False)
 
     class Meta:
         model = ProductReview
         exclude = ("user",)
-        read_only_fields = ("status", "created_at", "modified_at", "image_url", "view_count")
+        read_only_fields = ("status", "created_at", "modified_at", "view_count")
 
 
 class ProductReviewDetailSerializer(serializers.ModelSerializer):  # type: ignore
