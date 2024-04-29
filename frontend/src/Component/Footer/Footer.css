@@ -33,3 +33,7 @@
 .column ul a:hover {
   text-decoration-line: underline;
 }
+.column strong{
+  color: hotpink;
+  font-size: 1.15rem;
+}
