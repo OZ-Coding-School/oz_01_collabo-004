@@ -62,6 +62,7 @@ class MyReviewDetailView(APIView):
     )
     def put(self, request: Request, review_id: int, *args: Any) -> Response:
         review = get_object_or_404(ProductReview, id=review_id, user=request.user.id)
+        prev_image_url = review.image_url
         update_data = request.data
         update_image = request.FILES.get("image_file")
         if update_image:
@@ -69,11 +70,11 @@ class MyReviewDetailView(APIView):
         serializer = ProductReviewDetailSerializer(review, data=request.data, partial=True)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        if update_image:
-            if review.image_url:
+        if prev_image_url != update_image:
+            if prev_image_url is not None:
                 image_uploader = S3ImgUploader()
                 try:
-                    image_uploader.delete_img_file(str(review.image_url))  # 기존의 리뷰 이미지를 삭제
+                    image_uploader.delete_img_file(str(prev_image_url))  # 기존의 리뷰 이미지를 삭제
                 except Exception as e:
                     return Response({"msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         serializer.save()  # 인스턴스가 저장되면서 s3에 새로운 이미지가 업로드됨.
