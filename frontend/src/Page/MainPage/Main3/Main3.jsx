@@ -6,7 +6,7 @@ import "./Main3.css";
 function Main3() {
   const postCoupon = async () => {
     try {
-      const response = await axios.post(`/api/v1/coupon/issue/1`,
+      const response = await axios.post(`/api/v1/coupon/issue/2`,
         {}, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -14,17 +14,17 @@ function Main3() {
         }
       );
       console.log(response)
-      if (response.status === 200) {
+      if (response.status === 201) {
         console.log("쿠폰이 성공적으로 발급되었습니다!");
         alert("쿠폰이성공적으로 발급되었습니다!")
       } else {
         throw new Error("서버 응답 실패");
       }
     } catch (error) {
-      console.log(error);
+      console.log('쿠폰',error);
       console.log(error.response.data.msg)
       if (error.response.data.msg === 'already issued coupon.')
-        alert("이미발급된쿠폰입니다.")
+        alert("이미 발급된 쿠폰입니다.")
     }
   };
 

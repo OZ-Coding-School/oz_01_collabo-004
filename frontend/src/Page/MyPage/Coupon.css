@@ -5,7 +5,22 @@
     background-color: #f1f1f1;
     margin-top: 20px;
 }
+.maypage-payment-coupon-info::-webkit-scrollbar {
+    width: 8px;
+    /* 스크롤바 너비 조정 */
+    background-color: transparent;
+    /* 스크롤바 배경색 투명화 */
+}
 
+.maypage-payment-coupon-info::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    /* 스크롤바 색상 투명화 */
+}
+
+.maypage-payment-coupon-info::-webkit-scrollbar-track {
+    background-color: transparent;
+    /* 스크롤바 트랙 색상 투명화 */
+}
 .maypage-payment-coupon-container-btn {
     text-align: right;
 }

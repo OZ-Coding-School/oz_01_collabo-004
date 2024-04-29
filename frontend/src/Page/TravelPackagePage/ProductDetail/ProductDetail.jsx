@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { GiPin } from "react-icons/gi";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "../../../api/axios";
 import "./ProductDetail.css";
@@ -60,7 +61,6 @@ function ProductDetail(props) {
       console.log(error);
     }
   };
-
   useEffect(() => {
     getTravelDetailData();
     getReview();
@@ -172,7 +172,7 @@ const handlePetsChange = (size, amount) => {
           />
         </div>
         <div className="productdetail-page_contnet_review-content">
-          <h3>해당상품 리뷰</h3>
+          <h3><GiPin className="review-pin"/>해당상품 리뷰</h3>
           <div className="productdetail-page_contnet_review">
             <ul>
               {reviewData.map((review, index) => (

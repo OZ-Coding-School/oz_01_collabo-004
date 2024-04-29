@@ -6,24 +6,18 @@
 }
 .productdetail-page_product-img {
     width: 450px;
-    height: 450px;
-    border-radius: 25px;
+    border-radius: 10px;
 }
 .productdetail-page_contnet {
     display: flex;
     justify-content: space-evenly;
     padding: 20px 30px;
-    margin: 0 30px;
-    border-radius: 20px;
-    box-shadow: 0px 1px 3px 0px #333;
-}
-.productdetail-page_contnet_review-content h3 {
-    text-align: center;
+    width: 100%;
+    border: 1px solid grey;
+    align-items: flex-end;
 }
 .productdetail-page_contnet_review {
     padding: 10px;
-    width: 500px;
-    height: 400px;
     overflow: auto;
 }
 .productdetail-page_contnet_review ul {
@@ -151,8 +145,8 @@
     text-decoration: underline;
 }
 .description-img{
-    width: 750px;
-    height: 850px;
+    width: 797px;
+    height: 1000px;
 }
 .reservation-form-info p{
     margin: 0;
@@ -165,5 +159,24 @@
     margin-right: 30px;
 }
 .product-goback-btn:hover{
+    color: rgb(90, 120, 250);
+}
+
+/*리뷰*/
+.productdetail-page_contnet_review-content{
+    background-color: aliceblue;
+    box-shadow: -1px 1px 20px 0px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    border-radius: 20px;
+    width: 400px;
+}
+.productdetail-page_contnet_review-content h3{
+    margin: 20px;
+}
+.review-pin{
+    position: relative;
+    top: -20px;
+    right: 10px;
+    font-size: 3.25rem;
     color: rgb(90, 120, 250);
 }

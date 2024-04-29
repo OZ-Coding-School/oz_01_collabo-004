@@ -5,6 +5,16 @@
     background-color: #f1f1f1;
     margin-top: 20px;
 }
+.payment-coupon-info::-webkit-scrollbar {
+    width: 0.5em;
+    background-color: #f1f1f1;
+    /* 배경색과 동일하게 설정 */
+}
+
+.payment-coupon-info::-webkit-scrollbar-thumb {
+    background-color: #f1f1f1;
+    /* 스크롤 바 색상과 동일하게 설정 */
+}
 .payment-coupon-container-btn{
     text-align: right;
 }
@@ -21,7 +31,7 @@
     padding: 20px;
     margin: 0 0 20px;
     border: 4px solid rgb(253, 159, 49);
-    width: 387px;
+    width: 400px;
     transition: transform 0.3s ease;
 }
 .paymentcoupon-title{
