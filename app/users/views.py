@@ -199,7 +199,7 @@ class JWTRefreshView(APIView):
         try:
             refresh_token_validate = RefreshToken(refresh_token)  # type: ignore
             access_token = str(refresh_token_validate.access_token)
-            return Response({"access_token": access_token}, status=status.HTTP_200_OK)
+            return Response({"access": access_token}, status=status.HTTP_200_OK)
         except TokenError:
             return Response({"msg": "Plz Login again"}, status=status.HTTP_400_BAD_REQUEST)
         except ValidationError as e:
