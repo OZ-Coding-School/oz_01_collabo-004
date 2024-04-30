@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Navigate } from "react-router-dom";
-
+const navigate = Navigate()
 const request = axios.create({
   baseURL: "https://dog-go.store/",
   headers: {
@@ -18,10 +18,10 @@ const refreshToken = async () => {
     localStorage.setItem("token", newAccessToken);
     return newAccessToken;
   } catch (error) {
-    if(error.response.status === 400 && error.response.data.msg === "Plz Login again"){
+    if(error.response.status === 400){
       localStorage.removeItem("token")
       alert("로그인이 만료되었습니다. 다시 로그인 해주세요.")
-      Navigate("/login")
+      navigate("/login")
     }
     throw error;
   }
