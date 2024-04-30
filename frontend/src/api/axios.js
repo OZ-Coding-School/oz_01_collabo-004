@@ -1,6 +1,6 @@
 import axios from "axios";
-import { Navigate } from "react-router-dom";
-const navigate = Navigate()
+import { useNavigate } from "react-router-dom";
+const navigate = useNavigate()
 const request = axios.create({
   baseURL: "https://dog-go.store/",
   headers: {
