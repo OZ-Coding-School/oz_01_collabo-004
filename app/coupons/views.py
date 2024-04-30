@@ -60,7 +60,7 @@ class UserCouponListView(APIView):
 
     def get(self, request: Request) -> Response:
         # 전체 쿠폰 중에서 사용가능한 순으로, 그 중에서도 유효 기간이 짧은 순으로 내려줌
-        coupons = UserCoupon.objects.filter(user_id=request.user.id).order_by("-status", "expired_at")  # type: ignore
+        coupons = UserCoupon.objects.filter(user_id=request.user.id, status=True).order_by("-status", "expired_at")  # type: ignore
         if coupons:
             serializer = UserCouponSerializer(coupons, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
