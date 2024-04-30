@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-const navigate = useNavigate()
 const request = axios.create({
   baseURL: "https://dog-go.store/",
   headers: {
@@ -52,7 +51,7 @@ request.interceptors.response.use(
         if(error.response.status === 400){
           localStorage.removeItem("token")
           alert("로그인이 만료되었습니다. 다시 로그인 해주세요.")
-          navigate("/login")
+          useNavigate("/login")
         }
         console.log("리프레시 토큰 에러", error);
         throw error;
