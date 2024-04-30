@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
 const request = axios.create({
   baseURL: "https://dog-go.store/",
   headers: {
@@ -34,7 +34,7 @@ const refreshToken = async () => {
     localStorage.setItem("token", newAccessToken);
     return newAccessToken;
   } catch (error) {
-    console.log("리프레시 토큰 에러:", error);
+
     throw error;
   }
 };
@@ -81,11 +81,16 @@ request.interceptors.response.use(
         processQueue(null, newAccessToken);
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return request(originalRequest);
-      } catch (err) {
-        processQueue(err, null);
-        return Promise.reject(err);
-      } finally {
-        isRefreshing = false;
+
+      } catch (error) {
+        if(error.response.status === 400){
+          localStorage.removeItem("token")
+          alert("로그인이 만료되었습니다. 다시 로그인 해주세요.")
+          useNavigate("/login")
+        }
+     
+        throw error;
+
       }
     }
     return Promise.reject(error);

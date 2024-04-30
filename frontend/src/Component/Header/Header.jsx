@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
 import "./Header.css";
+import axios from "../../api/axios";
 
 function Search() {
   const [scrolled, setScrolled] = useState(false);
@@ -25,19 +26,14 @@ function Search() {
 
   const handleUser = async () => {
     try {
-      // await axios.post(
-      //   "https://dog-go.store/api/v1/user/logout/",
-      //   {
-      //     login_type: localStorage.getItem("kakao") ? "kakao" : "",
-      //   },
-      //   {
-      //     headers: {
-      //       Authorization: `Bearer ${localStorage.getItem("token")}`,
-      //     },
-      //   }
-      // );
+      await axios.post("api/v1/user/logout/",{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        // withCredentials: true,
+      });
       localStorage.removeItem("token");
-      localStorage.removeItem("kakao");
+      // localStorage.removeItem("kakao");
       navigate("/");
       alert("로그아웃 되었습니다.");
     } catch (error) {}
