@@ -27,11 +27,9 @@ function ReviewEdit({ review, setShowModal }) {
           },
         }
       );
-      console.log("Updated review:", response.data);
+
       setShowModal(false);
-    } catch (error) {
-      console.error("Error updating review:", error);
-    }
+    } catch (error) {}
   };
 
   useOnclickOutside(ref, () => {

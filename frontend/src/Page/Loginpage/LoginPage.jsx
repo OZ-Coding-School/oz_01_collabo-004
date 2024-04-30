@@ -32,7 +32,6 @@ function LoginPage() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Submitting", { user_id, password });
 
     try {
       const response = await axios.post("/api/v1/user/login/", {
@@ -40,12 +39,11 @@ function LoginPage() {
         password: password,
       });
       localStorage.setItem("token", response.data.access);
-      console.log("로그인 성공:", response);
+
       handleLoginFailure("로그인에 성공했습니다.");
       alert("반갑습니다. DogGo와 행복한 여행 되세요!");
       navigate("/");
     } catch (e) {
-      console.log(e);
       handleLoginFailure("로그인에 실패했습니다.");
     }
   };
@@ -61,15 +59,10 @@ function LoginPage() {
       const REDIRECT_URI = "https://dog-go.store/login";
       const url = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&prompt=login`;
       window.location.href = url;
-
-      console.log(code);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const kakaoLogin1 = async () => {
-    console.log("인가코드", code);
     try {
       const response = await axios.post(
         "https://dog-go.store/api/v1/user/auth/kakao_login/",
@@ -80,13 +73,12 @@ function LoginPage() {
           withCredentials: true,
         }
       );
-      console.log(response);
+
       if (response.status === 200) {
         localStorage.setItem("token", response.data.access);
         window.location.href = "/";
       }
     } catch (error) {
-      console.log(error);
       navigate("/login");
     }
   };

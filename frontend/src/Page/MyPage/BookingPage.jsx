@@ -59,10 +59,8 @@ const BookingPage = () => {
       if (response.status === 200) {
         const data = response.data;
         setCouponInfo(data);
-        console.log("coupon", response.data);
       }
     } catch (error) {
-      console.log("쿠폰 정보를 불러오는 데 실패했습니다:", error.message);
     } finally {
       setLoading(false);
     }
@@ -71,23 +69,19 @@ const BookingPage = () => {
   useEffect(() => {
     getCouponInfo();
   }, []);
-  console.log(couponInfo);
+
   useEffect(() => {
     const fetchBooking = async () => {
       try {
         const response = await axios.get(`/api/v1/order/${location.state.id}`);
         setBooking(response.data);
-        console.log("데이터", response.data);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     };
 
     fetchBooking();
   }, [location.state.id]);
   const handleSelectChange = (e) => {
     setSelected(e.target.value);
-    console.log("셀렉트", e.target.value);
   };
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -106,11 +100,9 @@ const BookingPage = () => {
       };
 
       await axios.put(`/api/v1/order/${booking.order_id}`, requestBody);
-      console.log("예약 정보가 성공적으로 업데이트되었습니다.");
+
       alert("예약 정보가 성공적으로 업데이트되었습니다.");
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handlePayment = () => {
@@ -120,7 +112,6 @@ const BookingPage = () => {
   const handleCouponSelect = (coupon) => {
     setSelectedCoupon(coupon);
     setFormData({ ...formData, coupon: coupon ? coupon.id : null });
-    console.log("셀렉트쿠폰", coupon);
   };
 
   return (

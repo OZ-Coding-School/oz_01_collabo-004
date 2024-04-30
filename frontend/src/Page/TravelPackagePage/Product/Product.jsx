@@ -4,43 +4,40 @@ import axios from "../../../api/axios";
 import "./Product.css";
 
 function Product({ products }) {
-
   const [isClicked, setIsClicked] = useState(false);
 
-  const wishlistClick = async() => {
+  const wishlistClick = async () => {
     setIsClicked(!isClicked);
     try {
-      const response = await axios.post('/api/v1/wishlist/',
+      const response = await axios.post(
+        "/api/v1/wishlist/",
         {
-            product: products.id
-        },{
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
-                },
-        });
-            if (response.status === 200) {
-                console.log('서버 응답:', response);
-            }
-        } catch (error) {
-            console.log('서버 요청 실패:', error.message);
+          product: products.id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
+      );
+      if (response.status === 200) {
+      }
+    } catch (error) {}
   };
 
   // //리뷰증가시에 서버에
-    const reviewOnClick = async () => {
+  const reviewOnClick = async () => {
     try {
-      const response = await axios.post(`/api/v1/product/${products.id}/`,
-        {}, {
-        });
-      console.log('리뷰포인트',response);
-    } catch (error) {
-      console.log("조회수 증가 실패:", error);
-    }
-    };
-  
-  return (
+      const response = await axios.post(
+        `/api/v1/product/${products.id}/`,
+        {},
+        {}
+      );
+    } catch (error) {}
+  };
 
+  return (
     <div className="product">
       <Link
         to={`/travel/${products.name.replace(/ /g, "")}`}
@@ -54,21 +51,21 @@ function Product({ products }) {
           className="product-img"
         />
         <div className="product-info">
-        <h3>{products.name}</h3>
-        <p>{products.description_text}</p>
-        <p>가격: {products.price.toLocaleString()}원</p>
-        <p>조회수: {products.view_count}</p>
+          <h3>{products.name}</h3>
+          <p>{products.description_text}</p>
+          <p>가격: {products.price.toLocaleString()}원</p>
+          <p>조회수: {products.view_count}</p>
         </div>
       </Link>
-        <div className="wishlist-btn">
+      <div className="wishlist-btn">
         <button
-        onClick={wishlistClick}
-        type="button" 
-        className={isClicked ? "wishlist-btn-clicked" : ""}
+          onClick={wishlistClick}
+          type="button"
+          className={isClicked ? "wishlist-btn-clicked" : ""}
         >
-        <span className="material-symbols-outlined favorite">pets</span>
+          <span className="material-symbols-outlined favorite">pets</span>
         </button>
-    </div>
+      </div>
     </div>
   );
 }

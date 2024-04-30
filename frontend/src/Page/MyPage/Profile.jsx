@@ -40,11 +40,9 @@ function Profile({ setUserId }) {
       setNickName(response.data.nickname);
       setEmail(response.data.email);
       setPhone(response.data.phone);
-      console.log(response.data);
+
       handleCloseModal();
-    } catch (error) {
-      console.error("Error saving changes:", error);
-    }
+    } catch (error) {}
   };
   const navigate = useNavigate();
 
@@ -64,14 +62,14 @@ function Profile({ setUserId }) {
       if (userImages) {
         formData.append("profile_image", userImages);
       }
-      console.log(userImages);
+
       const response = await axios.put("/api/v1/user/info/", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      console.log(response);
+
       if (response.status === 200) {
         alert("회원정보 수정이 완료 되었습니다.");
         setIsChange(true);
@@ -79,19 +77,14 @@ function Profile({ setUserId }) {
         setConfirmPassword("");
         setShowModal(false);
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleReceiveCoupon = async () => {
     try {
       const response = await axios.get("/api/v1/coupon/");
       setUserData(response.data);
-      console.log("User Coupon:", response.data);
-    } catch (error) {
-      console.error("Error receiving coupon:", error);
-    }
+    } catch (error) {}
   };
   useEffect(() => {
     handleUserInfo();

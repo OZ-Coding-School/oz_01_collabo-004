@@ -1,4 +1,7 @@
-import { faChevronLeft, faChevronRight, } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -36,43 +39,39 @@ function Main2() {
   }, []);
 
   const getData = async () => {
-    try{
+    try {
       const response = await axios.get("/api/v1/product/");
       setProductData(response.data);
-    }catch(error){
-      console.log(error);
-    }
+    } catch (error) {}
   };
   useEffect(() => {
     getData();
-  }, [])
-  
-
+  }, []);
 
   return (
     <div className="main2-contanier">
       <div className="main2slideshow-container">
-
         <div className="slide">
-          {productData.map((item,index) =>(
+          {productData.map((item, index) => (
             <div
               key={index}
               className="item"
               style={{ backgroundImage: `url(${item.product_img})` }}
             >
-            <div className="main2slideshow-content">
-            <div className="main2slideshow-content-title">
-            <h2>{item.name}</h2>
+              <div className="main2slideshow-content">
+                <div className="main2slideshow-content-title">
+                  <h2>{item.name}</h2>
                   <h5>{item.description_text}</h5>
                 </div>
                 <Link
-                  to={`/travel/${item.name.replace(/ /g, "")}`} state={{ id: item.id }} >
+                  to={`/travel/${item.name.replace(/ /g, "")}`}
+                  state={{ id: item.id }}
+                >
                   <button>SEE MORE</button>
-                  </Link>
-            </div>
+                </Link>
+              </div>
             </div>
           ))}
-
         </div>
 
         <div className="main2slideshow-btn">

@@ -15,27 +15,22 @@ const PaymentCoupon = ({
   // 쿠폰 정보 가져오는 함수
   const getCouponInfo = async () => {
     try {
-
-      const response = await axios.get('/api/v1/coupon/mycoupon/', {
-
+      const response = await axios.get("/api/v1/coupon/mycoupon/", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      console.log("쿠폰", response);
+
       if (response.status === 200) {
         if (response.data[0].status !== false) {
           const data = response.data;
           setCouponInfo(data);
           setPaymentCoupon(data[0]);
-          console.log("coupon", response.data);
         } else {
           return;
         }
       }
-    } catch (error) {
-      console.log("1쿠폰 정보를 불러오는 데 실패했습니다:", error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -66,7 +61,6 @@ const PaymentCoupon = ({
 
   const originalDateTimeString = "2024-05-24T00:37:39.068413+09:00";
   const formattedDateTimeString = formatDate(originalDateTimeString);
-  console.log(formattedDateTimeString);
 
   return (
     <div className="payment-coupon-container">

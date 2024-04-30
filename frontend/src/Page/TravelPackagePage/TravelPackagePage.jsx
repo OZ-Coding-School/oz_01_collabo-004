@@ -17,17 +17,12 @@ function Travelpackage() {
         },
         withCredentials: true,
       });
-      console.log(response.data);
+
       if (response.status === 200) {
-        console.log("데이터받아오기 성공!!");
         setProducts(response.data);
-        console.log(products);
       } else if (response.status === 404) {
-        console.log("데이터 받기 실패!!");
       }
-    } catch (error) {
-      console.log(error.response.data);
-    }
+    } catch (error) {}
   };
 
   const [searchTerm, setSearchTerm] = useState(" ");
@@ -44,9 +39,11 @@ function Travelpackage() {
     <div className="petshop-page">
       <div className="petshop-page-title">
         <div className="petshop-page-title-title">
-        <h1>Welcome to D<span>o</span>gG<span>O</span>!</h1>
-        <p>도고에서 준비한 색다른 컨텐츠를 둘러보세요!</p>
-        <input
+          <h1>
+            Welcome to D<span>o</span>gG<span>O</span>!
+          </h1>
+          <p>도고에서 준비한 색다른 컨텐츠를 둘러보세요!</p>
+          <input
             type="text"
             placeholder="검색어를 입력해주세요"
             value={searchTerm}
@@ -54,8 +51,7 @@ function Travelpackage() {
           />
         </div>
       </div>
-      <div className="product-list-title">
-      </div>
+      <div className="product-list-title"></div>
       <div className="product-list">
         {filteredProducts.map((products) => (
           <Product key={products.id} products={products} />

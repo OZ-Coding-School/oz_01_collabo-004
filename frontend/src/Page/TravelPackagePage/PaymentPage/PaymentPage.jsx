@@ -8,11 +8,11 @@ import "./PaymentPage.css";
 function PaymentPage() {
   const location = useLocation();
   const [couponId, setCouponId] = useState(0);
-  console.log(location);
+
   const travelData = location?.state?.travelData;
   const posttravelData = location?.state?.posttravelData;
   const totalPricepay = location?.state?.totalPrice;
-  console.log(location);
+
   const [couponiconClicked, setICouponiconClicked] = useState(false);
   const [departureDate, setDepartureDate] = useState(
     posttravelData?.departureDate
@@ -35,7 +35,7 @@ function PaymentPage() {
     paymentCoupon.id !== 0 && couponiconClicked
       ? paymentCoupon.coupon_info.sale_price
       : 0;
-  console.log("쿠폰", paymentCoupon);
+
   const handleBack = () => {
     navigate(-1); //뒤로가기
   };
@@ -44,7 +44,7 @@ function PaymentPage() {
     e.preventDefault();
 
     const paymentData = {
-      product: location.state.prouductId,
+      product: location.state.productId,
       departure_date: departureDate,
       people: numberOfPeople,
       pet_size_small: smallPetsCount,
@@ -60,14 +60,12 @@ function PaymentPage() {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      console.log(response);
+
       if (response.status === 201) {
         alert("예약이완료 되었습니다!");
         navigate("/travel");
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const [, setShowPaymentInputs] = useState(false);

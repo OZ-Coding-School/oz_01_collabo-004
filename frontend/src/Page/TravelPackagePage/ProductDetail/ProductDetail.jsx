@@ -42,11 +42,9 @@ function ProductDetail(props) {
     try {
       const response = await axios.get(`/api/v1/product/${location.state.id}`);
       setTravelData(response.data);
-      console.log("상품상세페이지", response);
+
       setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const getReview = async () => {
@@ -55,11 +53,7 @@ function ProductDetail(props) {
         `/api/v1/review/product/${location?.state?.id}`
       );
       setReviewData(response.data);
-      console.log("리뷰페이지", response);
-      console.log("리뷰페이지", response.data.results);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   useEffect(() => {
     getTravelDetailData();
@@ -139,15 +133,9 @@ function ProductDetail(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("출발일:", departureDate);
-    console.log("인원수:", numberOfPeople);
-    console.log("소 반려동물 수:", smallPetsCount);
-    console.log("중 반려동물 수:", mediumPetsCount);
-    console.log("대 반려동물 수:", largePetsCount);
   };
   const productId = location.state.id;
 
-  console.log("아무거나나", productId);
   const paybutton = () => {
     if (!posttravelData.departureDate) {
       alert("출발일을 선택해주세요!!");
@@ -165,9 +153,8 @@ function ProductDetail(props) {
     }
   };
 
-  console.log("test", posttravelData);
   if (isLoading) return <div>로딩중...</div>;
-  console.log(typeof testtotalPrice);
+
   return (
     <div className="productdetail-page">
       <div className="productdetail-page_contnet">

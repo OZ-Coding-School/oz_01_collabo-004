@@ -6,7 +6,7 @@ const ReviewModal = ({ onClose, productId, setCount }) => {
   const [title, setTitle] = useState("");
   const [image_file, setImage] = useState("");
   const [content, setContent] = useState("");
-  console.log(title, image_file, content, productId);
+
   const handleSubmit = async () => {
     try {
       const formData = new FormData();
@@ -22,12 +22,9 @@ const ReviewModal = ({ onClose, productId, setCount }) => {
         },
       });
 
-      console.log(" 보내기", response);
       setCount((prev) => prev + 1);
       onClose();
-    } catch (error) {
-      console.error("Error submitting review:", error);
-    }
+    } catch (error) {}
   };
 
   return (

@@ -16,10 +16,7 @@ const ReviewPage = (count) => {
           },
         });
         setReviews(response.data.results);
-        console.log("리뷰", response.data.results[0].image_url);
-      } catch (error) {
-        console.error("Error fetching reviews:", error);
-      }
+      } catch (error) {}
     };
 
     fetchReviews();
