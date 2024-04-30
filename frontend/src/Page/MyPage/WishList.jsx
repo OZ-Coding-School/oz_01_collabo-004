@@ -8,7 +8,6 @@ function WishList() {
   const [isClicked, setIsClicked] = useState(false);
   const [count, setCount] = useState(0);
   const navigate = useNavigate();
-  console.log("카운터", count);
 
   const wishlistClick = async (id) => {
     setCount((prev) => prev + 1);
@@ -27,11 +26,8 @@ function WishList() {
       );
       if (response.status === 200) {
         setCards(cards.filter((card) => card.product.id !== id));
-        console.log("서버 응답:", response);
       }
-    } catch (error) {
-      console.log("서버 요청 실패:", error.message);
-    }
+    } catch (error) {}
   };
 
   const fetchData = async () => {
@@ -42,14 +38,10 @@ function WishList() {
         },
       });
       setCards(response.data);
-      console.log(response.data);
-    } catch (error) {
-      console.log("Error fetching data:", error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
-    console.log("다시 부르나");
     fetchData();
   }, []);
 

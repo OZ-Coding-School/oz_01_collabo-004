@@ -28,7 +28,6 @@ const Testaa = () => {
         },
       }
     );
-    console.log(response);
   };
 
   const onChangeUserImg = (e) => {
@@ -37,7 +36,6 @@ const Testaa = () => {
       const reader = new FileReader();
       reader.onload = () => {
         setProductImg(file);
-        console.log(file);
       };
       reader.readAsDataURL(file);
     } else {
@@ -63,7 +61,7 @@ const Testaa = () => {
     view_count: viewCount,
     status: status,
   };
-  console.log(data);
+
   const handleProduct = async () => {
     try {
       const response = await axios.post("/api/v1/product/", formData, {
@@ -72,10 +70,7 @@ const Testaa = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(response);
-    } catch (error) {
-      console.log("상품등록 에러", error);
-    }
+    } catch (error) {}
   };
 
   const handleDelete = async () => {
@@ -88,7 +83,6 @@ const Testaa = () => {
         },
       }
     );
-    console.log(response);
   };
 
   return (

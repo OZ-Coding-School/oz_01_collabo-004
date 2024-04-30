@@ -33,9 +33,7 @@ const Order = ({ setCount }) => {
       });
       setOrders(response.data);
       filterOrders();
-    } catch (error) {
-      console.log("Error fetching orders:", error);
-    }
+    } catch (error) {}
   };
 
   const filterOrders = () => {

@@ -36,9 +36,7 @@ function Search() {
       // localStorage.removeItem("kakao");
       navigate("/");
       alert("로그아웃 되었습니다.");
-    } catch (error) {
-      console.log("로그아웃 에러:", error);
-    }
+    } catch (error) {}
   };
 
   const handleScroll = () => {

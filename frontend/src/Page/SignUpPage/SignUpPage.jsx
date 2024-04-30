@@ -29,14 +29,14 @@ function SignupForm({ setSignUp }) {
         },
       }
     );
-    console.log(response);
+
     if (response.status === 200) {
       setIsChecked(false);
       setEmailMeg(response.data.msg);
       alert("이메일 인증이 완료되었습니다.");
     }
   };
-  console.log(formData.email);
+
   const emailChecked = async () => {
     try {
       const response = await axios.post(
@@ -50,13 +50,11 @@ function SignupForm({ setSignUp }) {
           },
         }
       );
-      console.log(response);
+
       if (response.status === 200) {
         setIsChecked(true);
       }
-    } catch (error) {
-      console.log("이메일 인증 실패:", error);
-    }
+    } catch (error) {}
   };
 
   const handleChange = (event) => {
@@ -79,10 +77,10 @@ function SignupForm({ setSignUp }) {
       }));
     }
   };
-  console.log(emailMeg);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(formData);
+
     if (emailMeg === "Email Veryfied Successfully.") {
       try {
         const response = await axios.post("/api/v1/user/signup/", formData, {
@@ -91,11 +89,10 @@ function SignupForm({ setSignUp }) {
           },
           withCredentials: true,
         });
-        console.log(response);
 
         if (response.status === 201) {
           alert("DogGo의 가족이 되었습니다. 환영합니다!");
-          console.log("회원가입에 성공했습니다.");
+
           setFormData({
             user_id: "",
             name: "",
@@ -109,8 +106,6 @@ function SignupForm({ setSignUp }) {
         }
       } catch (error) {
         alert("회원가입 실패:", error.message);
-        console.log("회원가입 실패:", error);
-        console.log(formData);
       }
     } else {
       alert("이메일 인증을 완료해주세요.");
