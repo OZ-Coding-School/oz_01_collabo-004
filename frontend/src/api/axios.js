@@ -18,7 +18,11 @@ const refreshToken = async () => {
     localStorage.setItem("token", newAccessToken);
     return newAccessToken;
   } catch (error) {
-    console.log("리프레시 토큰 에러", error);
+    if(error.response.status === 400 && error.response.data.msg === "Plz Login again"){
+      localStorage.removeItem("token")
+      alert("로그인이 만료되었습니다. 다시 로그인 해주세요.")
+      Navigate("/login")
+    }
     throw error;
   }
 };
@@ -53,10 +57,6 @@ request.interceptors.response.use(
         console.log("리프레시 토큰 에러", error);
         throw error;
       }
-    } else if(error.response.status === 400 && error.response.data.msg === "Plz Login again"){
-      localStorage.removeItem("token")
-      alert("로그인이 만료되었습니다. 다시 로그인 해주세요.")
-      Navigate("/login")
     }
     return Promise.reject(error);
   }
