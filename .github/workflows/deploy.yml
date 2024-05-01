@@ -81,9 +81,9 @@ jobs:
           command_timeout: 5m						# timeout 시간 설정
           script: |
               cd oz_01_collabo-004/frontend
-              rm 
+              rm -rf build
               git pull origin main
-              cd frontend
+              npm install
               npm run build
               sudo systemctl restart uwsgi
               sudo systemctl restart nginx
